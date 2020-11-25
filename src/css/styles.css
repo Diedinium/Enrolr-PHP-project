@@ -1,0 +1,119 @@
+.todr-brand-colour-text {
+    color: #30913f!important;
+}
+
+.todr-brand-colour-bg {
+    background-color: #30913f!important;
+}
+
+button.todr-brand-colour-bg:hover, a.todr-brand-colour-bg:hover {
+    background-color: #277033!important;
+}
+
+.todr-brand-colour-text-accent {
+    color: #73d182!important;
+}
+
+.todr-brand-colour-bg-accent {
+    background-color: #73d182!important;
+}
+
+.todr-brand-colour-border {
+    border-color: #30913f;
+}
+
+.todr-brand-colour-border-accent {
+    border-color: #73d182;
+}
+
+.todr-navbar-top-accent {
+    border-top: 4px solid #73d182!important;
+}
+
+.todr-navbar-spacer {
+    padding-top: 60px;
+}
+
+.todr-subtle-shadow {
+    position: relative;
+}
+
+.todr-subtle-shadow::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: inherit;
+    box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.2);
+}
+
+.todr-todogroup-edit {
+    cursor: pointer;
+    color: rgb(116, 116, 116);
+}
+
+.todr-todogroup-edit:hover {
+    color: rgb(70, 70, 70);
+}
+
+.todr-todogroup-delete {
+    cursor: pointer;
+    color: rgb(194, 40, 40);
+}
+
+.todr-todogroup-delete:hover {
+    color: rgb(83, 14, 14);
+}
+
+.todr-todogroup-check {
+    color: rgb(104, 184, 114);
+}
+
+.todr-todogroup-check:hover {
+    cursor: pointer;
+    color: rgb(48, 102, 55);
+}
+
+.todr-toast-container {
+    position: absolute;
+    top: 65px;
+    right: 10px;
+}
+
+.todr-error-toast {
+    border-color: #A22424;
+}
+
+.todr-success-toast {
+    border-color: #50A224;
+}
+
+.form-control.error:focus {
+    border-color: #A22424;
+    box-shadow: 0 0 0 0.2rem rgba(218, 46, 46, 0.25);
+}
+
+.form-control.valid:focus {
+    border-color: #50A224;
+    box-shadow: 0 0 0 0.2rem rgba(80, 162, 36, 0.25);
+}
+
+.todr-todogroup-actions {
+    min-width: 60px;
+    text-align: right;
+}
+
+.tooltip-inner {
+    max-width: 350px;
+}
+
+.mw-50 {
+    max-width: 500px;
+}
+
+small.error {
+    color: rgb(219, 31, 31);
+}
