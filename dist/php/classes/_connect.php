@@ -1,7 +1,7 @@
 <?php
 
 $dbPassword = "JuPbdDs1aDSdhnfU";
-$dbUserName = "wad_assignment";
+$dbUserName = "wad-assignment";
 $dbServer = "localhost";
 $dbName = "wad-assignment";
 

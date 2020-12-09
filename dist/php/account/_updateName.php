@@ -8,7 +8,7 @@ if (!$account->getAuthenticated()) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['firstName']) || !isset($_POST['lastName'])) {
-        dieWithError("Something went wrong, first name or last name were not passed", "pages/settings.php?tab=management-tab");
+        dieWithError("Something went wrong, first name or last name were not passed", "pages/enrollments.php");
     }
     else {
         $firstName = $_POST['firstName'];
@@ -17,14 +17,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $account->updateNames($firstName, $lastName);
 
-            $_SESSION['successMessage'] = "Names updated";
-            header("Location: ../../pages/settings.php?tab=management-tab");
+            $_SESSION['successMessage'] = "Names updated for account: {$account->getEmail()}";
+            header("Location: ../../pages/enrollments.php");
         }
         catch (Exception $ex) {
-            dieWithError($ex->getMessage(), "pages/settings.php?tab=management-tab");
+            dieWithError($ex->getMessage(), "pages/enrollments.php");
         }
     }
 }
 else {
-    dieWithError("You cannot directly load this page", "pages/settings.php");
+    dieWithError("You cannot directly load this page", "pages/enrollments.php");
 }

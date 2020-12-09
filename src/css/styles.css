@@ -1,44 +1,44 @@
-.todr-brand-colour-text {
-    color: #30913f!important;
+.enrollr-brand-colour-text {
+    color: #f57f1f!important;
 }
 
-.todr-brand-colour-bg {
-    background-color: #30913f!important;
+.enrollr-brand-colour-bg {
+    background-color: #f57f1f!important;
 }
 
-button.todr-brand-colour-bg:hover, a.todr-brand-colour-bg:hover {
-    background-color: #277033!important;
+button.enrollr-brand-colour-bg:hover, a.enrollr-brand-colour-bg:hover {
+    background-color: #b85d13!important;
 }
 
-.todr-brand-colour-text-accent {
-    color: #73d182!important;
+.enrollr-brand-colour-text-accent {
+    color: #fcd426!important;
 }
 
-.todr-brand-colour-bg-accent {
-    background-color: #73d182!important;
+.enrollr-brand-colour-bg-accent {
+    background-color: #fcd426!important;
 }
 
-.todr-brand-colour-border {
-    border-color: #30913f;
+.enrollr-brand-colour-border {
+    border-color: #f57f1f;
 }
 
-.todr-brand-colour-border-accent {
-    border-color: #73d182;
+.enrollr-brand-colour-border-accent {
+    border-color: #fcd426;
 }
 
-.todr-navbar-top-accent {
-    border-top: 4px solid #73d182!important;
+.enrollr-navbar-top-accent {
+    border-top: 4px solid #f57f1f!important;
 }
 
-.todr-navbar-spacer {
-    padding-top: 60px;
+.enrollr-navbar-spacer {
+    padding-top: 75px;
 }
 
-.todr-subtle-shadow {
+.enrollr-subtle-shadow {
     position: relative;
 }
 
-.todr-subtle-shadow::before {
+.enrollr-subtle-shadow::before {
     content: '';
     position: absolute;
     width: 100%;
@@ -50,44 +50,35 @@ button.todr-brand-colour-bg:hover, a.todr-brand-colour-bg:hover {
     box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.2);
 }
 
-.todr-todogroup-edit {
-    cursor: pointer;
-    color: rgb(116, 116, 116);
-}
-
-.todr-todogroup-edit:hover {
-    color: rgb(70, 70, 70);
-}
-
-.todr-todogroup-delete {
-    cursor: pointer;
-    color: rgb(194, 40, 40);
-}
-
-.todr-todogroup-delete:hover {
-    color: rgb(83, 14, 14);
-}
-
-.todr-todogroup-check {
-    color: rgb(104, 184, 114);
-}
-
-.todr-todogroup-check:hover {
-    cursor: pointer;
-    color: rgb(48, 102, 55);
-}
-
-.todr-toast-container {
+.enrollr-toast-container {
     position: absolute;
     top: 65px;
     right: 10px;
 }
 
-.todr-error-toast {
+.enrollr-standard-icon {
+    cursor: pointer;
+    color: rgb(116, 116, 116);
+}
+
+.enrollr-standard-icon:hover {
+    color: rgb(65, 65, 65);
+}
+
+.enrollr-danger-icon {
+    cursor: pointer;
+    color: rgb(172, 0, 0);
+}
+
+.enrollr-danger-icon:hover {
+    color: rgb(119, 0, 0);
+}
+
+.enrollr-error-toast {
     border-color: #A22424;
 }
 
-.todr-success-toast {
+.enrollr-success-toast {
     border-color: #50A224;
 }
 
@@ -101,7 +92,7 @@ button.todr-brand-colour-bg:hover, a.todr-brand-colour-bg:hover {
     box-shadow: 0 0 0 0.2rem rgba(80, 162, 36, 0.25);
 }
 
-.todr-todogroup-actions {
+.enrollr-todogroup-actions {
     min-width: 60px;
     text-align: right;
 }

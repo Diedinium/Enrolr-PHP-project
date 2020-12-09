@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($account->getAuthenticated()) {
                 $_SESSION['successMessage'] = "Logged in successfully";
-                header("Location: ../../pages/todos.php");
+                header("Location: ../../pages/enrollments.php");
                 die;
             }
             else {

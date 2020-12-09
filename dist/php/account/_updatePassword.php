@@ -8,7 +8,7 @@ if (!$account->getAuthenticated()) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['currentPassword']) || !isset($_POST['newPassword']) || !isset($_POST['newPasswordConfirm'])) {
-        dieWithError("Something went wrong, not all details needed to update password were passed", "pages/settings.php?tab=security-tab");
+        dieWithError("Something went wrong, not all details needed to update password were passed", "pages/enrollments.php");
     }
     else {
         $currentPassword = $_POST['currentPassword'];
@@ -16,11 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newPasswordConfirm = $_POST['newPasswordConfirm'];
 
         if (!password_verify($currentPassword, $account->getPassword())) {
-            dieWithError("Your current password is not correct, could not update password. Please try again.", "pages/settings.php?tab=security-tab");
+            dieWithError("Your current password is not correct, could not update password. Please try again.", "pages/enrollments.php");
         }
 
         if ($newPassword !== $newPasswordConfirm) {
-            dieWithError("New passwords do not match, could not update. Please try again.", "pages/settings.php?tab=security-tab");
+            dieWithError("New passwords do not match, could not update. Please try again.", "pages/enrollments.php");
         }
 
         try {
@@ -31,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../../");
         }
         catch (Exception $ex) {
-            dieWithError($ex->getMessage(), "pages/settings.php?tab=security-tab");
+            dieWithError($ex->getMessage(), "pages/enrollments.php");
         }
     }
 }
 else {
-    dieWithError("You cannot directly load this page", "pages/settings.php");
+    dieWithError("You cannot directly load this page", "pages/enrollments.php");
 }

@@ -16,7 +16,7 @@ if (!empty($_SESSION['successMessage'])) {
 }
 
 if ($account->getAuthenticated()) {
-    header("Location: pages/todos.php");
+    header("Location: pages/enrollments.php");
     $connection->close();
     die;
 }
@@ -30,15 +30,18 @@ $connection->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todr - Home</title>
+    <title>Enrollr - Home</title>
     <script src="./main.js"></script>
     <link rel="stylesheet" href="./main.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top todr-navbar-top-accent shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrollr-navbar-top-accent shadow-sm">
         <div class="container">
-            <a class="navbar-brand todr-brand-colour-text" href="#"><i class="fas fa-check-double mr-1"></i>Todr</a>
+            <a class="navbar-brand d-flex align-items-center p-0" href="#">
+                <img src="img/EnrollrLogo.png" alt="Enrollr logo" width="60" class="d-inline-block">
+                <span>Enrollr</span>
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -61,7 +64,7 @@ $connection->close();
         </div>
     </nav>
 
-    <main class="todr-navbar-spacer">
+    <main class="enrollr-navbar-spacer">
         <div class="container">
             <?php if (!empty($successMessage)) : ?>
                 <div class="alert alert-success mt-3">
@@ -74,25 +77,24 @@ $connection->close();
                 </div>
             <?php endif; ?>
             <div class="jumbotron mt-3 text-center">
-                <h1 class="display-4">Welcome to Todr!</h1>
-                <p>A basic Todo lister demonstration site written using PHP.</p>
+                <h1 class="display-4">Welcome to Enrollr!</h1>
+                <p>A course enrollment/management web application.</p>
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-12 mb-3 mb-md-0">
-                    <div class="card h-100 todr-brand-colour-border">
-                        <h4 class="card-header todr-brand-colour-text">
-                            Create an account
+                <div class="col-md-6 col-12">
+                    <div class="card h-100 enrollr-brand-colour-border">
+                        <h4 class="card-header enrollr-brand-colour-text">
+                            Placeholder
                         </h4>
                         <div class="card-body">
-                            <p>To start making todo lists, create an account using the button below.</p>
-                            <a href="pages/createAccount.php" class="btn todr-brand-colour-bg text-white">Create Account</a>
+                            <p>This is a placeholder untill I think of something useful to put here...</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
-                    <div class="card h-100 todr-brand-colour-border">
-                        <h4 class="card-header todr-brand-colour-text">
+                    <div class="card h-100 enrollr-brand-colour-border">
+                        <h4 class="card-header enrollr-brand-colour-text">
                             Placeholder
                         </h4>
                         <div class="card-body">

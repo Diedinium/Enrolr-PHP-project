@@ -11,11 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $account->logout();
         $account->deleteAccount();
 
-        $_SESSION['successMessage'] = "Your account has succesfully been deleted.";  
+        $_SESSION['successMessage'] = "Account has succesfully been deleted.";  
         header("Location: ../../");
     } catch (Exception $ex) {
-        dieWithError($ex->getMessage(), "pages/settings.php?tab=management-tab");
+        dieWithError($ex->getMessage(), "pages/enrollments.php");
     }
 } else {
-    dieWithError("You cannot directly load this page", "pages/settings.php?tab=management-tab");
+    dieWithError("You cannot directly load this page", "pages/enrollments.php");
 }

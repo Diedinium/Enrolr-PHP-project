@@ -9,7 +9,7 @@ class Account
     private bool $isAuthenticated;
     private $firstName;
     private $lastName;
-    private $dateCreated;
+    private $created;
     private $isAdmin;
 
     public function __construct()
@@ -20,7 +20,7 @@ class Account
         $this->isAuthenticated = false;
         $this->firstName = null;
         $this->lastName = null;
-        $this->dateCreated = null;
+        $this->created = null;
         $this->isAdmin = null;
     }
 
@@ -63,9 +63,9 @@ class Account
         return $this->firstName . " " . $this->lastName;
     }
 
-    public function getDateCreated()
+    public function getCreated()
     {
-        return $this->dateCreated;
+        return $this->created;
     }
 
     public function getIsAdmin() 
@@ -83,27 +83,29 @@ class Account
             $password = trim($password);
 
             if (!is_null($this->getIdFromName($email))) {
-                throw new Exception("User name is already taken.");
+                throw new Exception("An account with this email already exists");
             }
 
-            $addAccountQuery = $connection->prepare("INSERT INTO t_users (firstName, lastName, email, password, jobTitle, isAdmin) VALUES (?, ?, ?, ?)");
+            $addAccountQuery = $connection->prepare("INSERT INTO t_users (firstName, lastName, email, password, jobTitle, isAdmin) VALUES (?, ?, ?, ?, ?, ?)");
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $addAccountQuery->bind_param("ssss", $email, $hash, $firstName, $lastName);
+            $addAccountQuery->bind_param("ssssss", $firstName, $lastName, $email, $hash, $jobTitle, $isAdmin);
             $addAccountQuery->execute();
 
             if (!empty($addAccountQuery->error)) {
                 throw new Exception("Failed to add user.");
             }
 
-            $getAccountQuery = $connection->query("SELECT id, email, password, firstName, lastName, dateCreated FROM t_users WHERE id = $addAccountQuery->insert_id");
+            $getAccountQuery = $connection->query("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users WHERE id = $addAccountQuery->insert_id");
             while ($row = $getAccountQuery->fetch_assoc()) {
                 $this->id = $row['id'];
-                $this->email = $row['email'];
-                $this->password = $row['password'];
-                $this->isAuthenticated = true;
                 $this->firstName = $row['firstName'];
                 $this->lastName = $row['lastName'];
-                $this->dateCreated = $row['dateCreated'];
+                $this->email = $row['email'];
+                $this->password = $row['password'];
+                $this->jobTitle = $row['jobTitle'];
+                $this->isAdmin = $row['isAdmin'];
+                $this->created = $row['created'];
+                $this->isAuthenticated = true;
             }
 
             $connection->query("INSERT INTO t_persist (iduser, token) VALUES ($this->id, '$sessionId')");
@@ -142,26 +144,28 @@ class Account
             if ($tokenQuery->num_rows > 0) {
                 $tokenQuery->fetch();
 
-                $userQueryResults = $connection->query("SELECT id, email, password, firstName, lastName, dateCreated FROM t_users WHERE id = {$userID}");
+                $userQueryResults = $connection->query("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users WHERE id = {$userID}");
                 $row = $userQueryResults->fetch_assoc();
 
                 $this->id = $row['id'];
-                $this->email = $row['email'];
-                $this->password = $row['password'];
-                $this->isAuthenticated = true;
                 $this->firstName = $row['firstName'];
                 $this->lastName = $row['lastName'];
-                $this->dateCreated = $row['dateCreated'];
+                $this->email = $row['email'];
+                $this->password = $row['password'];
+                $this->jobTitle = $row['jobTitle'];
+                $this->isAdmin = $row['isAdmin'];
+                $this->created = $row['created'];
+                $this->isAuthenticated = true;
                 return;
             }
 
             if (!empty($email) && !empty($password)) {
-                $userQuery = $connection->prepare("SELECT id, email, password, firstName, lastName, dateCreated FROM t_users WHERE email = ?");
+                $userQuery = $connection->prepare("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users WHERE email = ?");
 
                 $userQuery->bind_param("s", $email);
                 $userQuery->execute();
 
-                $userQuery->bind_result($resultId, $resultEmail, $resultPassword, $resultFirstName, $resultLastName, $resultDateCreated);
+                $userQuery->bind_result($resultId, $resultFirstName, $resultLastName, $resultEmail, $resultPassword, $resultJobTitle, $resultIsAdmin, $resultCreated);
                 $userQuery->store_result();
 
                 if ($userQuery->num_rows > 0) {
@@ -169,12 +173,14 @@ class Account
 
                     if (password_verify($password, $resultPassword)) {
                         $this->id = $resultId;
-                        $this->email = $resultEmail;
-                        $this->password = $resultPassword;
-                        $this->isAuthenticated = true;
                         $this->firstName = $resultFirstName;
                         $this->lastName = $resultLastName;
-                        $this->dateCreated = $resultDateCreated;
+                        $this->email = $resultEmail;
+                        $this->password = $resultPassword;
+                        $this->jobTitle = $resultJobTitle;
+                        $this->isAdmin = $resultIsAdmin;
+                        $this->created = $resultCreated;
+                        $this->isAuthenticated = true;
 
                         $connection->query("INSERT INTO t_persist (iduser, token) VALUES ($this->id, '$sessionId')");
                         return;
@@ -182,7 +188,7 @@ class Account
                         throw new Exception('Password was incorrect');
                     }
                 } else {
-                    throw new Exception('User not found.');
+                    throw new Exception('User with this email not found.');
                 }
             }
         }
@@ -202,7 +208,6 @@ class Account
 
             return;
         }
-
         return;
     }
 
@@ -233,7 +238,7 @@ class Account
         }
     }
 
-    public function deleteAllTodos()
+    public function deleteAllEnrollments()
     {
         global $connection;
 
@@ -241,10 +246,10 @@ class Account
             throw new Exception("Cannot delete, no user id.");
         }
 
-        $success = $connection->query("DELETE FROM t_todogroup WHERE iduser = $this->id");
+        $success = $connection->query("DELETE FROM t_enroll WHERE iduser = $this->id");
 
         if (!$success) {
-            throw new Exception("Deleting todos failed.");
+            throw new Exception("Deleting enrollments failed.");
         }
     }
 
