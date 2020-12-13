@@ -1,44 +1,44 @@
-.enrollr-brand-colour-text {
+.enrolr-brand-colour-text {
     color: #f57f1f!important;
 }
 
-.enrollr-brand-colour-bg {
+.enrolr-brand-colour-bg {
     background-color: #f57f1f!important;
 }
 
-button.enrollr-brand-colour-bg:hover, a.enrollr-brand-colour-bg:hover {
+button.enrolr-brand-colour-bg:hover, a.enrolr-brand-colour-bg:hover {
     background-color: #b85d13!important;
 }
 
-.enrollr-brand-colour-text-accent {
+.enrolr-brand-colour-text-accent {
     color: #fcd426!important;
 }
 
-.enrollr-brand-colour-bg-accent {
+.enrolr-brand-colour-bg-accent {
     background-color: #fcd426!important;
 }
 
-.enrollr-brand-colour-border {
+.enrolr-brand-colour-border {
     border-color: #f57f1f;
 }
 
-.enrollr-brand-colour-border-accent {
+.enrolr-brand-colour-border-accent {
     border-color: #fcd426;
 }
 
-.enrollr-navbar-top-accent {
+.enrolr-navbar-top-accent {
     border-top: 4px solid #f57f1f!important;
 }
 
-.enrollr-navbar-spacer {
-    padding-top: 75px;
+.enrolr-navbar-spacer {
+    padding-top: 80px;
 }
 
-.enrollr-subtle-shadow {
+.enrolr-subtle-shadow {
     position: relative;
 }
 
-.enrollr-subtle-shadow::before {
+.enrolr-subtle-shadow::before {
     content: '';
     position: absolute;
     width: 100%;
@@ -50,35 +50,35 @@ button.enrollr-brand-colour-bg:hover, a.enrollr-brand-colour-bg:hover {
     box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.2);
 }
 
-.enrollr-toast-container {
+.enrolr-toast-container {
     position: absolute;
     top: 65px;
     right: 10px;
 }
 
-.enrollr-standard-icon {
+.enrolr-standard-icon {
     cursor: pointer;
     color: rgb(116, 116, 116);
 }
 
-.enrollr-standard-icon:hover {
+.enrolr-standard-icon:hover {
     color: rgb(65, 65, 65);
 }
 
-.enrollr-danger-icon {
+.enrolr-danger-icon {
     cursor: pointer;
     color: rgb(172, 0, 0);
 }
 
-.enrollr-danger-icon:hover {
+.enrolr-danger-icon:hover {
     color: rgb(119, 0, 0);
 }
 
-.enrollr-error-toast {
+.enrolr-error-toast {
     border-color: #A22424;
 }
 
-.enrollr-success-toast {
+.enrolr-success-toast {
     border-color: #50A224;
 }
 
@@ -92,7 +92,7 @@ button.enrollr-brand-colour-bg:hover, a.enrollr-brand-colour-bg:hover {
     box-shadow: 0 0 0 0.2rem rgba(80, 162, 36, 0.25);
 }
 
-.enrollr-todogroup-actions {
+.enrolr-todogroup-actions {
     min-width: 60px;
     text-align: right;
 }

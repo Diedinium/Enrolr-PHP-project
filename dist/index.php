@@ -30,17 +30,17 @@ $connection->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enrollr - Home</title>
+    <title>Enrolr - Home</title>
     <script src="./main.js"></script>
     <link rel="stylesheet" href="./main.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrollr-navbar-top-accent shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
-                <img src="img/EnrollrLogo.png" alt="Enrollr logo" width="60" class="d-inline-block">
-                <span>Enrollr</span>
+                <img src="img/EnrolrLogo.png" alt="enrolr logo" width="60" class="d-inline-block">
+                <span>Enrolr</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -64,7 +64,7 @@ $connection->close();
         </div>
     </nav>
 
-    <main class="enrollr-navbar-spacer">
+    <main class="enrolr-navbar-spacer">
         <div class="container">
             <?php if (!empty($successMessage)) : ?>
                 <div class="alert alert-success mt-3">
@@ -77,14 +77,14 @@ $connection->close();
                 </div>
             <?php endif; ?>
             <div class="jumbotron mt-3 text-center">
-                <h1 class="display-4">Welcome to Enrollr!</h1>
+                <h1 class="display-4">Welcome to enrolr!</h1>
                 <p>A course enrollment/management web application.</p>
             </div>
 
             <div class="row">
                 <div class="col-md-6 col-12">
-                    <div class="card h-100 enrollr-brand-colour-border">
-                        <h4 class="card-header enrollr-brand-colour-text">
+                    <div class="card h-100 enrolr-brand-colour-border">
+                        <h4 class="card-header enrolr-brand-colour-text">
                             Placeholder
                         </h4>
                         <div class="card-body">
@@ -93,8 +93,8 @@ $connection->close();
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
-                    <div class="card h-100 enrollr-brand-colour-border">
-                        <h4 class="card-header enrollr-brand-colour-text">
+                    <div class="card h-100 enrolr-brand-colour-border">
+                        <h4 class="card-header enrolr-brand-colour-text">
                             Placeholder
                         </h4>
                         <div class="card-body">

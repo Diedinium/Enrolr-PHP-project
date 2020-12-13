@@ -8,14 +8,26 @@ if (!$account->getAuthenticated()) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        $account->logout();
-        $account->deleteAccount();
+        if (isset($_POST['idToDelete']) && $account->getIsAdmin()) {
+            $idToDelete = $_POST['idToDelete'];
+            $accountToDelete = new Account();
+            $accountToDelete->setId($idToDelete);
+            $accountToDelete->deleteAccount();
 
-        $_SESSION['successMessage'] = "Account has succesfully been deleted.";  
-        header("Location: ../../");
+            $_SESSION['successMessage'] = "Account with id of $idToDelete has succesfully been deleted.";  
+            header("Location: ../../pages/users.php");
+        }
+        else {
+            $account->logout();
+            $account->deleteAccount();
+    
+            $_SESSION['successMessage'] = "Account has succesfully been deleted.";  
+            header("Location: ../../");
+        }
     } catch (Exception $ex) {
-        dieWithError($ex->getMessage(), "pages/enrollments.php");
+        dieWithError($ex->getMessage(), "pages/enrolments.php");
     }
-} else {
-    dieWithError("You cannot directly load this page", "pages/enrollments.php");
+} 
+else {
+    dieWithError("You cannot directly load this page");
 }

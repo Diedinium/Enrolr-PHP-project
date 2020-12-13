@@ -28,9 +28,14 @@ class Account
     {
     }
 
-    public function getId():int
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
     }
 
     public function getEmail()
@@ -43,7 +48,7 @@ class Account
         return $this->password;
     }
 
-    public function getAuthenticated():bool
+    public function getAuthenticated(): bool
     {
         return $this->isAuthenticated;
     }
@@ -68,12 +73,12 @@ class Account
         return $this->created;
     }
 
-    public function getIsAdmin() 
+    public function getIsAdmin()
     {
         return $this->isAdmin;
     }
 
-    public function addAccount(string $email, string $password, string $firstName, string $lastName, string $jobTitle, bool $isAdmin)
+    public function addAccount(string $email, string $password, string $firstName, string $lastName, string $jobTitle, bool $isAdmin = false)
     {
         global $connection;
 
@@ -94,39 +99,26 @@ class Account
             if (!empty($addAccountQuery->error)) {
                 throw new Exception("Failed to add user.");
             }
-
-            $getAccountQuery = $connection->query("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users WHERE id = $addAccountQuery->insert_id");
-            while ($row = $getAccountQuery->fetch_assoc()) {
-                $this->id = $row['id'];
-                $this->firstName = $row['firstName'];
-                $this->lastName = $row['lastName'];
-                $this->email = $row['email'];
-                $this->password = $row['password'];
-                $this->jobTitle = $row['jobTitle'];
-                $this->isAdmin = $row['isAdmin'];
-                $this->created = $row['created'];
-                $this->isAuthenticated = true;
-            }
-
-            $connection->query("INSERT INTO t_persist (iduser, token) VALUES ($this->id, '$sessionId')");
         }
     }
 
-    public function getIdFromName(string $email)
+    // Delete currently logged in account, or delete account by manually setting id on new instance of account class (admin only).
+    public function deleteAccount()
     {
         global $connection;
-        $userQuery = $connection->prepare("SELECT id FROM t_users WHERE email = ?");
 
-        $userQuery->bind_param("s", $email);
-        $userQuery->execute();
+        if (is_null($this->id)) {
+            throw new Exception("Cannot delete, no user id.");
+        }
 
-        $userQuery->bind_result($userID);
-        $userQuery->store_result();
-        $userQuery->fetch();
+        $success = $connection->query("DELETE FROM t_users WHERE id = $this->id");
 
-        return $userQuery->num_rows() > 0 ? $userID : null;
+        if (!$success) {
+            throw new Exception("Deleting account failed.");
+        }
     }
 
+    // Login using session id as token, or on post, via email/password. Creates new session in t_persist if logging in for first time.
     public function login(string $email = '', string $password = '')
     {
         global $connection;
@@ -194,6 +186,43 @@ class Account
         }
     }
 
+    public static function getAllStaff(): array
+    {
+        global $connection;
+
+        $result = [];
+        $query = $connection->query("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users");
+        while ($row = $query->fetch_assoc()) {
+            array_push($result, $row);
+        }
+        return $result;
+    }
+
+    public static function fitlerAdministrators(array $arrayToFilter): array
+    {
+        $result = [];
+        foreach ($arrayToFilter as $userAccount) {
+            if ($userAccount['isAdmin']) {
+                array_push($result, $userAccount);
+            }
+        }
+        
+        return $result;
+    }
+
+    public static function filterStaff(array $arrayToFilter): array
+    {
+        $result = [];
+        foreach ($arrayToFilter as $userAccount) {
+            if (!$userAccount['isAdmin']) {
+                array_push($result, $userAccount);
+            }
+        }
+        
+        return $result;
+    }
+
+    // Logout by removing session id from t_persist
     public function logout()
     {
         global $connection;
@@ -211,6 +240,7 @@ class Account
         return;
     }
 
+    // Update users names
     public function updateNames(string $firstName, string $lastName)
     {
         global $connection;
@@ -224,6 +254,7 @@ class Account
         }
     }
 
+    // Update user password
     public function changePassword($newPassword)
     {
         global $connection;
@@ -238,6 +269,7 @@ class Account
         }
     }
 
+    // Delete all enrollments
     public function deleteAllEnrollments()
     {
         global $connection;
@@ -253,18 +285,19 @@ class Account
         }
     }
 
-    public function deleteAccount()
+    // Attempts to find existing accounts with email, used to validate that email is not already signed up.
+    public function getIdFromName(string $email)
     {
         global $connection;
+        $userQuery = $connection->prepare("SELECT id FROM t_users WHERE email = ?");
 
-        if (is_null($this->id)) {
-            throw new Exception("Cannot delete, no user id.");
-        }
+        $userQuery->bind_param("s", $email);
+        $userQuery->execute();
 
-        $success = $connection->query("DELETE FROM t_users WHERE id = $this->id");
+        $userQuery->bind_result($userID);
+        $userQuery->store_result();
+        $userQuery->fetch();
 
-        if (!$success) {
-            throw new Exception("Deleting account failed.");
-        }
+        return $userQuery->num_rows() > 0 ? $userID : null;
     }
 }

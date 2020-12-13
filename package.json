@@ -1,7 +1,7 @@
 {
-  "name": "todos-project",
+  "name": "enrollr-project",
   "version": "1.0.0",
-  "description": "Front end scripts and styling for the todr project",
+  "description": "Front end scripts and styling for the enrollr project",
   "main": "index.php",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
     "bootstrap": "^4.5.2",
+    "datatables.net-bs4": "^1.10.22",
     "jquery": "^3.5.1",
     "jquery-validation": "^1.19.2",
     "popper.js": "^1.16.1"

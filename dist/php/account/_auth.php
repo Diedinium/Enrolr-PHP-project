@@ -20,9 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $account->login($email, $password);
 
             if ($account->getAuthenticated()) {
-                $_SESSION['successMessage'] = "Logged in successfully";
-                header("Location: ../../pages/enrollments.php");
-                die;
+                if ($account->getIsAdmin()) {
+                    $_SESSION['successMessage'] = "Logged in successfully";
+                    header("Location: ../../pages/courses.php");
+                    die;
+                }
+                else {
+                    $_SESSION['successMessage'] = "Logged in successfully";
+                    header("Location: ../../pages/enrolments.php");
+                    die;
+                }
             }
             else {
                 dieWithError("Login failed.");

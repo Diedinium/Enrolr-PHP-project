@@ -29,17 +29,17 @@ if (!empty($_SESSION['successMessage'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enrollr - Enrollments</title>
+    <title>Enrolr - Enrolments</title>
     <script src="../main.js"></script>
     <link rel="stylesheet" href="../main.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrollr-navbar-top-accent shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
-                <img src="../img/EnrollrLogo.png" alt="Enrollr logo" width="60" class="d-inline-block">
-                <span>Enrollr</span>
+                <img src="../img/enrolrLogo.png" alt="enrolr logo" width="60" class="d-inline-block">
+                <span>Enrolr</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -50,25 +50,20 @@ if (!empty($_SESSION['successMessage'])) {
                     <li class="nav-item active">
                         <a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home</a>
                     </li>
-                    <?php if ($account->getIsAdmin()) : ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="manage.php"><i class="fas fa-users-cog"></i> Manage</a>
-                        </li>
-                    <?php endif ?>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php"><i class="fas fa-question"></i> About</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" action="../php/account/_logout.php" method="POST" id="logoutForm">
                     <div class="mr-sm-3 mr-3 text-muted"><i class="fas fa-user-circle"></i> <?= $account->getEmail() ?></div>
-                    <a href="settings.php"><i class="fas fa-user-edit fa-lg enrollr-standard-icon mr-3" data-toggle="tooltip" data-placement="bottom" title="Edit user settings"></i></a>
-                    <i class="fas fa-sign-out-alt fa-lg enrollr-danger-icon" onclick="submitLogout()" data-toggle="tooltip" data-placement="bottom" title="Logout"></i>
+                    <a href="settings.php"><i class="fas fa-cog fa-lg enrolr-standard-icon mr-3" data-toggle="tooltip" data-placement="bottom" title="Edit user settings"></i></a>
+                    <i class="fas fa-sign-out-alt fa-lg enrolr-danger-icon" onclick="submitLogout()" data-toggle="tooltip" data-placement="bottom" title="Logout"></i>
                 </form>
             </div>
         </div>
     </nav>
 
-    <main class="enrollr-navbar-spacer">
+    <main class="enrolr-navbar-spacer">
         <div class="container">
             <?php if (!empty($errorMessage)) : ?>
                 <div class="alert alert-danger mt-2">

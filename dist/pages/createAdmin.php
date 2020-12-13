@@ -7,6 +7,6 @@ $account = new Account();
 session_start();
 
 $password = password_hash("SomeCrappyAdminPassword", PASSWORD_DEFAULT);
-$account->addAccount("Admin.McAdmin@enrollr.co.uk", "SomeCrappyAdminPassword", "Admin", "McAdmin", "Adminstrator", true);
+$account->addAccount("Admin.McAdmin@enrolr.co.uk", "SomeCrappyAdminPassword", "Admin", "McAdmin", "Adminstrator", true);
 
 

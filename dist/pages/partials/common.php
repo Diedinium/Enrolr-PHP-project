@@ -1,9 +1,9 @@
-<div class="enrollr-toast-container position-fixed" id="toastContainer" style="z-index: 2000;">
+<div class="enrolr-toast-container position-fixed" id="toastContainer" style="z-index: 2000;">
 
 </div>
 
 <div class="d-none" id="templates">
-    <div class="toast enrollr-error-toast" role="alert" data-delay="8000" id="templateToastError">
+    <div class="toast enrolr-error-toast" role="alert" data-delay="8000" id="templateToastError">
         <div class="toast-header">
             <strong class="mr-auto text-danger">Error</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="toast enrollr-success-toast" role="alert" data-delay="8000" id="templateToastSuccess">
+    <div class="toast enrolr-success-toast" role="alert" data-delay="8000" id="templateToastSuccess">
         <div class="toast-header">
             <strong class="mr-auto text-success">Success</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
@@ -47,7 +47,7 @@
                 <p id="confirmMessage"></p>
             </div>
             <div class="modal-footer">
-                <button id="confirmBtnYes" type="button" class="btn enrollr-brand-colour-bg text-white">Yes</button>
+                <button id="confirmBtnYes" type="button" class="btn enrolr-brand-colour-bg text-white">Yes</button>
                 <button id="confirmBtnNo" type="button" class="btn btn-danger">No</button>
             </div>
         </div>

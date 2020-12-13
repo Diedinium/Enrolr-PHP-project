@@ -11,7 +11,7 @@ if ($account->getAuthenticated()) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['createEmail']) || !isset($_POST['createPassword']) || !isset($_POST['createPasswordConfirm']) || 
     !isset($_POST['createFirstName']) || !isset($_POST['createLastName']) || !isset($_POST['createJobRole']) || !isset($_POST['createIsAdmin'])) {
-        dieWithError("Something went wrong, details needed to create an account were not passed.", "pages/createAccount.php");
+        dieWithError("Something went wrong, details needed to create an account were not passed.", "pages/users.php");
     }
     else {
         $createEmail = $_POST['createEmail'];
@@ -23,20 +23,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createIsAdmin = $_POST['isAdmin'];
 
         if ($createPassword !== $createPasswordConfirm) {
-            dieWithError("Passwords not not match, account not created. Please try again.", "pages/settings.php?tab=password-tab");
+            dieWithError("Passwords not not match, account not created. Please try again.", "pages/users.php");
         }
 
         try {
             $account->addAccount($createEmail, $createPassword, $createFirstName, $createLastName, $createJobRole, $createIsAdmin);
 
-            $_SESSION['successMessage'] = "Account created using email: $createEmail";
-            header("Location: ../../pages/enrollments.php");
+            $_SESSION['successMessage'] = "Account created with email: $createEmail";
+            header("Location: ../../pages/users.php");
         }
         catch (Exception $ex) {
-            dieWithError($ex->getMessage(), "pages/enrollments.php");
+            dieWithError($ex->getMessage(), "pages/users.php");
         }
     }
 }
 else {
-    dieWithError("You cannot directly load this page", "pages/enrollments.php");
+    dieWithError("You cannot directly load this page");
 }
