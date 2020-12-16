@@ -16,7 +16,12 @@ if (!empty($_SESSION['successMessage'])) {
 }
 
 if ($account->getAuthenticated()) {
-    header("Location: pages/enrollments.php");
+    if ($account->getIsAdmin()) {
+        header("Location: pages/courses.php");
+        $connection->close();
+        die;
+    }
+    header("Location: pages/enrolments.php");
     $connection->close();
     die;
 }

@@ -91,11 +91,11 @@ if (!empty($_SESSION['successMessage'])) {
 
             <div class="card border-0 enrolr-subtle-shadow">
                 <div class="card-header">
-                    <h3>User Management</h3>
+                    <h3><span class="enrolr-gradient">User Management</span></h3>
                 </div>
                 <div class="card-body">
                     <p class="card-text">Create a new user, as either an administrator or regular staff member.</p>
-                    <button class="btn enrolr-brand-colour-bg text-white">Create new user</button>
+                    <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalAddUser').modal('show')">Create new user</button>
                 </div>
             </div>
 
@@ -120,6 +120,21 @@ if (!empty($_SESSION['successMessage'])) {
                             ?>
                                 <div class="alert alert-info">No Staff found, add one using the button above!</div>
                             <?php else : ?>
+                                <div class="row justify-content-end">
+                                    <div class="col-12 d-sm-none">
+                                        <div class="alert alert-warning">
+                                            <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="d-flex align-items-center">
+                                            <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
+                                            <div class="pl-2">
+                                                <i id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <table id="staffTable" class="table w-100">
                                     <thead>
                                         <th>First Name</th>
@@ -150,6 +165,21 @@ if (!empty($_SESSION['successMessage'])) {
                             ?>
                                 <div class="alert alert-info">No Administrators found, add one using the button above!</div>
                             <?php else : ?>
+                                <div class="row justify-content-end">
+                                    <div class="col-12 d-sm-none">
+                                        <div class="alert alert-warning">
+                                            <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="d-flex align-items-center">
+                                            <input type="search" id="adminSearchBox" class="form-control form-control-sm" placeholder="Type to search">
+                                            <div class="pl-2">
+                                                <i id="adminSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <table id="adminTable" class="table w-100">
                                     <thead>
                                         <th>First Name</th>
@@ -164,7 +194,7 @@ if (!empty($_SESSION['successMessage'])) {
                                             <td><?= $userAccount['lastName'] ?></td>
                                             <td><?= $userAccount['email'] ?></td>
                                             <td><?= $userAccount['jobTitle'] ?></td>
-                                            <td class="text-right">
+                                            <td class="text-right" style="min-width: 100px;">
                                                 <i onclick="alert('Not yet implemented')" class="fas fa-user-edit enrolr-standard-icon mr-2"></i>
                                                 <i onclick="alert('Not yet implemented')" class="fas fa-user-times enrolr-danger-icon mr-2"></i>
                                             </td>
@@ -178,6 +208,59 @@ if (!empty($_SESSION['successMessage'])) {
             </div>
         </div>
     </main>
+
+    <div class="modal" tabindex="-1" id="ModalAddUser">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add User</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <form action="../php/users/_createUser.php" method="POST" id="formAddUser">
+                    <div class="modal-body">
+                        <div class="form-label-group">
+                            <input type="email" id="createEmail" name="createEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
+                            <label for="createEmail">Email address</label>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="password" id="createPassword" name="createPassword" class="form-control" placeholder="Email address" autocomplete="new-password">
+                            <label for="createPassword">Password</label>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="password" id="createPasswordConfirm" name="createPasswordConfirm" class="form-control" data-msg-equalTo="Passwords do not match." placeholder="Email address" autocomplete="new-password">
+                            <label for="createPasswordConfirm">Retype Password</label>
+                        </div>
+                        <div class="d-sm-flex">
+                            <div class="form-label-group flex-fill mr-1">
+                                <input type="text" id="createFirstName" name="createFirstName" class="form-control" placeholder="First Name">
+                                <label for="createFirstName">First Name</label>
+                            </div>
+                            <div class="form-label-group flex-fill ml-1">
+                                <input type="text" id="createLastName" name="createLastName" class="form-control" placeholder="Last Name">
+                                <label for="createLastName">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="text" id="createJobRole" name="createJobRole" class="form-control" placeholder="Last Name">
+                            <label for="createLastName">Job Role</label>
+                        </div>
+                        <hr>
+                        <h5>User Options</h5>
+                        <div class="form-group form-check">
+                            <input type="checkbox" id="createIsAdmin" name="createIsAdmin" class="form-check-input">
+                            <label class="form-check-label" for="createIsAdmin">Make admin</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn enrolr-brand-colour-bg text-white">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <?php include_once __DIR__ . '/partials/common.php' ?>
 
@@ -205,11 +288,67 @@ if (!empty($_SESSION['successMessage'])) {
                 $(this).removeClass('error');
             });
 
-            $('#adminTable').DataTable({
+            let adminTable = $('#adminTable').DataTable({
                 ordering: false,
                 scrollX: true,
                 stateSave: true,
-                lengthChange: false
+                lengthChange: false,
+                dom: '<"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+            });
+
+            let staffTable = $('#staffTable').DataTable({
+                ordering: false,
+                scrollX: true,
+                stateSave: true,
+                lengthChange: false,
+                dom: '<"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+            });
+
+            $('#adminSearchBox, #adminSearchIcon').on('keyup click', function() {
+                adminTable.search($('#adminSearchBox').val()).draw();
+            });
+
+            $('#staffSearchBox, #staffSearchIcon').on('keyup click', function() {
+                adminTable.search($('#staffSearchBox').val()).draw();
+            });
+
+            $('#formAddUser').validate({
+                rules: {
+                    createEmail: {
+                        required: true,
+                        maxlength: 200,
+                        noWhiteSpace: true
+                    },
+                    createPassword: {
+                        required: true,
+                        maxlength: 150,
+                        minlength: 8,
+                        noWhiteSpace: true
+                    },
+                    createPasswordConfirm: {
+                        required: true,
+                        maxlength: 150,
+                        minlength: 8,
+                        noWhiteSpace: true,
+                        equalTo: '#createPassword'
+                    },
+                    createFirstName: {
+                        required: true,
+                        maxlength: 50,
+                        noWhiteSpace: true
+                    },
+                    createJobRole: {
+                        required: true,
+                        maxlength: 100,
+                        noWhiteSpace: true
+                    },
+                    createLastName: {
+                        required: true,
+                        maxlength: 50,
+                        noWhiteSpace: true
+                    }
+                },
+                errorElement: 'small'
             });
         });
     </script>
