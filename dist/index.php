@@ -5,16 +5,6 @@ require __DIR__ . '/php/account/_auth.php';
 $errorMessage;
 $successMessage;
 
-if (!empty($_SESSION['errorMessage'])) {
-    $errorMessage = $_SESSION['errorMessage'];
-    unset($_SESSION['errorMessage']);
-}
-
-if (!empty($_SESSION['successMessage'])) {
-    $successMessage = $_SESSION['successMessage'];
-    unset($_SESSION['successMessage']);
-}
-
 if ($account->getAuthenticated()) {
     if ($account->getIsAdmin()) {
         header("Location: pages/courses.php");
@@ -24,6 +14,16 @@ if ($account->getAuthenticated()) {
     header("Location: pages/enrolments.php");
     $connection->close();
     die;
+}
+
+if (!empty($_SESSION['errorMessage'])) {
+    $errorMessage = $_SESSION['errorMessage'];
+    unset($_SESSION['errorMessage']);
+}
+
+if (!empty($_SESSION['successMessage'])) {
+    $successMessage = $_SESSION['successMessage'];
+    unset($_SESSION['successMessage']);
 }
 
 $connection->close();

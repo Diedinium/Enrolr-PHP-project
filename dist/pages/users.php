@@ -130,7 +130,7 @@ if (!empty($_SESSION['successMessage'])) {
                                         <div class="d-flex align-items-center">
                                             <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
                                             <div class="pl-2">
-                                                <i id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                                                <i data-toggle="tooltip" data-placement="top" title="Search" id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -149,9 +149,9 @@ if (!empty($_SESSION['successMessage'])) {
                                             <td><?= $userAccount['lastName'] ?></td>
                                             <td><?= $userAccount['email'] ?></td>
                                             <td><?= $userAccount['jobTitle'] ?></td>
-                                            <td class="text-right">
-                                                <i onclick="alert('Not yet implemented')" data-toggle="tooltip" data-placement="top" title="Edit User" class="fas fa-user-edit enrolr-standard-icon mr-2"></i>
-                                                <i onclick="alert('Not yet implemented')" data-toggle="tooltip" data-placement="top" title="Delete User" class="fas fa-user-times enrolr-danger-icon mr-2"></i>
+                                            <td class="text-right enrolr-datatable-actions-min-width">
+                                                <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Edit User" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Delete User" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
                                             </td>
                                         </tr>
                                     <?php endforeach ?>
@@ -194,9 +194,13 @@ if (!empty($_SESSION['successMessage'])) {
                                             <td><?= $userAccount['lastName'] ?></td>
                                             <td><?= $userAccount['email'] ?></td>
                                             <td><?= $userAccount['jobTitle'] ?></td>
-                                            <td class="text-right" style="min-width: 100px;">
-                                                <i onclick="alert('Not yet implemented')" class="fas fa-user-edit enrolr-standard-icon mr-2"></i>
-                                                <i onclick="alert('Not yet implemented')" class="fas fa-user-times enrolr-danger-icon mr-2"></i>
+                                            <td class="text-right enrolr-datatable-actions-min-width">
+                                                <?php if ($userAccount['email'] !== "Admin.McAdmin@enrolr.co.uk") : ?>
+                                                    <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Edit User" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                    <?php if ($account->getId() != $userAccount['id']) : ?>
+                                                        <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Delete User" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach ?>
@@ -218,7 +222,7 @@ if (!empty($_SESSION['successMessage'])) {
                         <span>&times;</span>
                     </button>
                 </div>
-                <form action="../php/users/_createUser.php" method="POST" id="formAddUser">
+                <form action="../php/account/_createUser.php" method="POST" id="formAddUser">
                     <div class="modal-body">
                         <div class="form-label-group">
                             <input type="email" id="createEmail" name="createEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
@@ -258,6 +262,59 @@ if (!empty($_SESSION['successMessage'])) {
                         <button type="submit" class="btn enrolr-brand-colour-bg text-white">Add User</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" id="ModalEditUser">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="../php/account/_editUser.php" method="POST" id="formEditUser">
+                        <div class="form-label-group">
+                            <input type="email" id="createEmail" name="createEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
+                            <label for="createEmail">Email address</label>
+                        </div>
+                        <div class="d-sm-flex">
+                            <div class="form-label-group flex-fill mr-1">
+                                <input type="text" id="createFirstName" name="createFirstName" class="form-control" placeholder="First Name">
+                                <label for="createFirstName">First Name</label>
+                            </div>
+                            <div class="form-label-group flex-fill ml-1">
+                                <input type="text" id="createLastName" name="createLastName" class="form-control" placeholder="Last Name">
+                                <label for="createLastName">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="text" id="createJobRole" name="createJobRole" class="form-control" placeholder="Last Name">
+                            <label for="createLastName">Job Role</label>
+                        </div>
+                        <button type="submit" class="btn enrolr-brand-colour-bg text-white">Save</button>
+                    </form>
+                    <hr>
+                    <h5>Update user password</h5>
+                    <p>If a user has forgotten their password, use the form below to update their password.</p>
+                    <form action="../php/account/_editUserPassword.php" method="POST" id="formUpdateUserPassword">
+                        <div class="form-label-group">
+                            <input type="password" id="updatePassword" name="updatePassword" class="form-control" placeholder="Email address" autocomplete="new-password">
+                            <label for="updatePassword">New Password</label>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="password" id="updatePasswordConfirm" name="updatePasswordConfirm" class="form-control" data-msg-equalTo="Passwords do not match." placeholder="Email address" autocomplete="new-password">
+                            <label for="updatePasswordConfirm">Retype Password</label>
+                        </div>
+                        <button type="submit" class="btn enrolr-brand-colour-bg text-white">Update</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -309,7 +366,7 @@ if (!empty($_SESSION['successMessage'])) {
             });
 
             $('#staffSearchBox, #staffSearchIcon').on('keyup click', function() {
-                adminTable.search($('#staffSearchBox').val()).draw();
+                staffTable.search($('#staffSearchBox').val()).draw();
             });
 
             $('#formAddUser').validate({
@@ -349,6 +406,77 @@ if (!empty($_SESSION['successMessage'])) {
                     }
                 },
                 errorElement: 'small'
+            });
+
+            $(document).on('click', '.event-user-edit', function() {
+                $('.tooltip').tooltip('hide');
+                $('#ModalEditUser').modal('show');
+            });
+
+            $(document).on('click', '.event-user-delete-staff', function() {
+                $('.tooltip').tooltip('hide');
+                const userEmail = $(this).closest('tr').find('td').eq(2).html();
+                const $button = $(this);
+                confirmDialog(`Are you sure you want to delete ${userEmail}? This action cannot be undone.`, 'Confirm Deletion', function() {
+                    showSpinner();
+                    const $parentToRemove = $button.closest('tr');
+                    $.ajax({
+                        type: 'POST',
+                        url: '../php/account/_deleteUser.php',
+                        data: {
+                            id: $button.attr('data-userId')
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            hideSpinner();
+                            if (response.success == true) {
+                                displaySuccessToast(response.message);
+                                $parentToRemove.fadeOut(500, () => {
+                                    staffTable.row($parentToRemove).remove().draw();
+                                });
+                            } else {
+                                displayErrorToastStandard(response.message);
+                            }
+                        },
+                        error: function() {
+                            hideSpinner();
+                            displayErrorToastStandard('Something went wrong while handling this request');
+                        }
+                    });
+                });
+            });
+
+            $(document).on('click', '.event-user-delete-admin', function() {
+                $('.tooltip').tooltip('hide');
+                const userEmail = $(this).closest('tr').find('td').eq(2).html();
+                const $button = $(this);
+                confirmDialog(`Are you sure you want to delete ${userEmail}? This action cannot be undone.`, 'Confirm Deletion', function() {
+                    showSpinner();
+                    const $parentToRemove = $button.closest('tr');
+                    $.ajax({
+                        type: 'POST',
+                        url: '../php/account/_deleteUser.php',
+                        data: {
+                            id: $button.attr('data-userId')
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            hideSpinner();
+                            if (response.success == true) {
+                                displaySuccessToast(response.message);
+                                $parentToRemove.fadeOut(500, () => {
+                                    adminTable.row($parentToRemove).remove().draw();
+                                });
+                            } else {
+                                displayErrorToastStandard(response.message);
+                            }
+                        },
+                        error: function() {
+                            hideSpinner();
+                            displayErrorToastStandard('Something went wrong while handling this request');
+                        }
+                    });
+                });
             });
         });
     </script>

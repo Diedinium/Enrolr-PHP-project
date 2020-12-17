@@ -1,4 +1,4 @@
-<div class="enrolr-toast-container position-fixed" id="toastContainer" style="z-index: 2000;">
+<div class="enrolr-toast-container position-fixed" id="toastContainer" style="z-index: 1900;">
 
 </div>
 
@@ -37,6 +37,9 @@
     </div>
 </div>
 
+<div class="loader d-none"></div>
+<div class="overlay d-none"></div>
+
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -48,7 +51,7 @@
             </div>
             <div class="modal-footer">
                 <button id="confirmBtnYes" type="button" class="btn enrolr-brand-colour-bg text-white">Yes</button>
-                <button id="confirmBtnNo" type="button" class="btn btn-danger">No</button>
+                <button id="confirmBtnNo" type="button" class="btn btn-secondary">No</button>
             </div>
         </div>
     </div>

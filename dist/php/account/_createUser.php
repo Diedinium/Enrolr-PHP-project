@@ -2,15 +2,13 @@
 require __DIR__ . '/../classes/_connect.php';
 require __DIR__ . '/_auth.php';
 
-if ($account->getAuthenticated()) {
-    header("Location: pages/todos.php");
-    $connection->close();
-    die;
+if (!$account->getAuthenticated() || !$account->getIsAdmin()) {
+    dieWithError("You do not have access to this page");
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['createEmail']) || !isset($_POST['createPassword']) || !isset($_POST['createPasswordConfirm']) || 
-    !isset($_POST['createFirstName']) || !isset($_POST['createLastName']) || !isset($_POST['createJobRole']) || !isset($_POST['createIsAdmin'])) {
+    !isset($_POST['createFirstName']) || !isset($_POST['createLastName']) || !isset($_POST['createJobRole'])) {
         dieWithError("Something went wrong, details needed to create an account were not passed.", "pages/users.php");
     }
     else {
@@ -20,16 +18,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createFirstName = $_POST['createFirstName'];
         $createLastName = $_POST['createLastName'];
         $createJobRole = $_POST['createJobRole'];
-        $createIsAdmin = $_POST['isAdmin'];
+        if (!isset($_POST['createIsAdmin'])) {
+            $createIsAdmin = false;
+        }
+        else {
+            $createIsAdmin = true;
+        }
 
         if ($createPassword !== $createPasswordConfirm) {
-            dieWithError("Passwords not not match, account not created. Please try again.", "pages/users.php");
+            dieWithError("Passwords not not match, user not created. Please try again.", "pages/users.php");
         }
 
         try {
             $account->addAccount($createEmail, $createPassword, $createFirstName, $createLastName, $createJobRole, $createIsAdmin);
 
-            $_SESSION['successMessage'] = "Account created with email: $createEmail";
+            $_SESSION['successMessage'] = "User created with email: $createEmail";
             header("Location: ../../pages/users.php");
         }
         catch (Exception $ex) {

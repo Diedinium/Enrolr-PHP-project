@@ -66,6 +66,14 @@ window.confirmDialog = function (message, title, yesCallback) {
     });
 }
 
+window.showSpinner = function() {
+    $('.loader:first, .overlay:first').removeClass('d-none');
+}
+
+window.hideSpinner = function() {
+    $('.loader:first, .overlay:first').addClass('d-none');
+}
+
 $.validator.addMethod("noWhiteSpace", function (value, element) {
     if (value && !value.trim()) {
         return false;

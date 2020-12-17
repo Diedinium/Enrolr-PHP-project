@@ -164,6 +164,69 @@ small.error {
         background-size: 650%;
     }
 }
+
+/* .loader,
+.loader:after {
+  
+} */
+
+.loader {
+    margin: auto;
+    font-size: 10px;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
+    width: 8em;
+    height: 8em;
+    text-indent: -9999em;
+    border-top: 0.8em solid rgba(245,147,31, 0.3);
+    border-right: 0.8em solid rgba(245,147,31, 0.3);
+    border-bottom: 0.8em solid rgba(245,147,31, 0.3);
+    border-left: 0.8em solid #f5931f;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+}
+
+.overlay {
+    content: '';
+    display: block;
+    position: fixed;
+    z-index: 1999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.2);
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
 .form-label-group {
     position: relative;
     margin-bottom: 1rem;
