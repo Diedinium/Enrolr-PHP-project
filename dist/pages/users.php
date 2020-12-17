@@ -37,11 +37,12 @@ if (!empty($_SESSION['successMessage'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrolr - Users</title>
-    <script src="../main.js"></script>
+
     <link rel="stylesheet" href="../main.css">
 </head>
 
 <body>
+    <script src="../main.js"></script>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
@@ -54,11 +55,11 @@ if (!empty($_SESSION['successMessage'])) {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home</a>
                     </li>
                     <?php if ($account->getIsAdmin()) : ?>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a class="nav-link" href=""><i class="fas fa-users-cog"></i> User Management</a>
                         </li>
                     <?php endif ?>
