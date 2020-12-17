@@ -254,6 +254,19 @@ class Account
         }
     }
 
+    public function editUser(string $firstName, string $lastName, string $email, string $jobTitle) 
+    {
+        global $connection;
+
+        $editUser = $connection->prepare("UPDATE t_users SET firstName=?, lastName=?, email=?, jobTitle=? WHERE id = {$this->id}");
+        $editUser->bind_param("ssss", $firstName, $lastName, $email, $jobTitle);
+        $success = $editUser->execute();
+
+        if (!$success) {
+            throw new Exception("Edit user operation failed; most likely because you tried to set a users email to an already existing email");
+        }
+    }
+
     // Update user password
     public function changePassword($newPassword)
     {

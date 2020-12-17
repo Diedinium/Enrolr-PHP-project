@@ -150,8 +150,8 @@ if (!empty($_SESSION['successMessage'])) {
                                             <td><?= $userAccount['email'] ?></td>
                                             <td><?= $userAccount['jobTitle'] ?></td>
                                             <td class="text-right enrolr-datatable-actions-min-width">
-                                                <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Edit User" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
-                                                <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Delete User" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
+                                                <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
                                             </td>
                                         </tr>
                                     <?php endforeach ?>
@@ -196,9 +196,9 @@ if (!empty($_SESSION['successMessage'])) {
                                             <td><?= $userAccount['jobTitle'] ?></td>
                                             <td class="text-right enrolr-datatable-actions-min-width">
                                                 <?php if ($userAccount['email'] !== "Admin.McAdmin@enrolr.co.uk") : ?>
-                                                    <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Edit User" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
                                                     <?php if ($account->getId() != $userAccount['id']) : ?>
-                                                        <i data-userId="<?= $userAccount['id'] ?>" data-toggle="tooltip" data-placement="top" title="Delete User" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
+                                                        <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
                                                     <?php endif; ?>
                                                 <?php endif; ?>
                                             </td>
@@ -277,23 +277,24 @@ if (!empty($_SESSION['successMessage'])) {
                 </div>
                 <div class="modal-body">
                     <form action="../php/account/_editUser.php" method="POST" id="formEditUser">
+                        <input type="hidden" id="updateUserId" name="updateUserId">
                         <div class="form-label-group">
-                            <input type="email" id="createEmail" name="createEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
-                            <label for="createEmail">Email address</label>
+                            <input type="email" id="updateEmail" name="updateEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
+                            <label for="updateEmail">Email address</label>
                         </div>
                         <div class="d-sm-flex">
                             <div class="form-label-group flex-fill mr-1">
-                                <input type="text" id="createFirstName" name="createFirstName" class="form-control" placeholder="First Name">
-                                <label for="createFirstName">First Name</label>
+                                <input type="text" id="updateFirstName" name="updateFirstName" class="form-control" placeholder="First Name">
+                                <label for="updateFirstName">First Name</label>
                             </div>
                             <div class="form-label-group flex-fill ml-1">
-                                <input type="text" id="createLastName" name="createLastName" class="form-control" placeholder="Last Name">
-                                <label for="createLastName">Last Name</label>
+                                <input type="text" id="updateLastName" name="updateLastName" class="form-control" placeholder="Last Name">
+                                <label for="updateLastName">Last Name</label>
                             </div>
                         </div>
                         <div class="form-label-group">
-                            <input type="text" id="createJobRole" name="createJobRole" class="form-control" placeholder="Last Name">
-                            <label for="createLastName">Job Role</label>
+                            <input type="text" id="updateJobRole" name="updateJobRole" class="form-control" placeholder="Last Name">
+                            <label for="updateJobRole">Job Role</label>
                         </div>
                         <button type="submit" class="btn enrolr-brand-colour-bg text-white">Save</button>
                     </form>
@@ -301,6 +302,7 @@ if (!empty($_SESSION['successMessage'])) {
                     <h5>Update user password</h5>
                     <p>If a user has forgotten their password, use the form below to update their password.</p>
                     <form action="../php/account/_editUserPassword.php" method="POST" id="formUpdateUserPassword">
+                        <input type="hidden" id="updatePasswordUserId" name="updatePasswordUserId">
                         <div class="form-label-group">
                             <input type="password" id="updatePassword" name="updatePassword" class="form-control" placeholder="Email address" autocomplete="new-password">
                             <label for="updatePassword">New Password</label>
@@ -335,6 +337,16 @@ if (!empty($_SESSION['successMessage'])) {
         }
 
         $(function() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            let $rowReference;
+
+            if (urlParams.has('tab')) {
+                const tabName = urlParams.get('tab');
+
+                $(`#${tabName}`).tab('show');
+            }
+
             $('[data-toggle="tooltip"]').tooltip();
 
             $('a[data-toggle="tab"').on('shown.bs.tab', function(e) {
@@ -408,9 +420,132 @@ if (!empty($_SESSION['successMessage'])) {
                 errorElement: 'small'
             });
 
+            $('#formEditUser').validate({
+                rules: {
+                    updateEmail: {
+                        required: true,
+                        maxlength: 200,
+                        noWhiteSpace: true
+                    },
+                    updateFirstName: {
+                        required: true,
+                        maxlength: 50,
+                        noWhiteSpace: true
+                    },
+                    updateJobRole: {
+                        required: true,
+                        maxlength: 100,
+                        noWhiteSpace: true
+                    },
+                    updateLastName: {
+                        required: true,
+                        maxlength: 50,
+                        noWhiteSpace: true
+                    }
+                },
+                errorElement: 'small'
+            });
+
+            $('#formUpdateUserPassword').validate({
+                rules: {
+                    updatePassword: {
+                        required: true,
+                        maxlength: 150,
+                        minlength: 8,
+                        noWhiteSpace: true
+                    },
+                    updatePasswordConfirm: {
+                        required: true,
+                        maxlength: 150,
+                        minlength: 8,
+                        noWhiteSpace: true,
+                        equalTo: '#updatePassword'
+                    }
+                },
+                errorElement: 'small'
+            });
+
             $(document).on('click', '.event-user-edit', function() {
+                const $rowValues = $(this).closest('tr').find('td');
                 $('.tooltip').tooltip('hide');
+                $rowReference = $(this).closest('tr');
+
+                const $formInputs = $('#formEditUser input');
+                $formInputs.eq(0).val($(this).attr('data-userId'));
+                $formInputs.eq(1).val($rowValues.eq(2).html());
+                $formInputs.eq(2).val($rowValues.eq(0).html());
+                $formInputs.eq(3).val($rowValues.eq(1).html());
+                $formInputs.eq(4).val($rowValues.eq(3).html());
+                $('#formUpdateUserPassword input').first().val($(this).attr('data-userId'));
+
                 $('#ModalEditUser').modal('show');
+            });
+
+            $(document).on('submit', '#formEditUser', function(e) {
+                e.preventDefault();
+                showSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: '../php/account/_editUser.php',
+                    data: $('#formEditUser').serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success == true) {
+                            if ($($rowReference).closest('div.dataTables_wrapper').attr('id') === "staffTable_wrapper") {
+                                let data = staffTable.row($rowReference).data();
+                                data[0] = $('#formEditUser input').eq(2).val();
+                                data[1] = $('#formEditUser input').eq(3).val();
+                                data[2] = $('#formEditUser input').eq(1).val();
+                                data[3] = $('#formEditUser input').eq(4).val();
+                                staffTable.row($rowReference).data(data).draw();
+                            } else {
+                                let data = adminTable.row($rowReference).data();
+                                data[0] = $('#formEditUser input').eq(2).val();
+                                data[1] = $('#formEditUser input').eq(3).val();
+                                data[2] = $('#formEditUser input').eq(1).val();
+                                data[3] = $('#formEditUser input').eq(4).val();
+                                adminTable.row($rowReference).data(data).draw();
+                            }
+                            displaySuccessToast(response.message);
+                            $('#ModalEditUser').modal('hide');
+                            hideSpinner();
+                        } else {
+                            displayErrorToastStandard(response.message);
+                            hideSpinner();
+                        }
+                    },
+                    error: function() {
+                        hideSpinner();
+                        displayErrorToastStandard('Something went wrong while handling this request');
+                    }
+                });
+
+            });
+
+            $(document).on('submit', '#formUpdateUserPassword', function(e) {
+                e.preventDefault();
+                showSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: '../php/account/_updatePassword.php',
+                    data: $('#formUpdateUserPassword').serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success == true) {
+                            displaySuccessToast(response.message);
+                            $('#formUpdateUserPassword').trigger('reset');
+                            $('#ModalEditUser').modal('hide');
+                            hideSpinner();
+                        } else {
+                            displayErrorToastStandard(response.message);
+                            hideSpinner();
+                        }
+                    },
+                    error: function() {
+                        hideSpinner();
+                        displayErrorToastStandard('Something went wrong while handling this request');
+                    }
+                });
             });
 
             $(document).on('click', '.event-user-delete-staff', function() {

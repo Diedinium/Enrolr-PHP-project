@@ -7,18 +7,22 @@ if (!$account->getAuthenticated() || !$account->getIsAdmin()) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (!isset($_POST['id'])) {
+    if (!isset($_POST['updateUserId'])) {
         echo json_encode(['success' => 0, 'message' => 'Something went wrong, this request could not be processed']);
         die;
     }
 
-    $idToDelete = $_POST['id'];
+    $userId = $_POST['updateUserId'];
+    $email = $_POST['updateEmail'];
+    $firstName = $_POST['updateFirstName'];
+    $lastName = $_POST['updateLastName'];
+    $jobRole = $_POST['updateJobRole'];
     $accountToDelete = new Account();
-    $accountToDelete->setId($idToDelete);
+    $accountToDelete->setId($userId);
     try {
-        $accountToDelete->deleteAccount();
+        $accountToDelete->editUser($firstName, $lastName, $email, $jobRole);
 
-        echo json_encode(["success" => 1, "message" => "User with id $idToDelete succesfully deleted."]);
+        echo json_encode(["success" => 1, "message" => "User with id $userId succesfully updated."]);
         die;
     }
     catch (Exception $ex) {

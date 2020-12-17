@@ -33,7 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $account->addAccount($createEmail, $createPassword, $createFirstName, $createLastName, $createJobRole, $createIsAdmin);
 
             $_SESSION['successMessage'] = "User created with email: $createEmail";
-            header("Location: ../../pages/users.php");
+            if ($createIsAdmin) {
+                header("Location: ../../pages/users.php?tab=admin-tab");
+            }
+            else {
+                header("Location: ../../pages/users.php");
+            }
         }
         catch (Exception $ex) {
             dieWithError($ex->getMessage(), "pages/users.php");
