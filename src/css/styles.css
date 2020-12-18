@@ -1,3 +1,7 @@
+body {
+    background-color: rgb(250, 250, 250);
+}
+
 .enrolr-brand-colour-text {
     color: #f57f1f!important;
 }
@@ -47,7 +51,7 @@ button.enrolr-brand-colour-bg:hover, a.enrolr-brand-colour-bg:hover {
     left: 0;
     z-index: -1;
     border-radius: inherit;
-    box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.2)!important;
 }
 
 .enrolr-toast-container {
