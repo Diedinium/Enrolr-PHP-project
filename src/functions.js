@@ -57,11 +57,11 @@ window.confirmDialog = function (message, title, yesCallback) {
     $('#confirmTitle').html(title);
     $('#confirmModal').modal('show');
 
-    $('#confirmBtnYes').on('click', function () {
+    $('#confirmBtnYes').off().on('click', function () {
         $('#confirmModal').modal('hide');
         yesCallback();
     });
-    $('#confirmBtnNo').on('click', function () {
+    $('#confirmBtnNo').off().on('click', function () {
         $('#confirmModal').modal('hide');
     });
 }

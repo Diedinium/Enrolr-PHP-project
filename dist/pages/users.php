@@ -614,6 +614,10 @@ if (!empty($_SESSION['successMessage'])) {
                     });
                 });
             });
+
+            $(document).on('hidden.bs.toast', function($event) {
+                $event.target.remove();
+            });
         });
     </script>
 </body>
