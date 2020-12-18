@@ -47,8 +47,16 @@ if (!empty($_SESSION['successMessage'])) {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <?php if (!$account->getIsAdmin()) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="enrolments.php"><i class="fas fa-graduation-cap"></i> Enrolments</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href=""><i class="fas fa-chalkboard-teacher"></i> Courses</a>
                     </li>
                     <?php if ($account->getIsAdmin()) : ?>
                         <li class="nav-item">

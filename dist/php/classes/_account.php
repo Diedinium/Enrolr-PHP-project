@@ -4,24 +4,26 @@ class Account
 {
 
     private int $id;
-    private $email;
-    private $password;
+    private string $email;
+    private string $password;
     private bool $isAuthenticated;
-    private $firstName;
-    private $lastName;
-    private $created;
-    private $isAdmin;
+    private string $firstName;
+    private string $lastName;
+    private string $jobRole;
+    private string $created;
+    private bool $isAdmin;
 
     public function __construct()
     {
         $this->id = 0;
-        $this->email = null;
-        $this->password = null;
+        $this->email = "";
+        $this->password = "";
         $this->isAuthenticated = false;
-        $this->firstName = null;
-        $this->lastName = null;
-        $this->created = null;
-        $this->isAdmin = null;
+        $this->firstName = "";
+        $this->lastName = "";
+        $this->jobRole = "";
+        $this->created = "";
+        $this->isAdmin = false;
     }
 
     public function __destruct()
@@ -63,6 +65,11 @@ class Account
         return $this->lastName;
     }
 
+    public function getJobRole()
+    {
+        return $this->jobRole;
+    }
+
     public function getFullName()
     {
         return $this->firstName . " " . $this->lastName;
@@ -82,26 +89,23 @@ class Account
     {
         global $connection;
 
-        if (session_status() == PHP_SESSION_ACTIVE) {
-            $sessionId = session_id();
-            $email = trim($email);
-            $password = trim($password);
+        $email = trim($email);
+        $password = trim($password);
 
-            if (!is_null($this->getIdFromName($email))) {
-                throw new Exception("An account with this email already exists");
-            }
-
-            $addAccountQuery = $connection->prepare("INSERT INTO t_users (firstName, lastName, email, password, jobTitle, isAdmin) VALUES (?, ?, ?, ?, ?, ?)");
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $addAccountQuery->bind_param("ssssss", $firstName, $lastName, $email, $hash, $jobTitle, $isAdmin);
-            $addAccountQuery->execute();
-
-            if (!empty($addAccountQuery->error)) {
-                throw new Exception("Failed to add user.");
-            }
-
-            return $addAccountQuery->insert_id;
+        if (!is_null($this->getIdFromName($email))) {
+            throw new Exception("An account with this email already exists");
         }
+
+        $addAccountQuery = $connection->prepare("INSERT INTO t_users (firstName, lastName, email, password, jobTitle, isAdmin) VALUES (?, ?, ?, ?, ?, ?)");
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $addAccountQuery->bind_param("ssssss", $firstName, $lastName, $email, $hash, $jobTitle, $isAdmin);
+        $addAccountQuery->execute();
+
+        if (!empty($addAccountQuery->error)) {
+            throw new Exception("Failed to add user.");
+        }
+
+        return $addAccountQuery->insert_id;
     }
 
     // Delete currently logged in account, or delete account by manually setting id on new instance of account class (admin only).
@@ -146,7 +150,7 @@ class Account
                 $this->lastName = $row['lastName'];
                 $this->email = $row['email'];
                 $this->password = $row['password'];
-                $this->jobTitle = $row['jobTitle'];
+                $this->jobRole = $row['jobTitle'];
                 $this->isAdmin = $row['isAdmin'];
                 $this->created = $row['created'];
                 $this->isAuthenticated = true;
@@ -171,7 +175,7 @@ class Account
                         $this->lastName = $resultLastName;
                         $this->email = $resultEmail;
                         $this->password = $resultPassword;
-                        $this->jobTitle = $resultJobTitle;
+                        $this->jobRole = $resultJobTitle;
                         $this->isAdmin = $resultIsAdmin;
                         $this->created = $resultCreated;
                         $this->isAuthenticated = true;
@@ -208,7 +212,7 @@ class Account
                 array_push($result, $userAccount);
             }
         }
-        
+
         return $result;
     }
 
@@ -220,7 +224,7 @@ class Account
                 array_push($result, $userAccount);
             }
         }
-        
+
         return $result;
     }
 
@@ -242,21 +246,22 @@ class Account
         return;
     }
 
-    // Update users names
-    public function updateNames(string $firstName, string $lastName)
+    // Update user details, but from non-admin pages such as settings page.
+    public function updateDetails(string $firstName, string $lastName, string $jobRole)
     {
         global $connection;
 
-        $updateNames = $connection->prepare("UPDATE t_users SET firstName=?, lastName=? WHERE id = {$this->id}");
-        $updateNames->bind_param("ss", $firstName, $lastName);
+        $updateNames = $connection->prepare("UPDATE t_users SET firstName=?, lastName=?, jobTitle=? WHERE id = {$this->id}");
+        $updateNames->bind_param("sss", $firstName, $lastName, $jobRole);
         $success = $updateNames->execute();
 
         if (!$success) {
-            throw new Exception("Updating names failed.");
+            throw new Exception("Updating details failed for an unknown reason.");
         }
     }
 
-    public function editUser(string $firstName, string $lastName, string $email, string $jobTitle) 
+    // Used to update user details on user management page
+    public function editUser(string $firstName, string $lastName, string $email, string $jobTitle)
     {
         global $connection;
 

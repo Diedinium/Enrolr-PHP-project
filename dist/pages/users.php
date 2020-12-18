@@ -58,6 +58,9 @@ if (!empty($_SESSION['successMessage'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.php"><i class="fas fa-chalkboard-teacher"></i> Courses</a>
+                    </li>
                     <?php if ($account->getIsAdmin()) : ?>
                         <li class="nav-item active">
                             <a class="nav-link" href=""><i class="fas fa-users-cog"></i> User Management</a>
@@ -97,7 +100,6 @@ if (!empty($_SESSION['successMessage'])) {
                 <div class="card-body">
                     <p class="card-text">Create a new user, as either an administrator or regular staff member.</p>
                     <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalAddUser').modal('show')">Create new user</button>
-                    <button type="button" class="btn btn-primary event-add-row">Add row/create table</button>
                 </div>
             </div>
 
@@ -121,73 +123,45 @@ if (!empty($_SESSION['successMessage'])) {
                             if (count($staffResult) < 1) :
                             ?>
                                 <div class="alert alert-info">No Staff found, add one using the button above!</div>
-                                <div class="row justify-content-end">
-                                    <div class="col-12 d-sm-none">
-                                        <div class="alert alert-warning">
-                                            <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="d-flex align-items-center">
-                                            <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
-                                            <div class="pl-2">
-                                                <i data-toggle="tooltip" data-placement="top" title="Search" id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <table id="staffTable" class="table w-100">
-                                    <thead>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Job Title</th>
-                                        <th></th>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            <?php else : ?>
-                                <div class="row justify-content-end">
-                                    <div class="col-12 d-sm-none">
-                                        <div class="alert alert-warning">
-                                            <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="d-flex align-items-center">
-                                            <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
-                                            <div class="pl-2">
-                                                <i data-toggle="tooltip" data-placement="top" title="Search" id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <table id="staffTable" class="table w-100">
-                                    <thead>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Job Title</th>
-                                        <th></th>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($staffResult as $userAccount) : ?>
-                                            <tr>
-                                                <td><?= $userAccount['firstName'] ?></td>
-                                                <td><?= $userAccount['lastName'] ?></td>
-                                                <td><?= $userAccount['email'] ?></td>
-                                                <td><?= $userAccount['jobTitle'] ?></td>
-                                                <td class="text-right enrolr-datatable-actions-min-width">
-                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
-                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>
                             <?php endif; ?>
+                            <div class="row justify-content-end">
+                                <div class="col-12 d-sm-none">
+                                    <div class="alert alert-warning">
+                                        <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="d-flex align-items-center">
+                                        <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
+                                        <div class="pl-2">
+                                            <i data-toggle="tooltip" data-placement="top" title="Search" id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="staffTable" class="table w-100">
+                                <thead>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Job Title</th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($staffResult as $userAccount) : ?>
+                                        <tr>
+                                            <td><?= $userAccount['firstName'] ?></td>
+                                            <td><?= $userAccount['lastName'] ?></td>
+                                            <td><?= $userAccount['email'] ?></td>
+                                            <td><?= $userAccount['jobTitle'] ?></td>
+                                            <td class="text-right enrolr-datatable-actions-min-width">
+                                                <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="tab-pane fade p-2" id="admin" role="tabpanel">
                             <?php
@@ -195,50 +169,49 @@ if (!empty($_SESSION['successMessage'])) {
                             if (count($result) < 1) :
                             ?>
                                 <div class="alert alert-info">No Administrators found, add one using the button above!</div>
-                            <?php else : ?>
-                                <div class="row justify-content-end">
-                                    <div class="col-12 d-sm-none">
-                                        <div class="alert alert-warning">
-                                            <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
-                                        </div>
+                            <?php endif; ?>
+                            <div class="row justify-content-end">
+                                <div class="col-12 d-sm-none">
+                                    <div class="alert alert-warning">
+                                        <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
                                     </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="d-flex align-items-center">
-                                            <input type="search" id="adminSearchBox" class="form-control form-control-sm" placeholder="Type to search">
-                                            <div class="pl-2">
-                                                <i id="adminSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
-                                            </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="d-flex align-items-center">
+                                        <input type="search" id="adminSearchBox" class="form-control form-control-sm" placeholder="Type to search">
+                                        <div class="pl-2">
+                                            <i id="adminSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <table id="adminTable" class="table w-100">
-                                    <thead>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Job Title</th>
-                                        <th></th>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($adminResult as $userAccount) : ?>
-                                            <tr>
-                                                <td><?= $userAccount['firstName'] ?></td>
-                                                <td><?= $userAccount['lastName'] ?></td>
-                                                <td><?= $userAccount['email'] ?></td>
-                                                <td><?= $userAccount['jobTitle'] ?></td>
-                                                <td class="text-right enrolr-datatable-actions-min-width">
-                                                    <?php if ($userAccount['email'] !== "Admin.McAdmin@enrolr.co.uk") : ?>
-                                                        <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
-                                                        <?php if ($account->getId() != $userAccount['id']) : ?>
-                                                            <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
-                                                        <?php endif; ?>
+                            </div>
+                            <table id="adminTable" class="table w-100">
+                                <thead>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Job Title</th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($adminResult as $userAccount) : ?>
+                                        <tr>
+                                            <td><?= $userAccount['firstName'] ?></td>
+                                            <td><?= $userAccount['lastName'] ?></td>
+                                            <td><?= $userAccount['email'] ?></td>
+                                            <td><?= $userAccount['jobTitle'] ?></td>
+                                            <td class="text-right enrolr-datatable-actions-min-width">
+                                                <?php if ($userAccount['email'] !== "Admin.McAdmin@enrolr.co.uk") : ?>
+                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                    <?php if ($account->getId() != $userAccount['id']) : ?>
+                                                        <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
                                                     <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>
-                            <?php endif; ?>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -419,21 +392,6 @@ if (!empty($_SESSION['successMessage'])) {
                 staffTable.search($('#staffSearchBox').val()).draw();
             });
 
-            $(document).on('click', '.event-add-row', function() {
-                $('#staff div.alert-info').remove();
-                const $rowTemplate = $('#templates').children('div').eq(4).find('tr:first').clone();
-                $rowTemplate.find('td').eq(0).html('Test first name');
-                $rowTemplate.find('td').eq(1).html('Test second name');
-                $rowTemplate.find('td').eq(2).html('Test email');
-                $rowTemplate.find('td').eq(3).html('Test job title');
-                $rowTemplate.find('td').eq(4).find('i').eq(0).attr('data-userId', 5);
-                $rowTemplate.find('td').eq(4).find('i').eq(1).attr('data-userId', 5);
-                $('#staffTable_wrapper, #staff div.row.justify-content-end').show();
-                staffTable.columns.adjust();
-                staffTable.row.add($rowTemplate).draw();
-
-            });
-
             $('#formAddUser').validate({
                 rules: {
                     createEmail: {
@@ -562,6 +520,7 @@ if (!empty($_SESSION['successMessage'])) {
                                 staffTable.row.add($rowTemplate).draw();
                             }
 
+                            $('#formAddUser').trigger('reset');
                             displaySuccessToast(response.message);
                             $('#ModalAddUser').modal('hide');
                             hideSpinner();

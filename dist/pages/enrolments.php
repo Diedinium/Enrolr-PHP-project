@@ -9,6 +9,13 @@ if (!$account->getAuthenticated()) {
     exit;
 }
 
+if ($account->getIsAdmin()) {
+    $_SESSION['errorMessage'] = "Admin accounts are not allowed to enrol on courses, so you do not need to access this page.";
+    header("Location: ../index.php");
+    $connection->close();
+    exit;
+}
+
 $errorMessage;
 $successMessage;
 
@@ -47,8 +54,14 @@ if (!empty($_SESSION['successMessage'])) {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href=""><i class="fas fa-graduation-cap"></i> Enrolments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.php"><i class="fas fa-chalkboard-teacher"></i> Courses</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php"><i class="fas fa-question"></i> About</a>
