@@ -97,6 +97,7 @@ if (!empty($_SESSION['successMessage'])) {
                 <div class="card-body">
                     <p class="card-text">Create a new user, as either an administrator or regular staff member.</p>
                     <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalAddUser').modal('show')">Create new user</button>
+                    <button type="button" class="btn btn-primary event-add-row">Add row/create table</button>
                 </div>
             </div>
 
@@ -120,6 +121,33 @@ if (!empty($_SESSION['successMessage'])) {
                             if (count($staffResult) < 1) :
                             ?>
                                 <div class="alert alert-info">No Staff found, add one using the button above!</div>
+                                <div class="row justify-content-end">
+                                    <div class="col-12 d-sm-none">
+                                        <div class="alert alert-warning">
+                                            <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="d-flex align-items-center">
+                                            <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
+                                            <div class="pl-2">
+                                                <i data-toggle="tooltip" data-placement="top" title="Search" id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="staffTable" class="table w-100">
+                                    <thead>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Job Title</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
                             <?php else : ?>
                                 <div class="row justify-content-end">
                                     <div class="col-12 d-sm-none">
@@ -144,18 +172,20 @@ if (!empty($_SESSION['successMessage'])) {
                                         <th>Job Title</th>
                                         <th></th>
                                     </thead>
-                                    <?php foreach ($staffResult as $userAccount) : ?>
-                                        <tr>
-                                            <td><?= $userAccount['firstName'] ?></td>
-                                            <td><?= $userAccount['lastName'] ?></td>
-                                            <td><?= $userAccount['email'] ?></td>
-                                            <td><?= $userAccount['jobTitle'] ?></td>
-                                            <td class="text-right enrolr-datatable-actions-min-width">
-                                                <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
-                                                <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach ?>
+                                    <tbody>
+                                        <?php foreach ($staffResult as $userAccount) : ?>
+                                            <tr>
+                                                <td><?= $userAccount['firstName'] ?></td>
+                                                <td><?= $userAccount['lastName'] ?></td>
+                                                <td><?= $userAccount['email'] ?></td>
+                                                <td><?= $userAccount['jobTitle'] ?></td>
+                                                <td class="text-right enrolr-datatable-actions-min-width">
+                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach ?>
+                                    </tbody>
                                 </table>
                             <?php endif; ?>
                         </div>
@@ -189,22 +219,24 @@ if (!empty($_SESSION['successMessage'])) {
                                         <th>Job Title</th>
                                         <th></th>
                                     </thead>
-                                    <?php foreach ($adminResult as $userAccount) : ?>
-                                        <tr>
-                                            <td><?= $userAccount['firstName'] ?></td>
-                                            <td><?= $userAccount['lastName'] ?></td>
-                                            <td><?= $userAccount['email'] ?></td>
-                                            <td><?= $userAccount['jobTitle'] ?></td>
-                                            <td class="text-right enrolr-datatable-actions-min-width">
-                                                <?php if ($userAccount['email'] !== "Admin.McAdmin@enrolr.co.uk") : ?>
-                                                    <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
-                                                    <?php if ($account->getId() != $userAccount['id']) : ?>
-                                                        <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
+                                    <tbody>
+                                        <?php foreach ($adminResult as $userAccount) : ?>
+                                            <tr>
+                                                <td><?= $userAccount['firstName'] ?></td>
+                                                <td><?= $userAccount['lastName'] ?></td>
+                                                <td><?= $userAccount['email'] ?></td>
+                                                <td><?= $userAccount['jobTitle'] ?></td>
+                                                <td class="text-right enrolr-datatable-actions-min-width">
+                                                    <?php if ($userAccount['email'] !== "Admin.McAdmin@enrolr.co.uk") : ?>
+                                                        <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                                                        <?php if ($account->getId() != $userAccount['id']) : ?>
+                                                            <i data-userId="<?= $userAccount['id'] ?>" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-admin"></i>
+                                                        <?php endif; ?>
                                                     <?php endif; ?>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach ?>
+                                    </tbody>
                                 </table>
                             <?php endif; ?>
                         </div>
@@ -371,15 +403,35 @@ if (!empty($_SESSION['successMessage'])) {
                 scrollX: true,
                 stateSave: true,
                 lengthChange: false,
-                dom: '<"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+                dom: '<"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                initComplete: function() {
+                    if ($('#staffTable tbody .dataTables_empty').length) {
+                        $('#staffTable_wrapper, #staff div.row.justify-content-end').hide();
+                    }
+                }
             });
 
-            $('#adminSearchBox, #adminSearchIcon').on('keyup click', function() {
+            $(document).on('keyup click', '#adminSearchBox, #adminSearchIcon', function() {
                 adminTable.search($('#adminSearchBox').val()).draw();
             });
 
-            $('#staffSearchBox, #staffSearchIcon').on('keyup click', function() {
+            $(document).on('keyup click', '#staffSearchBox, #staffSearchIcon', function() {
                 staffTable.search($('#staffSearchBox').val()).draw();
+            });
+
+            $(document).on('click', '.event-add-row', function() {
+                $('#staff div.alert-info').remove();
+                const $rowTemplate = $('#templates').children('div').eq(4).find('tr:first').clone();
+                $rowTemplate.find('td').eq(0).html('Test first name');
+                $rowTemplate.find('td').eq(1).html('Test second name');
+                $rowTemplate.find('td').eq(2).html('Test email');
+                $rowTemplate.find('td').eq(3).html('Test job title');
+                $rowTemplate.find('td').eq(4).find('i').eq(0).attr('data-userId', 5);
+                $rowTemplate.find('td').eq(4).find('i').eq(1).attr('data-userId', 5);
+                $('#staffTable_wrapper, #staff div.row.justify-content-end').show();
+                staffTable.columns.adjust();
+                staffTable.row.add($rowTemplate).draw();
+
             });
 
             $('#formAddUser').validate({
@@ -482,6 +534,49 @@ if (!empty($_SESSION['successMessage'])) {
                 $('#ModalEditUser').modal('show');
             });
 
+            $(document).on('submit', '#formAddUser', function(e) {
+                e.preventDefault();
+                showSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: '../php/account/_createUser.php',
+                    data: $('#formAddUser').serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success == true) {
+                            const $rowTemplate = $('#templates').children('div').eq(4).find('tr:first').clone();
+                            $rowTemplate.find('td').eq(0).html(response.details.firstName);
+                            $rowTemplate.find('td').eq(1).html(response.details.lastName);
+                            $rowTemplate.find('td').eq(2).html(response.details.email);
+                            $rowTemplate.find('td').eq(3).html(response.details.jobTitle);
+                            $rowTemplate.find('td').eq(4).find('i').eq(0).attr('data-userId', response.details.id);
+                            $rowTemplate.find('td').eq(4).find('i').eq(1).attr('data-userId', response.details.id);
+
+                            if (response.details.isAdmin) {
+                                $(`#admin-tab`).tab('show');
+                                adminTable.row.add($rowTemplate).draw();
+                            } else {
+                                $('#staff div.alert-info').remove();
+                                $('#staffTable_wrapper, #staff div.row.justify-content-end').show();
+                                $('#staff-tab').tab('show');
+                                staffTable.row.add($rowTemplate).draw();
+                            }
+
+                            displaySuccessToast(response.message);
+                            $('#ModalAddUser').modal('hide');
+                            hideSpinner();
+                        } else {
+                            displayErrorToastStandard(response.message);
+                            hideSpinner();
+                        }
+                    },
+                    error: function() {
+                        hideSpinner();
+                        displayErrorToastStandard('Something went wrong while handling this request');
+                    }
+                });
+            });
+
             $(document).on('submit', '#formEditUser', function(e) {
                 e.preventDefault();
                 showSpinner();
@@ -520,7 +615,6 @@ if (!empty($_SESSION['successMessage'])) {
                         displayErrorToastStandard('Something went wrong while handling this request');
                     }
                 });
-
             });
 
             $(document).on('submit', '#formUpdateUserPassword', function(e) {

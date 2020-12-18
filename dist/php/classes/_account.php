@@ -78,7 +78,7 @@ class Account
         return $this->isAdmin;
     }
 
-    public function addAccount(string $email, string $password, string $firstName, string $lastName, string $jobTitle, bool $isAdmin = false)
+    public function addAccount(string $email, string $password, string $firstName, string $lastName, string $jobTitle, bool $isAdmin = false): int
     {
         global $connection;
 
@@ -99,6 +99,8 @@ class Account
             if (!empty($addAccountQuery->error)) {
                 throw new Exception("Failed to add user.");
             }
+
+            return $addAccountQuery->insert_id;
         }
     }
 

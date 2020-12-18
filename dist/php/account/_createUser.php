@@ -3,15 +3,18 @@ require __DIR__ . '/../classes/_connect.php';
 require __DIR__ . '/_auth.php';
 
 if (!$account->getAuthenticated() || !$account->getIsAdmin()) {
-    dieWithError("You do not have access to this page");
+    echo json_encode(["success" => 0, "message" => "You are not authorised to perform this action"]);
+    die;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset($_POST['createEmail']) || !isset($_POST['createPassword']) || !isset($_POST['createPasswordConfirm']) || 
-    !isset($_POST['createFirstName']) || !isset($_POST['createLastName']) || !isset($_POST['createJobRole'])) {
-        dieWithError("Something went wrong, details needed to create an account were not passed.", "pages/users.php");
-    }
-    else {
+    if (
+        !isset($_POST['createEmail']) || !isset($_POST['createPassword']) || !isset($_POST['createPasswordConfirm']) ||
+        !isset($_POST['createFirstName']) || !isset($_POST['createLastName']) || !isset($_POST['createJobRole'])
+    ) {
+        echo json_encode(['success' => 0, 'message' => 'Something went wrong, this request could not be processed']);
+        die;
+    } else {
         $createEmail = $_POST['createEmail'];
         $createPassword = $_POST['createPassword'];
         $createPasswordConfirm = $_POST['createPasswordConfirm'];
@@ -20,31 +23,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createJobRole = $_POST['createJobRole'];
         if (!isset($_POST['createIsAdmin'])) {
             $createIsAdmin = false;
-        }
-        else {
+        } else {
             $createIsAdmin = true;
         }
 
         if ($createPassword !== $createPasswordConfirm) {
-            dieWithError("Passwords not not match, user not created. Please try again.", "pages/users.php");
+            echo json_encode(['success' => 0, 'message' => 'Something went wrong, this request could not be processed']);
+            die;
         }
 
         try {
-            $account->addAccount($createEmail, $createPassword, $createFirstName, $createLastName, $createJobRole, $createIsAdmin);
+            $insertId = $account->addAccount($createEmail, $createPassword, $createFirstName, $createLastName, $createJobRole, $createIsAdmin);
 
-            $_SESSION['successMessage'] = "User created with email: $createEmail";
-            if ($createIsAdmin) {
-                header("Location: ../../pages/users.php?tab=admin-tab");
-            }
-            else {
-                header("Location: ../../pages/users.php");
-            }
-        }
-        catch (Exception $ex) {
-            dieWithError($ex->getMessage(), "pages/users.php");
+            echo json_encode([
+                'success' => 1,
+                'message' => "User added with email $createEmail",
+                "details" => [
+                    "id" => $insertId,
+                    "firstName" => $createFirstName,
+                    "lastName" => $createLastName,
+                    "email" => $createEmail,
+                    "jobTitle" => $createJobRole,
+                    "isAdmin" => $createIsAdmin
+                ]
+            ]);
+            die;
+        } catch (Exception $ex) {
+            echo json_encode(["success" => 0, "message" => $ex->getMessage()]);
+            die;
         }
     }
-}
-else {
-    dieWithError("You cannot directly load this page");
 }

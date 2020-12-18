@@ -35,6 +35,50 @@
         <div class="toast-body">
         </div>
     </div>
+
+    <div>
+        <div class="row justify-content-end">
+            <div class="col-12 d-sm-none">
+                <div class="alert alert-warning">
+                    <strong>Note:</strong> Since you are on a small screen, scroll the table horizontally to see actions.
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="d-flex align-items-center">
+                    <input type="search" id="staffSearchBox" class="form-control form-control-sm" placeholder="Type to search">
+                    <div class="pl-2">
+                        <i data-toggle="tooltip" data-placement="top" title="Search" id="staffSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="staffTable" class="table w-100">
+            <thead>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Job Title</th>
+                <th></th>
+            </thead>
+        </table>
+    </div>
+
+    <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Placeholder</td>
+                    <td>Placeholder</td>
+                    <td>Placeholder</td>
+                    <td>Placeholder</td>
+                    <td class="text-right enrolr-datatable-actions-min-width">
+                        <i data-userId="0" class="fas fa-user-edit enrolr-standard-icon mr-2 event-user-edit"></i>
+                        <i data-userId="0" class="fas fa-user-times enrolr-danger-icon mr-2 event-user-delete-staff"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="loader d-none"></div>
