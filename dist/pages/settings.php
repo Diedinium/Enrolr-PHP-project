@@ -91,7 +91,7 @@ if (!empty($_SESSION['successMessage'])) {
                 </div>
             <?php endif; ?>
 
-            <div class="card border-0 enrolr-subtle-shadow">
+            <div class="card border-0 enrolr-subtle-shadow mt-1">
                 <div class="card-header">
                     <h3><span class="enrolr-gradient">User Settings</span></h3>
                     <ul class="nav nav-tabs card-header-tabs" id="settingsTab" role="tablist">

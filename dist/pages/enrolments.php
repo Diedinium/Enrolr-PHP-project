@@ -116,6 +116,10 @@ if (!empty($_SESSION['successMessage'])) {
             $('input, select').focusout(function() {
                 $(this).removeClass('error');
             });
+
+            $(document).on('hidden.bs.toast', function($event) {
+                $event.target.remove();
+            });
         });
     </script>
 </body>

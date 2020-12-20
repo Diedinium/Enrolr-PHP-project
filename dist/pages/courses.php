@@ -90,8 +90,40 @@ if (!empty($_SESSION['successMessage'])) {
                 </div>
             <?php endif; ?>
 
-            <h1>Placeholder content</h1>
-            <p>To see this page means you're logged in, yay.</p>
+            <?php if ($account->getIsAdmin()) : ?>
+                <div class="card border-0 enrolr-subtle-shadow mt-1">
+                    <div class="card-header">
+                        <h3><span class="enrolr-gradient">Course Management</span></h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">As an administrator, you cannot enrol on courses, but you can create, edit and delete them. </p>
+                        <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalAddUser').modal('show')">Create new course</button>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <div class="card border-0 enrolr-subtle-shadow mt-3">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="courseTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses">Upcoming Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="past-tab" data-toggle="tab" href="#past">Past Courses</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-2">
+                    <div class="tab-content" id="courseTabContent">
+                        <div class="tab-pane fade show active p-2" id="courses" role="tabpanel">
+                            <p>Placeholder</p>
+                        </div>
+                        <div class="tab-pane fade p-2" id="past" role="tabpanel">
+                        <p>Placeholder</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -117,11 +149,8 @@ if (!empty($_SESSION['successMessage'])) {
                 $(this).removeClass('error');
             });
 
-            $('#example').DataTable({
-                ordering: false,
-                scrollX: true,
-                stateSave: true,
-                lengthChange: false
+            $(document).on('hidden.bs.toast', function($event) {
+                $event.target.remove();
             });
         });
     </script>

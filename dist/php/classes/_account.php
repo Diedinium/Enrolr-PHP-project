@@ -2,7 +2,6 @@
 
 class Account
 {
-
     private int $id;
     private string $email;
     private string $password;
@@ -226,6 +225,16 @@ class Account
         }
 
         return $result;
+    }
+
+    public static function ensureAdminAccountDeleted() {
+        global $connection;
+
+        $delete = $connection->query("DELETE FROM t_users WHERE email = 'Admin.McAdmin@enrolr.co.uk'");
+
+        if (!$delete) {
+            throw new Exception("Deleting exisitng admin account failed for some unknown reason.");
+        }
     }
 
     // Logout by removing session id from t_persist
