@@ -180,7 +180,7 @@ if (!empty($_SESSION['successMessage'])) {
                                     <div class="d-flex align-items-center">
                                         <input type="search" id="adminSearchBox" class="form-control form-control-sm" placeholder="Type to search">
                                         <div class="pl-2">
-                                            <i id="adminSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon"></i>
+                                            <i id="adminSearchIcon" data-toggle="tooltip" data-placement="top" title="Search" class="fas fa-search fa-lg enrolr-standard-icon"></i>
                                         </div>
                                     </div>
                                 </div>

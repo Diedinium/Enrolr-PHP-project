@@ -113,6 +113,10 @@ button.enrolr-brand-colour-bg:hover, a.enrolr-brand-colour-bg:hover {
     min-width: 75px;
 }
 
+.enrolr-actions-min-width {
+    min-width: 80px;
+}
+
 .mw-50 {
     max-width: 500px;
 }
