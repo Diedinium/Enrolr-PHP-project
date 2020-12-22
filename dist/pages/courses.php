@@ -117,7 +117,7 @@ if (!empty($_SESSION['successMessage'])) {
                 <div class="card-body p-2">
                     <div class="tab-content" id="courseTabContent">
                         <div class="tab-pane fade show active p-2" id="courses" role="tabpanel">
-                            <div class="form-row mb-3">
+                            <div class="form-row mb-3" id="upcomingSearchFilter">
                                 <div class="col-md-4 col-sm-6 col-12">
                                     <select name="sortUpcoming" id="sortUpcoming" class="form-control form-control-sm">
                                         <option selected value="1">Date Asc (Default)</option>
@@ -138,60 +138,83 @@ if (!empty($_SESSION['successMessage'])) {
                                 </div>
                             </div>
 
-                            <?php
-                            $upcomingCourses = Course::getUpcomingCourses($account->getId());
-                            if (count($upcomingCourses) < 1) :
-                            ?>
-                                <div class="alert alert-info">No upcoming courses found.</div>
-                            <?php else : ?>
-                                <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
-                                    <?php foreach ($upcomingCourses as $upcomingCourse) : ?>
-                                        <?php
-                                        $courseDate = new DateTimeImmutable($upcomingCourse['date']);
-                                        $today = new DateTimeImmutable();
-                                        $isFullyBooked = $upcomingCourse['maxAttendees'] <= $upcomingCourse['enrolled'];
-                                        $isThisWeek = $courseDate < $today->modify("+7 day");
-                                        ?>
-                                        <div class="col mb-2 px-2">
-                                            <div class="card h-100">
-                                                <div class="card-body">
-                                                    <h5 class="card-title mb-0"><?= $upcomingCourse['title'] ?></h5>
-                                                    <div class="pb-2">
-                                                        <span class="badge badge-info"><?= $upcomingCourse['duration'] ?> hours</span>
-                                                        <?php if ($isThisWeek) : ?>
-                                                            <span class="badge badge-success">This week</span>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                    <p class="card-text"><?= $upcomingCourse['description'] ?></p>
-                                                </div>
-                                                <ul class="list-group list-group-flush">
-                                                    <?php if (!empty($upcomingCourse['location'])) : ?>
-                                                        <li class="list-group-item">
-                                                            <span><i data-toggle="tooltip" data-placement="top" title="Location" class="fa fa-map-marked text-muted pr-2"></i><?= $upcomingCourse['location'] ?></span>
-                                                        </li>
-                                                    <?php endif; ?>
-                                                    <li class="list-group-item d-flex">
-                                                        <span class="mr-auto"><i data-toggle="tooltip" data-placement="top" title="Course date/time" class="fa fa-calendar-day text-muted pr-2"></i><?= $courseDate->format("d/m/Y g:i a") ?></span>
-                                                        <span><i data-toggle="tooltip" data-placement="top" title="Attendees" class="fa fa-user text-muted pr-2"></i><?= $upcomingCourse['enrolled'] . "/" . $upcomingCourse['maxAttendees'] ?></span>
-                                                    </li>
-                                                </ul>
-                                                <div class="card-footer">
-                                                    <div class="d-flex align-items-center">
-                                                        <small class="text-muted mr-auto"><?= date("d/m/Y h:i a", strtotime($upcomingCourse['created'])) ?></small>
-                                                        <?php if ($account->getIsAdmin()) : ?>
-                                                            <div class="enrolr-actions-min-width text-right">
-                                                                <i data-toggle="tooltip" data-placement="top" title="Edit" class="fas fa-edit fa-lg enrolr-standard-icon event-edit-course"></i>
-                                                                <i data-toggle="tooltip" data-placement="top" title="Delete" class="fas fa-trash fa-lg enrolr-danger-icon event-delete-course pl-2"></i>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
+                            <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
                                             </div>
                                         </div>
-
-                                    <?php endforeach; ?>
+                                    </div>
                                 </div>
-                            <?php endif; ?>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -269,6 +292,7 @@ if (!empty($_SESSION['successMessage'])) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="console.log(new Date($('#createCourseDate').val()).toLocaleString([], { dateStyle: 'short', timeStyle: 'short', hour12: true }))">Test</button>
                             <button type="submit" class="btn enrolr-brand-colour-bg text-white">Add Course</button>
                         </div>
                     </form>
@@ -310,7 +334,7 @@ if (!empty($_SESSION['successMessage'])) {
                         noWhiteSpace: true
                     },
                     createCourseDate: {
-                        required: true                      
+                        required: true
                     },
                     createCourseDuration: {
                         required: true
@@ -335,6 +359,76 @@ if (!empty($_SESSION['successMessage'])) {
             $(document).on('hidden.bs.toast', function($event) {
                 $event.target.remove();
             });
+
+            let upcomingResponse = [];
+
+            $.ajax({
+                type: 'GET',
+                url: '../php/course/_getUpcoming.php',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        upcomingResponse = response.data;
+                        renderUpcoming(response.isAdmin);
+                    } else {
+                        displayErrorToastStandard(response.message);
+                    }
+                },
+                error: function() {
+                    displayErrorToastStandard('Something went wrong fetching data for this page, please reload the page to try again.');
+                }
+            });
+
+            function renderUpcoming(isAdmin) {
+                if (upcomingResponse.length < 1) {
+                    $('#upcomingSearchFilter').eq(0).hide();
+                    $('#courses').append('<div class="alert alert-info">No upcoming courses found.</div>');
+                    $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+                } else {
+                    $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+                    $('#upcomingSearchFilter').eq(1).show();
+                    const $upcomingContainer = $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2');
+                    upcomingResponse.forEach(course => {
+                        const createdDate = new Date(course.created);
+                        const courseDate = new Date(course.date);
+                        const todaysDatePlus7 = new Date().addDays(7);
+                        const isThisWeek = courseDate < todaysDatePlus7;
+                        let $courseTemplate = $('#templates').children('div').eq(5).clone();
+                        $courseTemplate.find('h5.card-title').html(course.title);
+                        $courseTemplate.find('p.card-text').html(course.description);
+                        $courseTemplate.find('span.badge.badge-info').first().html(`${course.duration} hours`);
+
+                        if (!isThisWeek) {
+                            $courseTemplate.find('span.badge.badge-success').first().remove();
+                        }
+
+                        $courseTemplate.find('ul li span span').eq(1).html(courseDate.toLocaleString([], {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            hour12: true
+                        }));
+                        $courseTemplate.find('ul li span span').eq(2).html(`${course.enrolled}/${course.maxAttendees}`);
+                        $courseTemplate.find('div.card-footer small').first().html(createdDate.toLocaleString([], {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            hour12: true
+                        }));
+
+                        if (course.location === null) {
+                            $courseTemplate.find('ul li').first().remove();
+                        } else {
+                            $courseTemplate.find('ul li span span').first().html(course.location);
+                        }
+
+                        if (!isAdmin) {
+                            $courseTemplate.find('div.card-footer div i').remove();
+                        }
+
+                        $upcomingContainer.append($courseTemplate);
+                    });
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
+            };
         });
     </script>
 </body>

@@ -79,6 +79,63 @@
             </tbody>
         </table>
     </div>
+
+    <div class="col mb-2 px-2">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-0">title</h5>
+                <div class="pb-2">
+                    <span class="badge badge-info">hours</span>
+                    <span class="badge badge-success">This week</span>
+                </div>
+                <p class="card-text">description</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <span><i data-toggle="tooltip" data-placement="top" title="Location" class="fa fa-map-marked text-muted pr-2"></i><span></span></span>
+                </li>
+                <li class="list-group-item d-flex">
+                    <span class="mr-auto"><i data-toggle="tooltip" data-placement="top" title="Course date/time" class="fa fa-calendar-day text-muted pr-2"></i><span></span></span>
+                    <span><i data-toggle="tooltip" data-placement="top" title="Attendees" class="fa fa-user text-muted pr-2"></i><span></span></span>
+                </li>
+            </ul>
+            <div class="card-footer">
+                <div class="d-flex align-items-center">
+                    <small class="text-muted mr-auto">created</small>
+                    <div class="enrolr-actions-min-width text-right">
+                        <i data-toggle="tooltip" data-placement="top" title="Edit" class="fas fa-edit fa-lg enrolr-standard-icon event-edit-course"></i>
+                        <i data-toggle="tooltip" data-placement="top" title="Delete" class="fas fa-trash fa-lg enrolr-danger-icon event-delete-course pl-2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col mb-2 px-2">
+        <div class="ph-item">
+            <div class="ph-col-12">
+                <div class="ph-row">
+                    <div class="ph-col-8 big"></div>
+                    <div class="ph-col-4 empty"></div>
+                    <div class="ph-col-4"></div>
+                    <div class="ph-col-8 empty"></div>
+                    <div class="ph-col-6"></div>
+                    <div class="ph-col-6 empty"></div>
+                    <div class="ph-col-12"></div>
+                </div>
+                <div class="ph-row mt-4">
+                    <div class="ph-col-6"></div>
+                    <div class="ph-col-6 empty"></div>
+                    <div class="ph-col-4"></div>
+                    <div class="ph-col-4 empty"></div>
+                    <div class="ph-col-4"></div>
+                </div>
+                <div class="ph-row mt-4">
+                    <div class="ph-col-12 big"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="loader d-none"></div>
