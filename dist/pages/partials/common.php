@@ -112,7 +112,7 @@
     </div>
 
     <div class="col mb-2 px-2">
-        <div class="ph-item">
+        <div class="ph-item mb-2">
             <div class="ph-col-12">
                 <div class="ph-row">
                     <div class="ph-col-8 big"></div>

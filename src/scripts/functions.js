@@ -1,4 +1,7 @@
-window.displayErrorToast = function (errorMap, errorList) {
+import $ from 'jquery';
+import 'bootstrap';
+
+export function displayErrorToast(errorMap, errorList) {
     if (Object.keys(errorMap).length > 0) {
         let $toastError = $('#templates').find('#templateToastError').clone();
         let $toastContainer = $('#toastContainer');
@@ -7,13 +10,13 @@ window.displayErrorToast = function (errorMap, errorList) {
             let errorFormatted = `<p class="mb-0 text-danger">${key} - ${value}</p>`
             $toastError.find('.toast-body').first().append(errorFormatted);
         }
-
+        
         $toastError.toast('show');
         $toastContainer.append($toastError);
     }
 }
 
-window.displayErrorToastStandard = function (errorMessage, errorTitle = null) {
+export function displayErrorToastStandard(errorMessage, errorTitle = null) {
     let $toastError = $('#templates').find('#templateToastError').clone();
     let $toastContainer = $('#toastContainer');
 
@@ -26,7 +29,7 @@ window.displayErrorToastStandard = function (errorMessage, errorTitle = null) {
     $toastContainer.append($toastError);
 }
 
-window.displaySuccessToast = function (successMessage, successTitle = null) {
+export function displaySuccessToast(successMessage, successTitle = null) {
     let $toastSuccess = $('#templates').find('#templateToastSuccess').clone();
     let $toastContainer = $('#toastContainer');
 
@@ -39,7 +42,7 @@ window.displaySuccessToast = function (successMessage, successTitle = null) {
     $toastContainer.append($toastSuccess);
 }
 
-window.displayStandardToast = function (message, title = null) {
+export function displayStandardToast(message, title = null) {
     let $toastStandard = $('#templates').find('#templateToastStandard').clone();
     let $toastContainer = $('#toastContainer');
 
@@ -52,7 +55,7 @@ window.displayStandardToast = function (message, title = null) {
     $toastContainer.append($toastStandard);
 }
 
-window.confirmDialog = function (message, title, yesCallback) {
+export function confirmDialog(message, title, yesCallback) {
     $('#confirmMessage').html(message);
     $('#confirmTitle').html(title);
     $('#confirmModal').modal('show');
@@ -66,12 +69,16 @@ window.confirmDialog = function (message, title, yesCallback) {
     });
 }
 
-window.showSpinner = function() {
+export function showSpinner() {
     $('.loader:first, .overlay:first').removeClass('d-none');
 }
 
-window.hideSpinner = function() {
+export function hideSpinner() {
     $('.loader:first, .overlay:first').addClass('d-none');
+}
+
+export function submitLogout() {
+    $('#logoutForm').trigger('submit');
 }
 
 $.validator.addMethod("noWhiteSpace", function (value, element) {

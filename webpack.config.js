@@ -30,10 +30,18 @@ module.exports = {
         }),
         new OptimizeCSSAssetsPlugin({})
     ],
-    entry: './src/script.js',
+    entry: {
+        main: './src/scripts/styles.js',
+        index: './src/scripts/index.js',
+        users: './src/scripts/users.js',
+        settings: './src/scripts/settings.js',
+        courses: './src/scripts/courses.js',
+        enrolments: './src/scripts/enrolments.js'
+    },
     mode: 'development',
+    devtool: 'eval-source-map',
     output: {
-        filename: 'main.js',
-        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist/static'),
     },
 };

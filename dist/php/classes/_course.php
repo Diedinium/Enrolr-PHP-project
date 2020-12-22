@@ -12,4 +12,15 @@ class Course {
         }
         return $result;
     }
+
+    public static function deleteCourse(int $courseId)
+    {
+        global $connection;
+
+        $delete = $connection->query("DELETE FROM t_courses WHERE id = $courseId");
+
+        if (!$delete) {
+            throw new Exception("Deleting course failed for an unknown reason.");
+        }
+    }
 }

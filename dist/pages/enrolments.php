@@ -37,11 +37,12 @@ if (!empty($_SESSION['successMessage'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrolr - Enrolments</title>
-    <script src="../main.js"></script>
-    <link rel="stylesheet" href="../main.css">
+
+    <link rel="stylesheet" href="../static/main.css">
 </head>
 
 <body>
+    <script src="../static/enrolments.js"></script>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
@@ -104,24 +105,6 @@ if (!empty($_SESSION['successMessage'])) {
             <span class="float-right text-muted"><?= date("Y") ?></span>
         </div>
     </footer>
-
-    <script>
-        function submitLogout() {
-            $('#logoutForm').submit();
-        }
-
-        $(function() {
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $('input, select').focusout(function() {
-                $(this).removeClass('error');
-            });
-
-            $(document).on('hidden.bs.toast', function($event) {
-                $event.target.remove();
-            });
-        });
-    </script>
 </body>
 
 </html>

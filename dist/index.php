@@ -36,11 +36,12 @@ $connection->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrolr - Home</title>
-    <script src="./main.js"></script>
-    <link rel="stylesheet" href="./main.css">
+
+    <link rel="stylesheet" href="./static/main.css">
 </head>
 
 <body>
+    <script src="./static/index.js"></script>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
@@ -120,25 +121,6 @@ $connection->close();
             <span class="float-right text-muted"><?= date("Y") ?></span>
         </div>
     </footer>
-
-    <script>
-        $(function() {
-            $('#logonForm').validate({
-                onkeyup: false,
-                onclick: false,
-                onfocusout: false,
-                showErrors: function(errorMap, errorList) {
-                    this.defaultShowErrors();
-                    displayErrorToast(errorMap, errorList);
-                },
-                errorPlacement: function(error, element) {}
-            });
-
-            $('input, select').focusout(function() {
-                $(this).removeClass('error');
-            });
-        });
-    </script>
 </body>
 
 </html>

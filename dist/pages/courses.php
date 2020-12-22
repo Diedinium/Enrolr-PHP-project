@@ -31,11 +31,12 @@ if (!empty($_SESSION['successMessage'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrolr - Enrollments</title>
-    <script src="../main.js"></script>
-    <link rel="stylesheet" href="../main.css">
+
+    <link rel="stylesheet" href="../static/main.css">
 </head>
 
 <body>
+    <script src="../static/courses.js"></script>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
@@ -140,7 +141,7 @@ if (!empty($_SESSION['successMessage'])) {
 
                             <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
                                 <div class="col mb-2 px-2">
-                                    <div class="ph-item">
+                                    <div class="ph-item mb-2">
                                         <div class="ph-col-12">
                                             <div class="ph-row">
                                                 <div class="ph-col-8 big"></div>
@@ -165,7 +166,7 @@ if (!empty($_SESSION['successMessage'])) {
                                     </div>
                                 </div>
                                 <div class="col mb-2 px-2">
-                                    <div class="ph-item">
+                                    <div class="ph-item mb-2">
                                         <div class="ph-col-12">
                                             <div class="ph-row">
                                                 <div class="ph-col-8 big"></div>
@@ -190,7 +191,7 @@ if (!empty($_SESSION['successMessage'])) {
                                     </div>
                                 </div>
                                 <div class="col mb-2 px-2">
-                                    <div class="ph-item">
+                                    <div class="ph-item mb-2">
                                         <div class="ph-col-12">
                                             <div class="ph-row">
                                                 <div class="ph-col-8 big"></div>
@@ -216,7 +217,6 @@ if (!empty($_SESSION['successMessage'])) {
                                 </div>
                             </div>
 
-
                         </div>
                         <div class="tab-pane fade p-2" id="past" role="tabpanel">
                             <div class="form-row mb-3">
@@ -237,6 +237,84 @@ if (!empty($_SESSION['successMessage'])) {
                                 <div class="col d-flex align-items-center mt-2 mt-sm-0">
                                     <input type="search" class="form-control form-control-sm" placeholder="Search by title">
                                     <i data-toggle="tooltip" data-placement="top" title="Search" id="pastSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon pl-2"></i>
+                                </div>
+                            </div>
+
+                            <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -308,129 +386,6 @@ if (!empty($_SESSION['successMessage'])) {
             <span class="float-right text-muted"><?= date("Y") ?></span>
         </div>
     </footer>
-
-    <script>
-        function submitLogout() {
-            $('#logoutForm').submit();
-        }
-
-        $(function() {
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $('input, select').focusout(function() {
-                $(this).removeClass('error');
-            });
-
-            $('#formAddCourse').validate({
-                rules: {
-                    createTitle: {
-                        required: true,
-                        maxlength: 255,
-                        noWhiteSpace: true
-                    },
-                    createDescription: {
-                        required: true,
-                        maxlength: 350,
-                        noWhiteSpace: true
-                    },
-                    createCourseDate: {
-                        required: true
-                    },
-                    createCourseDuration: {
-                        required: true
-                    },
-                    createCourseAttendees: {
-                        required: true
-                    },
-                    createLink: {
-                        required: '#createLocation:blank',
-                        maxlength: 1000,
-                        noWhiteSpace: true
-                    },
-                    createLocation: {
-                        required: '#createLink:blank',
-                        maxlength: 255,
-                        noWhiteSpace: true
-                    }
-                },
-                errorElement: 'small'
-            });
-
-            $(document).on('hidden.bs.toast', function($event) {
-                $event.target.remove();
-            });
-
-            let upcomingResponse = [];
-
-            $.ajax({
-                type: 'GET',
-                url: '../php/course/_getUpcoming.php',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        upcomingResponse = response.data;
-                        renderUpcoming(response.isAdmin);
-                    } else {
-                        displayErrorToastStandard(response.message);
-                    }
-                },
-                error: function() {
-                    displayErrorToastStandard('Something went wrong fetching data for this page, please reload the page to try again.');
-                }
-            });
-
-            function renderUpcoming(isAdmin) {
-                if (upcomingResponse.length < 1) {
-                    $('#upcomingSearchFilter').eq(0).hide();
-                    $('#courses').append('<div class="alert alert-info">No upcoming courses found.</div>');
-                    $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
-                } else {
-                    $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
-                    $('#upcomingSearchFilter').eq(1).show();
-                    const $upcomingContainer = $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2');
-                    upcomingResponse.forEach(course => {
-                        const createdDate = new Date(course.created);
-                        const courseDate = new Date(course.date);
-                        const todaysDatePlus7 = new Date().addDays(7);
-                        const isThisWeek = courseDate < todaysDatePlus7;
-                        let $courseTemplate = $('#templates').children('div').eq(5).clone();
-                        $courseTemplate.find('h5.card-title').html(course.title);
-                        $courseTemplate.find('p.card-text').html(course.description);
-                        $courseTemplate.find('span.badge.badge-info').first().html(`${course.duration} hours`);
-
-                        if (!isThisWeek) {
-                            $courseTemplate.find('span.badge.badge-success').first().remove();
-                        }
-
-                        $courseTemplate.find('ul li span span').eq(1).html(courseDate.toLocaleString([], {
-                            dateStyle: 'short',
-                            timeStyle: 'short',
-                            hour12: true
-                        }));
-                        $courseTemplate.find('ul li span span').eq(2).html(`${course.enrolled}/${course.maxAttendees}`);
-                        $courseTemplate.find('div.card-footer small').first().html(createdDate.toLocaleString([], {
-                            dateStyle: 'short',
-                            timeStyle: 'short',
-                            hour12: true
-                        }));
-
-                        if (course.location === null) {
-                            $courseTemplate.find('ul li').first().remove();
-                        } else {
-                            $courseTemplate.find('ul li span span').first().html(course.location);
-                        }
-
-                        if (!isAdmin) {
-                            $courseTemplate.find('div.card-footer div i').remove();
-                        }
-
-                        $upcomingContainer.append($courseTemplate);
-                    });
-                    $('[data-toggle="tooltip"]').tooltip();
-                }
-            };
-        });
-    </script>
 </body>
 
 </html>
