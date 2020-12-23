@@ -88,7 +88,7 @@
                     <span class="badge badge-info">hours</span>
                     <span class="badge badge-success">This week</span>
                 </div>
-                <p class="card-text">description</p>
+                <p class="card-text enrolr-line-sep">description</p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">

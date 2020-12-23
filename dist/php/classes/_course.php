@@ -23,4 +23,30 @@ class Course {
             throw new Exception("Deleting course failed for an unknown reason.");
         }
     }
+
+    public static function editCourse(int $courseId, string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location) {
+        global $connection;
+
+        $editCourse = $connection->prepare("UPDATE t_courses SET title=?, date=?, duration=?, maxAttendees=?, description=?, link=?, location=? WHERE id = ?");
+        $editCourse->bind_param("ssdisssi", $title, $date, $duration, $maxAttendees, $description, $link, $location, $courseId);
+        $success = $editCourse->execute();
+
+        if (!$success) {
+            throw new Exception("Edit course operation failed");
+        }
+    }
+
+    public static function createCourse(string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location): int {
+        global $connection;
+
+        $createCourse = $connection->prepare("INSERT INTO t_courses (title, date, duration, maxAttendees, description, link, location) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $createCourse->bind_param("ssdisss", $title, $date, $duration, $maxAttendees, $description, $link, $location);
+        $createCourse->execute();
+
+        if (!empty($createCourse->error)) {
+            throw new Exception("Create course operation failed");
+        }
+
+        return $createCourse->insert_id;
+    }
 }

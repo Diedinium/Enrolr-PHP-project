@@ -99,7 +99,7 @@ if (!empty($_SESSION['successMessage'])) {
                     </div>
                     <div class="card-body">
                         <p class="card-text">As an administrator, you cannot enrol on courses, but you can create, edit and delete them. </p>
-                        <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalAddCourse').modal('show')">Create new course</button>
+                        <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalCreateCourse').modal('show')">Create new course</button>
                     </div>
                 </div>
             <?php endif; ?>
@@ -327,7 +327,7 @@ if (!empty($_SESSION['successMessage'])) {
     <?php include_once __DIR__ . '/partials/common.php' ?>
 
     <?php if ($account->getIsAdmin()) : ?>
-        <div class="modal" tabindex="-1" id="ModalAddCourse">
+        <div class="modal" tabindex="-1" id="ModalCreateCourse">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -336,7 +336,7 @@ if (!empty($_SESSION['successMessage'])) {
                             <span>&times;</span>
                         </button>
                     </div>
-                    <form action="../php/course/_addCourse.php" method="POST" id="formAddCourse">
+                    <form action="../php/course/_createCourse.php" method="POST" id="formCreateCourse">
                         <div class="modal-body">
                             <div class="form-label-group">
                                 <input type="text" id="createTitle" name="createTitle" class="form-control" placeholder="Title">
@@ -347,31 +347,81 @@ if (!empty($_SESSION['successMessage'])) {
                             </div>
                             <div class="form-row">
                                 <div class="form-label-group col-md-4">
-                                    <input type="datetime-local" id="createCourseDate" name="createCourseDate" class="form-control" placeholder="2020-12-01" min="<?= date("Y-m-d\\TH:i") ?>">
+                                    <input type="datetime-local" id="createDate" name="createDate" class="form-control" placeholder="2020-12-01" min="<?= date("Y-m-d\\TH:i") ?>">
                                     <label for="createCourseDate">Course date/time</label>
                                 </div>
                                 <div class="form-label-group col-md-4">
-                                    <input type="number" id="createCourseDuration" name="createCourseDuration" class="form-control" placeholder="54">
-                                    <label for="createCourseDuration">Course duration (hours)</label>
+                                    <input type="number" id="createDuration" name="createDuration" class="form-control" placeholder="54">
+                                    <label for="createDuration">Course duration (hours)</label>
                                 </div>
                                 <div class="form-label-group col-md-4">
-                                    <input type="number" id="createCourseAttendees" name="createCourseAttendees" class="form-control" placeholder="32">
-                                    <label for="createCourseAttendees">Max Attendees</label>
+                                    <input type="number" id="createMaxAttendees" name="createMaxAttendees" class="form-control" placeholder="32">
+                                    <label for="createMaxAttendees">Max Attendees</label>
                                 </div>
                             </div>
                             <div class="form-label-group">
-                                <input type="text" id="createLink" name="createLink" class="form-control" placeholder="Link" data-msg-required="You must set either a link or location">
+                                <input type="text" id="createLink" name="createLink" class="form-control" placeholder="Link" data-msg-required="You must set either a link or location, or both.">
                                 <label for="createLink">Link</label>
                             </div>
                             <div class="form-label-group">
-                                <input type="text" id="createLocation" name="createLocation" class="form-control" placeholder="Location" data-msg-required="You must set either a link or location">
+                                <input type="text" id="createLocation" name="createLocation" class="form-control" placeholder="Location" data-msg-required="You must set either a link or location, or both.">
                                 <label for="createLocation">Location</label>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="console.log(new Date($('#createCourseDate').val()).toLocaleString([], { dateStyle: 'short', timeStyle: 'short', hour12: true }))">Test</button>
                             <button type="submit" class="btn enrolr-brand-colour-bg text-white">Add Course</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" id="ModalEditCourse">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Course</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <form action="../php/course/_editCourse.php" method="POST" id="formEditCourse">
+                        <div class="modal-body">
+                            <input type="hidden" value="0" name="editId" id="editId">
+                            <div class="form-label-group">
+                                <input type="text" id="editTitle" name="editTitle" class="form-control" placeholder="Title">
+                                <label for="editTitle">Title</label>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" name="editDescription" id="editDescription" rows="3" placeholder="Description"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-label-group col-md-4">
+                                    <input type="datetime-local" id="editDate" name="editDate" class="form-control" placeholder="2020-12-01" min="<?= date("Y-m-d\\TH:i") ?>">
+                                    <label for="editDate">Course date/time</label>
+                                </div>
+                                <div class="form-label-group col-md-4">
+                                    <input type="number" id="editDuration" name="editDuration" class="form-control" placeholder="54">
+                                    <label for="editDuration">Course duration (hours)</label>
+                                </div>
+                                <div class="form-label-group col-md-4">
+                                    <input type="number" id="editMaxAttendees" name="editMaxAttendees" class="form-control" placeholder="32">
+                                    <label for="editMaxAttendees">Max Attendees</label>
+                                </div>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="editLink" name="editLink" class="form-control" placeholder="Link" data-msg-required="You must set either a link or location, or both.">
+                                <label for="editLink">Link</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="editLocation" name="editLocation" class="form-control" placeholder="Location" data-msg-required="You must set either a link or location, or both.">
+                                <label for="editLocation">Location</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn enrolr-brand-colour-bg text-white">Save</button>
                         </div>
                     </form>
                 </div>

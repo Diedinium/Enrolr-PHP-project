@@ -14,7 +14,7 @@ $(function () {
         $(this).removeClass('error');
     });
 
-    let formAddCourseValidator = $('#formAddCourse').validate({
+    let formCreateCourseValidator = $('#formCreateCourse').validate({
         rules: {
             createTitle: {
                 required: true,
@@ -26,13 +26,13 @@ $(function () {
                 maxlength: 350,
                 noWhiteSpace: true
             },
-            createCourseDate: {
+            createDate: {
                 required: true
             },
-            createCourseDuration: {
+            createDuration: {
                 required: true
             },
-            createCourseAttendees: {
+            createMaxAttendees: {
                 required: true
             },
             createLink: {
@@ -49,13 +49,48 @@ $(function () {
         errorElement: 'small'
     });
 
+    let formEditCourseValidator = $('#formEditCourse').validate({
+        rules: {
+            editTitle: {
+                required: true,
+                maxlength: 255,
+                noWhiteSpace: true
+            },
+            editDescription: {
+                required: true,
+                maxlength: 350,
+                noWhiteSpace: true
+            },
+            editDate: {
+                required: true
+            },
+            editDuration: {
+                required: true
+            },
+            editMaxAttendees: {
+                required: true
+            },
+            editLink: {
+                required: '#editLocation:blank',
+                maxlength: 1000,
+                noWhiteSpace: true
+            },
+            editLocation: {
+                required: '#editLink:blank',
+                maxlength: 255,
+                noWhiteSpace: true
+            }
+        },
+        errorElement: 'small'
+    });
+
     $(document).on('hidden.bs.toast', function ($event) {
         $event.target.remove();
     });
 
-    $('#ModalAddCourse').on('hidden.bs.modal', function () {
-        $('#formAddCourse').trigger('reset');
-        formAddCourseValidator.resetForm();
+    $('#ModalCreateCourse').on('hidden.bs.modal', function () {
+        $('#formCreateCourse').trigger('reset');
+        formCreateCourseValidator.resetForm();
     });
 
     // Store response details
@@ -63,7 +98,7 @@ $(function () {
     let userIsAdmin = false;
 
     // Load initial courses
-    $.ajax({
+    let getUpcoming = () => $.ajax({
         type: 'GET',
         url: '../php/course/_getUpcoming.php',
         dataType: 'json',
@@ -80,6 +115,8 @@ $(function () {
             displayErrorToastStandard('Something went wrong fetching data for this page, please reload the page to try again.');
         }
     });
+
+    getUpcoming();
 
     // Renders upcoming courses, displaying appropriate user controls based on role.
     function renderUpcoming(isAdmin) {
@@ -117,7 +154,7 @@ $(function () {
                     hour12: true
                 }));
 
-                if (course.location === null) {
+                if (course.location === null || course.location === "") {
                     $courseTemplate.find('ul li').first().remove();
                 } else {
                     $courseTemplate.find('ul li span span').first().html(course.location);
@@ -159,6 +196,87 @@ $(function () {
                     displayErrorToastStandard('Something went wrong while handling this request');
                 }
             });
+        });
+    });
+
+    $(document).on('click', '.event-edit-course', function() {
+        $('.tooltip').tooltip('hide');
+        formEditCourseValidator.resetForm();
+        const currentCourseData = $(this).closest('div.col.mb-2.px-2').data();
+        $('#formEditCourse').trigger('reset');
+        $('#editId').val(currentCourseData.id);
+        $('#editTitle').val(currentCourseData.title);
+        $('#editDate').val(currentCourseData.date.replace(' ', 'T'));
+        $('#editDescription').val(currentCourseData.description);
+        $('#editDuration').val(currentCourseData.duration);
+        $('#editMaxAttendees').val(currentCourseData.maxAttendees);
+        $('#editLocation').val(currentCourseData.location);
+        $('#editLink').val(currentCourseData.link);
+        $('#ModalEditCourse').modal('show').data(currentCourseData);
+    });
+
+    $(document).on('submit', '#formCreateCourse', function(e) {
+        e.preventDefault();
+        showSpinner();
+        $.ajax({
+            type: 'POST',
+            url: '../php/course/_createCourse.php',
+            data: $('#formCreateCourse').serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success == true) {
+                    getUpcoming();
+                    displaySuccessToast(response.message);
+                    $('#ModalCreateCourse').modal('hide');
+                    renderUpcoming(userIsAdmin);
+                    hideSpinner();
+                } else {
+                    displayErrorToastStandard(response.message);
+                    hideSpinner();
+                }
+            },
+            error: function() {
+                hideSpinner();
+                displayErrorToastStandard('Something went wrong while handling this request');
+            }
+        });
+    });
+
+    $(document).on('submit', '#formEditCourse', function(e) {
+        e.preventDefault();
+        showSpinner();
+        $.ajax({
+            type: 'POST',
+            url: '../php/course/_editCourse.php',
+            data: $('#formEditCourse').serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success == true) {
+                    let currentData = $('#ModalEditCourse').data();
+                    currentData.title = $('#editTitle').val();
+                    currentData.date = $('#editDate').val();
+                    currentData.description = $('#editDescription').val();
+                    currentData.duration = $('#editDuration').val();
+                    currentData.maxAttendees = $('#editMaxAttendees').val();
+                    currentData.location = $('#editLocation').val();
+                    currentData.link = $('#editLink').val();
+
+                    let foundIndex = upcomingResponse.findIndex(course => course.id === currentData.id);
+                    upcomingResponse[foundIndex] = currentData;
+                    upcomingResponse.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    displaySuccessToast(response.message);
+                    $('#ModalEditCourse').modal('hide');
+                    renderUpcoming(userIsAdmin);
+                    hideSpinner();
+                } else {
+                    displayErrorToastStandard(response.message);
+                    hideSpinner();
+                }
+            },
+            error: function() {
+                hideSpinner();
+                displayErrorToastStandard('Something went wrong while handling this request');
+            }
         });
     });
 });

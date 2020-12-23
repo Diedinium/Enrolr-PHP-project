@@ -228,3 +228,7 @@ small.error {
     transform: rotate(360deg);
   }
 }
+
+.enrolr-line-sep {
+    white-space: pre-line;
+}
