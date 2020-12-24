@@ -106,6 +106,9 @@ if (!empty($_SESSION['successMessage'])) {
 
             <div class="card border-0 enrolr-subtle-shadow mt-3">
                 <div class="card-header">
+                    <?php if (!$account->getIsAdmin()) : ?>
+                        <h3><span class="enrolr-gradient">Courses</span></h3>
+                    <?php endif; ?>
                     <ul class="nav nav-tabs card-header-tabs" id="courseTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses">Upcoming Courses</a>
@@ -217,6 +220,12 @@ if (!empty($_SESSION['successMessage'])) {
                                 </div>
                             </div>
 
+                            <nav>
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                    <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                </ul>
+                            </nav>
                         </div>
                         <div class="tab-pane fade p-2" id="past" role="tabpanel">
                             <div class="form-row mb-3">

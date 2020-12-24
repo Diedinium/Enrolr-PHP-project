@@ -136,6 +136,14 @@
             </div>
         </div>
     </div>
+
+    <li class="list-group-item d-flex align-items-center">
+        <i data-toggle="tooltip" data-placement="top" title="Link" class="fa fa-globe text-muted pr-2"></i>
+        <div>
+            <p class="mb-0 text-break">Online Course</p>
+            <small class="text-muted">Link will be provided once you enrol.</small>
+        </div>
+    </li>
 </div>
 
 <div class="loader d-none"></div>

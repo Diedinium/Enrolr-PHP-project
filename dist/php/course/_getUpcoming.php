@@ -12,7 +12,7 @@ echo json_encode(
     [
         "success" => 1,
         "isAdmin" => $account->getIsAdmin(),
-        "data" => Course::getUpcomingCourses($account->getId())
+        "data" => Course::getUpcomingCourses($account->getId(), $_GET['pageIndex'])
     ]
 );
 die;

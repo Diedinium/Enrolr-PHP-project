@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import validate from 'jquery-validation';
 import 'bootstrap';
-import { showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast, submitLogout, confirmDialog } from './functions';
+import { submitLogout, confirmDialog, showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast } from './functions';
 
 window.jQuery = $;
 window.$ = $;
@@ -96,11 +96,15 @@ $(function () {
     // Store response details
     let upcomingResponse = [];
     let userIsAdmin = false;
+    let paginateIndex = 1;
 
     // Load initial courses
     let getUpcoming = () => $.ajax({
         type: 'GET',
         url: '../php/course/_getUpcoming.php',
+        data: {
+            pageIndex: paginateIndex
+        },
         dataType: 'json',
         success: function (response) {
             if (response.success) {
@@ -128,7 +132,7 @@ $(function () {
             $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
             $('#upcomingSearchFilter').eq(1).show();
             const $upcomingContainer = $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2');
-            upcomingResponse.forEach(course => {
+            upcomingResponse.every((course, i) => {
                 const createdDate = new Date(course.created);
                 const courseDate = new Date(course.date);
                 const todaysDatePlus7 = new Date().addDays(7);
@@ -155,21 +159,72 @@ $(function () {
                 }));
 
                 if (course.location === null || course.location === "") {
-                    $courseTemplate.find('ul li').first().remove();
+                    let $linkTemplate = $('#templates').children('li').eq(0).clone();
+                    $linkTemplate.find('small').remove();
+                    $linkTemplate.find('p').html(`<a href="${course.link}">${course.link}</a>`);
+                    if (isAdmin) {
+                        $courseTemplate.find('ul li').first().replaceWith($linkTemplate);
+                    }
+                    else {
+                        if (course.isUserEnrolled == true) {
+                            $courseTemplate.find('ul li').first().replaceWith($linkTemplate);
+                        }
+                        else {
+                            $courseTemplate.find('ul li').first().replaceWith($('#templates').children('li').eq(0).clone());
+                        }
+                    }
+
                 } else {
                     $courseTemplate.find('ul li span span').first().html(course.location);
                 }
 
                 if (!isAdmin) {
                     $courseTemplate.find('div.card-footer div i').remove();
+
+                    if (course.isUserEnrolled == false) {
+                        $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
+                            '<button type="button" class="btn enrolr-brand-colour-bg text-white event-course-enrol">Enrol</button>'
+                        );
+                    }
+                    else {
+                        $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
+                            '<button type="button" class="btn btn-secondary text-white event-course-unenrol">Unenrol</button>'
+                        );
+                    }
                 }
+
                 $courseTemplate.data(course);
 
                 $upcomingContainer.append($courseTemplate);
+
+                if (i >= 11) return false;
+                else return true;
             });
+
+            if (paginateIndex > 1) {
+                $('#courses nav ul li:nth-child(1)').removeClass('disabled');
+            }
+            else {
+                $('#courses nav ul li:nth-child(1)').addClass('disabled');
+            }
+
+            if (upcomingResponse.length > 12) {
+                $('#courses nav ul li:nth-child(2)').removeClass('disabled');
+            }
+            else {
+                $('#courses nav ul li:nth-child(2)').addClass('disabled');
+            }
+
             $('[data-toggle="tooltip"]').tooltip();
         }
     };
+
+    function replaceUpcomingWithLoading() {
+        $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+        for (let i = 0; i < 3; i++) {
+            $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').append($('#templates').children('div').eq(6).clone());
+        }
+    }
 
     $(document).on('click', '.event-delete-course', function () {
         confirmDialog(`Are you sure you want to delete "${$(this).closest('div.col.mb-2.px-2').data().title}", this action cannot be undone`, 'Confirm Deletion', () => {
@@ -199,7 +254,7 @@ $(function () {
         });
     });
 
-    $(document).on('click', '.event-edit-course', function() {
+    $(document).on('click', '.event-edit-course', function () {
         $('.tooltip').tooltip('hide');
         formEditCourseValidator.resetForm();
         const currentCourseData = $(this).closest('div.col.mb-2.px-2').data();
@@ -215,7 +270,7 @@ $(function () {
         $('#ModalEditCourse').modal('show').data(currentCourseData);
     });
 
-    $(document).on('submit', '#formCreateCourse', function(e) {
+    $(document).on('submit', '#formCreateCourse', function (e) {
         e.preventDefault();
         showSpinner();
         $.ajax({
@@ -223,7 +278,7 @@ $(function () {
             url: '../php/course/_createCourse.php',
             data: $('#formCreateCourse').serialize(),
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.success == true) {
                     getUpcoming();
                     displaySuccessToast(response.message);
@@ -235,14 +290,14 @@ $(function () {
                     hideSpinner();
                 }
             },
-            error: function() {
+            error: function () {
                 hideSpinner();
                 displayErrorToastStandard('Something went wrong while handling this request');
             }
         });
     });
 
-    $(document).on('submit', '#formEditCourse', function(e) {
+    $(document).on('submit', '#formEditCourse', function (e) {
         e.preventDefault();
         showSpinner();
         $.ajax({
@@ -250,7 +305,7 @@ $(function () {
             url: '../php/course/_editCourse.php',
             data: $('#formEditCourse').serialize(),
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.success == true) {
                     let currentData = $('#ModalEditCourse').data();
                     currentData.title = $('#editTitle').val();
@@ -273,10 +328,26 @@ $(function () {
                     hideSpinner();
                 }
             },
-            error: function() {
+            error: function () {
                 hideSpinner();
                 displayErrorToastStandard('Something went wrong while handling this request');
             }
         });
+    });
+
+    let tabContent = document.querySelector('ul.nav.nav-tabs.card-header-tabs');
+
+    $(document).on('click', '#courses nav ul.pagination li:not(.disabled):nth-child(1) button', function () {
+        paginateIndex--;
+        replaceUpcomingWithLoading();
+        getUpcoming();
+        tabContent.scrollIntoView();
+    });
+
+    $(document).on('click', '#courses nav ul.pagination li:not(.disabled):nth-child(2) button', function () {
+        paginateIndex++;
+        replaceUpcomingWithLoading();
+        getUpcoming();
+        tabContent.scrollIntoView();
     });
 });

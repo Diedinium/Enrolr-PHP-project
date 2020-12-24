@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'bootstrap';
 
-export function displayErrorToast(errorMap, errorList) {
+function displayErrorToast(errorMap, errorList) {
     if (Object.keys(errorMap).length > 0) {
         let $toastError = $('#templates').find('#templateToastError').clone();
         let $toastContainer = $('#toastContainer');
@@ -16,7 +16,7 @@ export function displayErrorToast(errorMap, errorList) {
     }
 }
 
-export function displayErrorToastStandard(errorMessage, errorTitle = null) {
+function displayErrorToastStandard(errorMessage, errorTitle = null) {
     let $toastError = $('#templates').find('#templateToastError').clone();
     let $toastContainer = $('#toastContainer');
 
@@ -29,7 +29,7 @@ export function displayErrorToastStandard(errorMessage, errorTitle = null) {
     $toastContainer.append($toastError);
 }
 
-export function displaySuccessToast(successMessage, successTitle = null) {
+function displaySuccessToast(successMessage, successTitle = null) {
     let $toastSuccess = $('#templates').find('#templateToastSuccess').clone();
     let $toastContainer = $('#toastContainer');
 
@@ -42,7 +42,7 @@ export function displaySuccessToast(successMessage, successTitle = null) {
     $toastContainer.append($toastSuccess);
 }
 
-export function displayStandardToast(message, title = null) {
+function displayStandardToast(message, title = null) {
     let $toastStandard = $('#templates').find('#templateToastStandard').clone();
     let $toastContainer = $('#toastContainer');
 
@@ -55,7 +55,7 @@ export function displayStandardToast(message, title = null) {
     $toastContainer.append($toastStandard);
 }
 
-export function confirmDialog(message, title, yesCallback) {
+function confirmDialog(message, title, yesCallback) {
     $('#confirmMessage').html(message);
     $('#confirmTitle').html(title);
     $('#confirmModal').modal('show');
@@ -69,15 +69,15 @@ export function confirmDialog(message, title, yesCallback) {
     });
 }
 
-export function showSpinner() {
+function showSpinner() {
     $('.loader:first, .overlay:first').removeClass('d-none');
 }
 
-export function hideSpinner() {
+function hideSpinner() {
     $('.loader:first, .overlay:first').addClass('d-none');
 }
 
-export function submitLogout() {
+function submitLogout() {
     $('#logoutForm').trigger('submit');
 }
 
@@ -95,4 +95,6 @@ Date.prototype.addDays = function(days) {
     date.setDate(date.getDate() + days);
     return date;
 };
+
+export { displayErrorToast, displayErrorToastStandard, displaySuccessToast, displayStandardToast, confirmDialog, showSpinner, hideSpinner, submitLogout };
 
