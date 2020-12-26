@@ -2,7 +2,7 @@
 
 class Course {
     // Returns array of upcoming courses.
-    public static function getUpcomingCourses(int $userId, int $pageIndex) : array 
+    public static function getUpcomingCourses(int $userId, int $pageIndex, string $searchMinDate, string $searchMaxDate, string $searchTitle) : array 
     {
         global $connection;
 
@@ -10,10 +10,41 @@ class Course {
         // Then, in the front end, if there are 13 results rather than 12, paginate controls know to allow navigation to next page.
         $limitEnd = (12 * $pageIndex) + 1;
         $limitStart = $limitEnd - 13;
+        $upcomingQuery = null;
 
+        // Build where clause
+        if (!empty($searchMinDate)) {
+            $where = "WHERE DATE(t_courses.date) >= '$searchMinDate'";
+        }
+        else {
+            $where = "WHERE DATE(t_courses.date) >= CURRENT_DATE";
+        }
+
+        if (!empty($searchMaxDate)) {
+            $where .= " AND DATE(t_courses.date) <= '$searchMaxDate'";
+        }
+
+        // Since title is not validated at _getUpcoming, should be prepared via prepared statement.
+        if (!empty($searchTitle)) {
+            $where .= " AND t_courses.title LIKE CONCAT('%', ?, '%')";
+        }
+
+        $upcomingQueryString = "SELECT t_courses.*, COUNT(t_enroll.iduser) AS 'enrolled', IFNULL(MAX(CASE WHEN t_enroll.iduser = ? then true end), false) as 'isUserEnrolled' FROM t_courses LEFT JOIN t_enroll ON t_enroll.idcourse = t_courses.id $where GROUP BY t_courses.id ORDER BY t_courses.date LIMIT ?, ?";
+
+        // Prepare statement differently depending on if title is populated or not.
+        if (!empty($searchTitle)) {
+            $upcomingQuery = $connection->prepare($upcomingQueryString);
+            $upcomingQuery->bind_param("isii", $userId, $searchTitle, $limitStart, $limitEnd);
+        }
+        else {
+            $upcomingQuery = $connection->prepare($upcomingQueryString);
+            $upcomingQuery->bind_param("iii", $userId, $limitStart, $limitEnd);
+        }
+
+        $upcomingQuery->execute();
+        $queryResult = $upcomingQuery->get_result();
         $result = [];
-        $query = $connection->query("SELECT t_courses.*, COUNT(t_enroll.iduser) AS 'enrolled', IFNULL(MAX(CASE WHEN t_enroll.iduser = $userId then true end), false) as 'isUserEnrolled' FROM t_courses LEFT JOIN t_enroll ON t_enroll.idcourse = t_courses.id WHERE t_courses.date >= CURRENT_DATE GROUP BY t_courses.id ORDER BY t_courses.date LIMIT $limitStart, $limitEnd");
-        while ($row = $query->fetch_assoc()) {
+        while ($row = $queryResult->fetch_assoc()) {
             array_push($result, $row);
         }
         return $result;

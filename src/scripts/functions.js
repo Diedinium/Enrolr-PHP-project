@@ -90,6 +90,16 @@ $.validator.addMethod("noWhiteSpace", function (value, element) {
     }
 }, "Whitespace (spaces and tabs) alone are not allowed.");
 
+$.validator.addMethod("greaterThan", function (value, element, params) {
+
+    if (!/Invalid|NaN/.test(new Date(value)) && !/Invalid|NaN/.test(new Date($(params).val()))) {
+        return new Date(value) > new Date($(params).val());
+    }
+    else {
+        return true;
+    }
+}, "This field must be greater than it's corresponding field");
+
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);

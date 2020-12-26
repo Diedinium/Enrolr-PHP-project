@@ -121,26 +121,31 @@ if (!empty($_SESSION['successMessage'])) {
                 <div class="card-body p-2">
                     <div class="tab-content" id="courseTabContent">
                         <div class="tab-pane fade show active p-2" id="courses" role="tabpanel">
-                            <div class="form-row mb-3" id="upcomingSearchFilter">
-                                <div class="col-md-4 col-sm-6 col-12">
-                                    <select name="sortUpcoming" id="sortUpcoming" class="form-control form-control-sm">
-                                        <option selected value="1">Date Asc (Default)</option>
-                                        <option value="2">Date Desc</option>
-                                        <option value="3">Attendees Asc</option>
-                                        <option value="4">Attendees Desc</option>
-                                        <?php if (!$account->getIsAdmin()) : ?>
-                                            <option value="5">Enrolled Asc</option>
-                                            <option value="6">Enrolled Desc</option>
-                                        <?php endif; ?>
-                                        <option value="7">Created Asc</option>
-                                        <option value="8">Created Desc</option>
-                                    </select>
+                            <form id="upcomingSearchForm">
+                                <h5>Search upcoming courses</h5>
+                                <div class="form-row mb-3 align-items-start" id="upcomingSearchFilter">
+                                    <div class="col-lg-3 col-md-12 mb-2 mb-lg-0">
+                                        <div class="form-label-group mb-0 w-100">
+                                            <input type="date" id="searchMinDate" name="searchMinDate" class="form-control upcomingSearchGroup" placeholder="2020-12-01" min="<?= date("Y-m-d") ?>">
+                                            <label for="searchMinDate">Min date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-12 mb-2 mb-lg-0">
+                                        <div class="form-label-group mb-0 w-100">
+                                            <input type="date" id="searchMaxDate" name="searchMaxDate" class="form-control upcomingSearchGroup" data-msg-greaterThan="This date cannot be less than or equal to the min date." placeholder="2020-12-01" min="<?= date("Y-m-d") ?>">
+                                            <label for="searchMaxDate">Max date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex align-items-center">
+                                        <div class="form-label-group mb-0 w-100">
+                                            <input type="text" id="searchTitle" name="searchTitle" class="form-control upcomingSearchGroup" placeholder="Search by title">
+                                            <label for="searchTitle">Search by title</label>
+                                        </div>
+                                        <i data-toggle="tooltip" data-placement="top" title="Clear search" id="clearSearchIcon" class="fas fa-redo fa-lg enrolr-danger-icon pl-2"></i>
+                                        <i data-toggle="tooltip" data-placement="top" title="Search" id="upcomingSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon pl-3"></i>
+                                    </div>
                                 </div>
-                                <div class="col d-flex align-items-center mt-2 mt-sm-0">
-                                    <input type="search" class="form-control form-control-sm" placeholder="Search by title">
-                                    <i data-toggle="tooltip" data-placement="top" title="Search" id="upcomingSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon pl-2"></i>
-                                </div>
-                            </div>
+                            </form>
 
                             <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
                                 <div class="col mb-2 px-2">

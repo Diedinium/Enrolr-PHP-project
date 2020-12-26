@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import validate from 'jquery-validation';
+import 'jquery-validation/dist/additional-methods';
 import 'bootstrap';
 import { submitLogout, confirmDialog, showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast } from './functions';
 
@@ -9,6 +10,7 @@ window.submitLogout = submitLogout;
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
+    $('#clearSearchIcon').hide();
 
     $('input, select').on('focusout', function () {
         $(this).removeClass('error');
@@ -84,6 +86,26 @@ $(function () {
         errorElement: 'small'
     });
 
+    let formUpcomingSearchValidator = $('#upcomingSearchForm').validate({
+        onfocusout: false,
+        rules: {
+            searchMinDate: {
+                require_from_group: [1, '.upcomingSearchGroup']
+            },
+            searchMaxDate: {
+                require_from_group: [1, '.upcomingSearchGroup'],
+                greaterThan: '#searchMinDate'
+            },
+            searchTitle: {
+                require_from_group: [1, '.upcomingSearchGroup'],
+                noWhiteSpace: true,
+                minlength: 3,
+                maxlength: 50
+            }
+        },
+        errorElement: 'small'
+    });
+
     $(document).on('hidden.bs.toast', function ($event) {
         $event.target.remove();
     });
@@ -97,13 +119,17 @@ $(function () {
     let upcomingResponse = [];
     let userIsAdmin = false;
     let paginateIndex = 1;
+    let isSearching = false;
 
     // Load initial courses
     let getUpcoming = () => $.ajax({
         type: 'GET',
         url: '../php/course/_getUpcoming.php',
         data: {
-            pageIndex: paginateIndex
+            pageIndex: paginateIndex,
+            searchMinDate: $('#searchMinDate').val(),
+            searchMaxDate: $('#searchMaxDate').val(),
+            searchTitle: $('#searchTitle').val()
         },
         dataType: 'json',
         success: function (response) {
@@ -125,18 +151,23 @@ $(function () {
     // Renders upcoming courses, displaying appropriate user controls based on role.
     function renderUpcoming(isAdmin) {
         if (upcomingResponse.length < 1) {
-            $('#upcomingSearchFilter').eq(0).hide();
+            if (!isSearching) {
+                $('#upcomingSearchForm').hide();
+            }
+            $('#courses nav').hide();
             $('#courses').append('<div class="alert alert-info">No upcoming courses found.</div>');
             $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
         } else {
             $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
-            $('#upcomingSearchFilter').eq(1).show();
+            $('#upcomingSearchForm').show();
+            $('#courses nav').show();
             const $upcomingContainer = $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2');
             upcomingResponse.every((course, i) => {
                 const createdDate = new Date(course.created);
                 const courseDate = new Date(course.date);
                 const todaysDatePlus7 = new Date().addDays(7);
                 const isThisWeek = courseDate < todaysDatePlus7;
+                const isToday = courseDate.getDate() === new Date().getDate();
                 let $courseTemplate = $('#templates').children('div').eq(5).clone();
                 $courseTemplate.find('h5.card-title').html(course.title);
                 $courseTemplate.find('p.card-text').html(course.description);
@@ -144,6 +175,10 @@ $(function () {
 
                 if (!isThisWeek) {
                     $courseTemplate.find('span.badge.badge-success').first().remove();
+                }
+
+                if (isToday) {
+                    $courseTemplate.find('span.badge.badge-success').first().html('Today!').removeClass('badge-success').addClass('badge-warning');
                 }
 
                 $courseTemplate.find('ul li span span').eq(1).html(courseDate.toLocaleString([], {
@@ -349,5 +384,40 @@ $(function () {
         replaceUpcomingWithLoading();
         getUpcoming();
         tabContent.scrollIntoView();
+    });
+
+    $(document).on('enter', '#upcomingSearchForm input', function() {
+        $('#upcomingSearchForm').trigger('submit');
+    });
+
+    $(document).on('click', '#upcomingSearchIcon', function() {
+        $('#upcomingSearchForm').trigger('submit');
+    });
+
+    $(document).on('submit', '#upcomingSearchForm', function(e) {
+        e.preventDefault();
+        paginateIndex = 1;
+        isSearching = true;
+        replaceUpcomingWithLoading();
+        getUpcoming();
+        tabContent.scrollIntoView();
+    });
+
+    $(document).on('input', '#upcomingSearchForm input', function() {
+        if ($('#searchMinDate').val() === "" && $('#searchMaxDate').val() === "" && $('#searchTitle').val() === "") {
+            $('#clearSearchIcon').hide();
+        }
+        else {
+            $('#clearSearchIcon').show();
+        }
+    });
+
+    $(document).on('click', '#clearSearchIcon', function() {
+        $('#upcomingSearchForm').trigger('reset');
+        formUpcomingSearchValidator.resetForm();
+        paginateIndex = 1;
+        isSearching = false;
+        replaceUpcomingWithLoading();
+        getUpcoming();
     });
 });
