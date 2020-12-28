@@ -276,7 +276,14 @@ $(function () {
                         displaySuccessToast(response.message);
                         $parentCourse.fadeOut(500, () => {
                             upcomingResponse = upcomingResponse.filter(course => course.id !== $parentCourse.data().id);
-                            renderUpcoming(userIsAdmin);
+                            if (upcomingResponse.length < 1 && paginateIndex > 1) {
+                                paginateIndex--;
+                                replaceUpcomingWithLoading();
+                                getUpcoming();
+                            }
+                            else {
+                                renderUpcoming(userIsAdmin);
+                            }
                         });
                     } else {
                         displayErrorToastStandard(response.message);
@@ -302,8 +309,98 @@ $(function () {
         $('#editMaxAttendees').val(currentCourseData.maxAttendees);
         $('#editLocation').val(currentCourseData.location);
         $('#editLink').val(currentCourseData.link);
-        $('#ModalEditCourse').modal('show').data(currentCourseData);
+        $('#ModalEditCourse').data(currentCourseData);
+        $('#ModalEditCourse').modal('show');
     });
+
+    let paginateIndexEnrolledStaff = 1;
+    let enrolledStaffResponse = [];
+    let getEnrolledStaff = (courseId) => $.ajax({
+        type: 'GET',
+        url: '../php/course/_getStaffEnrolledOnCourse.php',
+        data: {
+            courseId: courseId,
+            pageIndex: paginateIndexEnrolledStaff
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                enrolledStaffResponse = response.data;
+                renderEnrolledStaff();
+            } else {
+                displayErrorToastStandard(response.message);
+            }
+        },
+        error: function () {
+            displayErrorToastStandard('Something went wrong fetching enrolled users, please reload the page to try again.');
+        }
+    });
+
+    $('#ModalEditCourse').on('shown.bs.modal', function () {
+        $('#ModalEditCourse div.modal-body ul').first().empty();
+        $('#ModalEditCourse div.modal-body div.alert.alert-info').remove();
+        $('#ModalEditCourse .enrolled-staff-placeholder').show();
+        paginateIndexEnrolledStaff = 1;
+        getEnrolledStaff($(this).data().id);
+    });
+
+    $(document).on('click', '#ModalEditCourse nav ul.pagination li:not(.disabled):nth-child(1) button', function () {
+        paginateIndexEnrolledStaff--;
+        $('#ModalEditCourse div.modal-body ul').first().empty();
+        $('#ModalEditCourse .enrolled-staff-placeholder').show();
+        getEnrolledStaff($('#ModalEditCourse').data().id);
+    });
+
+    $(document).on('click', '#ModalEditCourse nav ul.pagination li:not(.disabled):nth-child(2) button', function () {
+        paginateIndexEnrolledStaff++;
+        $('#ModalEditCourse div.modal-body ul').first().empty();
+        $('#ModalEditCourse .enrolled-staff-placeholder').show();
+        getEnrolledStaff($('#ModalEditCourse').data().id);
+    });
+
+    function renderEnrolledStaff() {
+        if (paginateIndexEnrolledStaff > 1) {
+            $('#ModalEditCourse nav ul li:nth-child(1)').removeClass('disabled');
+        }
+        else {
+            $('#ModalEditCourse nav ul li:nth-child(1)').addClass('disabled');
+        }
+
+        if (enrolledStaffResponse.length > 5) {
+            $('#ModalEditCourse nav ul li:nth-child(2)').removeClass('disabled');
+        }
+        else {
+            $('#ModalEditCourse nav ul li:nth-child(2)').addClass('disabled');
+        }
+
+        if (enrolledStaffResponse.length < 1) {
+            $('#ModalEditCourse div.modal-body div.alert.alert-info').remove();
+            $('#ModalEditCourse div.modal-body').children('div').first().append('<div class="alert alert-info">No staff are currently enrolled.</div>');
+            $('#ModalEditCourse div.modal-body nav').hide();
+            $('#ModalEditCourse .enrolled-staff-placeholder').hide();
+        }
+        else {
+            $('#ModalEditCourse .enrolled-staff-placeholder').hide();
+            $('#ModalEditCourse div.modal-body nav').show();
+            $('#ModalEditCourse div.modal-body div.alert.alert-info').remove();
+            enrolledStaffResponse.every((staff, i) => {
+                let $enrolledStaffTemplate = $('#templates').children('li').eq(1).clone();
+                $enrolledStaffTemplate.find('p strong').html(`${staff.firstName} ${staff.lastName}`);
+                $enrolledStaffTemplate.find('p em').html(staff.jobTitle);
+                $enrolledStaffTemplate.find('p').eq(1).html(staff.email);''
+                $enrolledStaffTemplate.find('small').html(`Enrolled: ${new Date(staff.dateCreated).toLocaleString([], {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                    hour12: true
+                })}`);
+                $enrolledStaffTemplate.data(staff);
+                $('#ModalEditCourse div.modal-body ul').first().append($enrolledStaffTemplate);
+                if (i >= 4) return false;
+                else return true;
+            });
+            
+        }
+    }
 
     $(document).on('submit', '#formCreateCourse', function (e) {
         e.preventDefault();
@@ -386,15 +483,15 @@ $(function () {
         tabContent.scrollIntoView();
     });
 
-    $(document).on('enter', '#upcomingSearchForm input', function() {
+    $(document).on('enter', '#upcomingSearchForm input', function () {
         $('#upcomingSearchForm').trigger('submit');
     });
 
-    $(document).on('click', '#upcomingSearchIcon', function() {
+    $(document).on('click', '#upcomingSearchIcon', function () {
         $('#upcomingSearchForm').trigger('submit');
     });
 
-    $(document).on('submit', '#upcomingSearchForm', function(e) {
+    $(document).on('submit', '#upcomingSearchForm', function (e) {
         e.preventDefault();
         paginateIndex = 1;
         isSearching = true;
@@ -403,7 +500,7 @@ $(function () {
         tabContent.scrollIntoView();
     });
 
-    $(document).on('input', '#upcomingSearchForm input', function() {
+    $(document).on('input', '#upcomingSearchForm input', function () {
         if ($('#searchMinDate').val() === "" && $('#searchMaxDate').val() === "" && $('#searchTitle').val() === "") {
             $('#clearSearchIcon').hide();
         }
@@ -412,8 +509,9 @@ $(function () {
         }
     });
 
-    $(document).on('click', '#clearSearchIcon', function() {
+    $(document).on('click', '#clearSearchIcon', function () {
         $('#upcomingSearchForm').trigger('reset');
+        $('#clearSearchIcon').hide();
         formUpcomingSearchValidator.resetForm();
         paginateIndex = 1;
         isSearching = false;

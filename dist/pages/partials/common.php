@@ -137,11 +137,61 @@
         </div>
     </div>
 
+    <div class="enrolled-staff-placeholder">
+        <div class="ph-item mb-0 px-0 py-2">
+            <div class="ph-col-12">
+                <div class="ph-row mb-0">
+                    <div class="ph-col-4 big"></div>
+                    <div class="ph-col-8 empty"></div>
+                    <div class="ph-col-8"></div>
+                    <div class="ph-col-4 emtpy"></div>
+                    <div class="ph-col-6"></div>
+                    <div class="ph-col-6 empty"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ph-item mb-0 px-0 py-2">
+            <div class="ph-col-12">
+                <div class="ph-row mb-0">
+                    <div class="ph-col-4 big"></div>
+                    <div class="ph-col-8 empty"></div>
+                    <div class="ph-col-8"></div>
+                    <div class="ph-col-4 emtpy"></div>
+                    <div class="ph-col-6"></div>
+                    <div class="ph-col-6 empty"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ph-item mb-0 px-0 py-2">
+            <div class="ph-col-12">
+                <div class="ph-row mb-0">
+                    <div class="ph-col-4 big"></div>
+                    <div class="ph-col-8 empty"></div>
+                    <div class="ph-col-8"></div>
+                    <div class="ph-col-4 emtpy"></div>
+                    <div class="ph-col-6"></div>
+                    <div class="ph-col-6 empty"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <li class="list-group-item d-flex align-items-center">
         <i data-toggle="tooltip" data-placement="top" title="Link" class="fa fa-globe text-muted pr-2"></i>
         <div>
             <p class="mb-0 text-break">Online Course</p>
             <small class="text-muted">Link will be provided once you enrol.</small>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="d-flex align-items-center">
+            <div class="pr-3 mr-auto">
+                <p class="mb-0"><strong>Jane Doe</strong>, <em>Job Role</em></p>
+                <p class="mb-0">janedoe@test.com</p>
+                <small class="text-muted">Enrolled: dateHere</small>
+            </div>
+            <button type="submit" class="btn btn-danger event-user-remove-from-course">Remove</button>
         </div>
     </li>
 </div>

@@ -97,9 +97,10 @@ if (!empty($_SESSION['successMessage'])) {
                     <div class="card-header">
                         <h3><span class="enrolr-gradient">Course Management</span></h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-3">
                         <p class="card-text">As an administrator, you cannot enrol on courses, but you can create, edit and delete them. </p>
                         <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalCreateCourse').modal('show')">Create new course</button>
+                        <div class="alert alert-info mt-2 mb-0"><strong>Note: </strong>As an administrator, you can remove staff from courses. Edit a course below to remove staff members.</div>
                     </div>
                 </div>
             <?php endif; ?>
@@ -400,8 +401,8 @@ if (!empty($_SESSION['successMessage'])) {
                             <span>&times;</span>
                         </button>
                     </div>
-                    <form action="../php/course/_editCourse.php" method="POST" id="formEditCourse">
-                        <div class="modal-body">
+                    <div class="modal-body">
+                        <form action="../php/course/_editCourse.php" method="POST" id="formEditCourse">
                             <input type="hidden" value="0" name="editId" id="editId">
                             <div class="form-label-group">
                                 <input type="text" id="editTitle" name="editTitle" class="form-control" placeholder="Title">
@@ -432,12 +433,65 @@ if (!empty($_SESSION['successMessage'])) {
                                 <input type="text" id="editLocation" name="editLocation" class="form-control" placeholder="Location" data-msg-required="You must set either a link or location, or both.">
                                 <label for="editLocation">Location</label>
                             </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn enrolr-brand-colour-bg text-white">Save</button>
+                            </div>
+                        </form>
+                        <hr>
+                        <div>
+                            <h6>Staff enrolled</h6>
+                            <ul class="list-group">
+
+                            </ul>
+                            <div class="enrolled-staff-placeholder">
+                                <div class="ph-item mb-0 px-0 py-2">
+                                    <div class="ph-col-12">
+                                        <div class="ph-row mb-0">
+                                            <div class="ph-col-4 big"></div>
+                                            <div class="ph-col-8 empty"></div>
+                                            <div class="ph-col-8"></div>
+                                            <div class="ph-col-4 emtpy"></div>
+                                            <div class="ph-col-6"></div>
+                                            <div class="ph-col-6 empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ph-item mb-0 px-0 py-2">
+                                    <div class="ph-col-12">
+                                        <div class="ph-row mb-0">
+                                            <div class="ph-col-4 big"></div>
+                                            <div class="ph-col-8 empty"></div>
+                                            <div class="ph-col-8"></div>
+                                            <div class="ph-col-4 emtpy"></div>
+                                            <div class="ph-col-6"></div>
+                                            <div class="ph-col-6 empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ph-item mb-0 px-0 py-2">
+                                    <div class="ph-col-12">
+                                        <div class="ph-row mb-0">
+                                            <div class="ph-col-4 big"></div>
+                                            <div class="ph-col-8 empty"></div>
+                                            <div class="ph-col-8"></div>
+                                            <div class="ph-col-4 emtpy"></div>
+                                            <div class="ph-col-6"></div>
+                                            <div class="ph-col-6 empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <nav class="mt-2">
+                                <ul class="pagination justify-content-end mb-0">
+                                    <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                    <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                </ul>
+                            </nav>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn enrolr-brand-colour-bg text-white">Save</button>
-                        </div>
-                    </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>

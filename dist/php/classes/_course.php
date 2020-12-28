@@ -1,8 +1,9 @@
 <?php
 
-class Course {
+class Course
+{
     // Returns array of upcoming courses.
-    public static function getUpcomingCourses(int $userId, int $pageIndex, string $searchMinDate, string $searchMaxDate, string $searchTitle) : array 
+    public static function getUpcomingCourses(int $userId, int $pageIndex, string $searchMinDate, string $searchMaxDate, string $searchTitle): array
     {
         global $connection;
 
@@ -15,8 +16,7 @@ class Course {
         // Build where clause
         if (!empty($searchMinDate)) {
             $where = "WHERE DATE(t_courses.date) >= '$searchMinDate'";
-        }
-        else {
+        } else {
             $where = "WHERE DATE(t_courses.date) >= CURRENT_DATE";
         }
 
@@ -35,14 +35,37 @@ class Course {
         if (!empty($searchTitle)) {
             $upcomingQuery = $connection->prepare($upcomingQueryString);
             $upcomingQuery->bind_param("isii", $userId, $searchTitle, $limitStart, $limitEnd);
-        }
-        else {
+        } else {
             $upcomingQuery = $connection->prepare($upcomingQueryString);
             $upcomingQuery->bind_param("iii", $userId, $limitStart, $limitEnd);
         }
 
         $upcomingQuery->execute();
         $queryResult = $upcomingQuery->get_result();
+        $result = [];
+        while ($row = $queryResult->fetch_assoc()) {
+            array_push($result, $row);
+        }
+        return $result;
+    }
+
+    public static function getUsersEnrolledOnCourse(int $courseId, int $pageIndex): array
+    {
+        global $connection;
+
+        $limitEnd = (5 * $pageIndex) + 1;
+        $limitStart = $limitEnd - 6;
+
+        $usersEnrolledQuery = $connection->prepare("SELECT t_users.id, t_users.firstName, t_users.lastName, t_users.email, t_users.jobTitle, t_enroll.dateCreated FROM t_enroll LEFT JOIN t_users ON t_enroll.iduser = t_users.id WHERE t_enroll.idcourse = ? ORDER BY dateCreated LIMIT $limitStart, $limitEnd");
+        $usersEnrolledQuery->bind_param("i", $courseId);
+
+        $success = $usersEnrolledQuery->execute();
+
+        if (!$success) {
+            throw new Exception("Fetching users enrolled on course failed.");
+        }
+
+        $queryResult = $usersEnrolledQuery->get_result();
         $result = [];
         while ($row = $queryResult->fetch_assoc()) {
             array_push($result, $row);
@@ -63,7 +86,8 @@ class Course {
     }
 
     // Edits course by course Id and by passing all values.
-    public static function editCourse(int $courseId, string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location) {
+    public static function editCourse(int $courseId, string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location)
+    {
         global $connection;
 
         $editCourse = $connection->prepare("UPDATE t_courses SET title=?, date=?, duration=?, maxAttendees=?, description=?, link=?, location=? WHERE id = ?");
@@ -75,7 +99,8 @@ class Course {
         }
     }
 
-    public static function createCourse(string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location): int {
+    public static function createCourse(string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location): int
+    {
         global $connection;
 
         $createCourse = $connection->prepare("INSERT INTO t_courses (title, date, duration, maxAttendees, description, link, location) VALUES (?, ?, ?, ?, ?, ?, ?)");
