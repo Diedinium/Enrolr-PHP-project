@@ -99,8 +99,8 @@ if (!empty($_SESSION['successMessage'])) {
                     </div>
                     <div class="card-body p-3">
                         <p class="card-text">As an administrator, you cannot enrol on courses, but you can create, edit and delete them. </p>
+                        <p class="card-text"><span class="badge badge-warning">Important!</span> As an administrator, you can remove staff from courses by clicking the edit icon on a course.</p>
                         <button class="btn enrolr-brand-colour-bg text-white" onclick="$('#ModalCreateCourse').modal('show')">Create new course</button>
-                        <div class="alert alert-info mt-2 mb-0"><strong>Note: </strong>As an administrator, you can remove staff from courses. Edit a course below to remove staff members.</div>
                     </div>
                 </div>
             <?php endif; ?>

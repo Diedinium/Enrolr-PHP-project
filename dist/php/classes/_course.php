@@ -85,6 +85,20 @@ class Course
         }
     }
 
+    // Admin based user unenrollment, takes course id and user id and removes matching record.
+    public static function unenrolUser(int $courseId, int $userId)
+    {
+        global $connection;
+
+        $unenrolUserQuery = $connection->prepare("DELETE FROM t_enroll WHERE iduser = ? AND idcourse = ?");
+        $unenrolUserQuery->bind_param("ii", $userId, $courseId);
+        $delete = $unenrolUserQuery->execute();
+
+        if (!$delete) {
+            throw new Exception("Deleting enrollment failed for an unknown reason.");
+        }
+    }
+
     // Edits course by course Id and by passing all values.
     public static function editCourse(int $courseId, string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location)
     {

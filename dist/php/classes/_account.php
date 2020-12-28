@@ -314,6 +314,40 @@ class Account
         }
     }
 
+    // Enroll current user on course.
+    public function enroll(int $courseId)
+    {
+        global $connection;
+
+        $canUserEnroll = $this->canUserEnrol($courseId);
+
+        if (!$canUserEnroll) {
+            throw new Exception("Could not enrol on this course, either you are already enrolled or it is fully booked.");
+        }
+
+        $enrollOnCourseQuery = $connection->prepare("INSERT INTO t_enroll (iduser, idcourse) VALUES ({$this->id}, ?)");
+        $enrollOnCourseQuery->bind_param("i", $courseId);
+        $success = $enrollOnCourseQuery->execute();
+
+        if (!$success) {
+            throw new Exception("Enrolling on course failed for unknown reason, please try again.");
+        }
+    }
+
+    // Unenroll current user from course
+    public function unenroll(int $courseId)
+    {
+        global $connection;
+
+        $unenrolQuery = $connection->prepare("DELETE FROM t_enroll WHERE iduser = {$this->id} AND idcourse = ?");
+        $unenrolQuery->bind_param("i", $courseId);
+        $delete = $unenrolQuery->execute();
+
+        if (!$delete) {
+            throw new Exception("Unenrolling failed, an unknown error occured.");
+        }
+    }
+
     // Attempts to find existing accounts with email, used to validate that email is not already signed up.
     public function getIdFromName(string $email)
     {
@@ -328,5 +362,38 @@ class Account
         $userQuery->fetch();
 
         return $userQuery->num_rows() > 0 ? $userID : null;
+    }
+
+    // Checks if user can enrol
+    private function canUserEnrol(int $courseId): bool
+    {
+        global $connection;
+
+        if ($this->getIsAdmin()) {
+            return false;
+        }
+
+        $checkCourseQuery = $connection->prepare("SELECT t_courses.maxAttendees, COUNT(t_enroll.iduser) AS 'enrolled', IFNULL(MAX(CASE WHEN t_enroll.iduser = {$this->id} then true end), false) as 'isUserEnrolled' FROM t_courses LEFT JOIN t_enroll ON t_enroll.idcourse = t_courses.id WHERE t_courses.id = ? GROUP BY t_courses.id");
+        $checkCourseQuery->bind_param("i", $courseId);
+        $success = $checkCourseQuery->execute();
+
+        if (!$success) {
+            throw new Exception("Something went wrong while checking enrollment status");
+        }
+
+        $checkCourseQuery->bind_result($maxAttendees, $currentAttendees, $isUserEnrolled);
+        $checkCourseQuery->store_result();
+        $checkCourseQuery->fetch();
+
+        if ($isUserEnrolled) {
+            return false;
+        }
+
+        if ($maxAttendees > $currentAttendees) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

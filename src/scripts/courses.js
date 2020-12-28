@@ -168,6 +168,7 @@ $(function () {
                 const todaysDatePlus7 = new Date().addDays(7);
                 const isThisWeek = courseDate < todaysDatePlus7;
                 const isToday = courseDate.getDate() === new Date().getDate();
+                const isFullyBooked = course.maxAttendees <= course.enrolled;
                 let $courseTemplate = $('#templates').children('div').eq(5).clone();
                 $courseTemplate.find('h5.card-title').html(course.title);
                 $courseTemplate.find('p.card-text').html(course.description);
@@ -179,6 +180,10 @@ $(function () {
 
                 if (isToday) {
                     $courseTemplate.find('span.badge.badge-success').first().html('Today!').removeClass('badge-success').addClass('badge-warning');
+                }
+
+                if (isFullyBooked) {
+                    $courseTemplate.find('div.card-body').children('div').first().append('<span class="badge badge-danger">Fully Booked</span>')
                 }
 
                 $courseTemplate.find('ul li span span').eq(1).html(courseDate.toLocaleString([], {
@@ -217,9 +222,16 @@ $(function () {
                     $courseTemplate.find('div.card-footer div i').remove();
 
                     if (course.isUserEnrolled == false) {
-                        $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
-                            '<button type="button" class="btn enrolr-brand-colour-bg text-white event-course-enrol">Enrol</button>'
-                        );
+                        if (course.enrolled < course.maxAttendees) {
+                            $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
+                                '<button type="button" class="btn enrolr-brand-colour-bg text-white event-course-enrol">Enrol</button>'
+                            );
+                        }
+                        else {
+                            $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
+                                '<button type="button" class="btn enrolr-brand-colour-bg text-white event-course-enrol disabled">Enrol</button>'
+                            );
+                        }                        
                     }
                     else {
                         $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
@@ -344,6 +356,12 @@ $(function () {
         getEnrolledStaff($(this).data().id);
     });
 
+    $('#ModalEditCourse').on('hidden.bs.modal', function() {
+        let foundIndex = upcomingResponse.findIndex(course => course.id === $(this).data().id);
+        upcomingResponse[foundIndex].enrolled = $(this).data().enrolled;
+        renderUpcoming(userIsAdmin);
+    });
+
     $(document).on('click', '#ModalEditCourse nav ul.pagination li:not(.disabled):nth-child(1) button', function () {
         paginateIndexEnrolledStaff--;
         $('#ModalEditCourse div.modal-body ul').first().empty();
@@ -356,6 +374,39 @@ $(function () {
         $('#ModalEditCourse div.modal-body ul').first().empty();
         $('#ModalEditCourse .enrolled-staff-placeholder').show();
         getEnrolledStaff($('#ModalEditCourse').data().id);
+    });
+
+    $(document).on('click', '.event-user-remove-from-course', function () {
+        const $listItem = $(this).closest('li.list-group-item');
+        $.ajax({
+            type: 'POST',
+            url: '../php/course/_deleteEnrollment.php',
+            data: {
+                courseId: $('#ModalEditCourse').data().id,
+                userId: $(this).closest('li.list-group-item').data().id
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == true) {
+                    $('#ModalEditCourse').data().enrolled--;
+                    displaySuccessToast(response.message);
+                    $listItem.fadeOut(500, () => {
+                        enrolledStaffResponse = enrolledStaffResponse.filter(staff => staff.id !== $listItem.data().id);
+                        if (enrolledStaffResponse.length < 1 && paginateIndexEnrolledStaff > 1) {
+                            paginateIndexEnrolledStaff--;
+                        }
+                        $('#ModalEditCourse div.modal-body ul').first().empty();
+                        $('#ModalEditCourse .enrolled-staff-placeholder').show();
+                        getEnrolledStaff($('#ModalEditCourse').data().id);
+                    });
+                } else {
+                    displayErrorToastStandard(response.message);
+                }
+            },
+            error: function () {
+                displayErrorToastStandard('Something went wrong while handling this request');
+            }
+        });
     });
 
     function renderEnrolledStaff() {
@@ -387,7 +438,7 @@ $(function () {
                 let $enrolledStaffTemplate = $('#templates').children('li').eq(1).clone();
                 $enrolledStaffTemplate.find('p strong').html(`${staff.firstName} ${staff.lastName}`);
                 $enrolledStaffTemplate.find('p em').html(staff.jobTitle);
-                $enrolledStaffTemplate.find('p').eq(1).html(staff.email);''
+                $enrolledStaffTemplate.find('p').eq(1).html(staff.email); ''
                 $enrolledStaffTemplate.find('small').html(`Enrolled: ${new Date(staff.dateCreated).toLocaleString([], {
                     dateStyle: 'short',
                     timeStyle: 'short',
@@ -398,7 +449,7 @@ $(function () {
                 if (i >= 4) return false;
                 else return true;
             });
-            
+
         }
     }
 
@@ -502,6 +553,7 @@ $(function () {
 
     $(document).on('input', '#upcomingSearchForm input', function () {
         if ($('#searchMinDate').val() === "" && $('#searchMaxDate').val() === "" && $('#searchTitle').val() === "") {
+            $('.tooltip').tooltip('hide');
             $('#clearSearchIcon').hide();
         }
         else {
@@ -511,11 +563,62 @@ $(function () {
 
     $(document).on('click', '#clearSearchIcon', function () {
         $('#upcomingSearchForm').trigger('reset');
+        $('.tooltip').tooltip('hide');
         $('#clearSearchIcon').hide();
         formUpcomingSearchValidator.resetForm();
         paginateIndex = 1;
         isSearching = false;
         replaceUpcomingWithLoading();
         getUpcoming();
+    });
+
+    $(document).on('click', '.event-course-enrol:not(.disabled)', function() {
+        const courseId = $(this).closest('div.col.mb-2.px-2').data().id;
+        $.ajax({
+            type: 'POST',
+            url: '../php/enrol/_userEnrol.php',
+            data: {
+                id: courseId
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == true) {
+                    displaySuccessToast(response.message);
+                    upcomingResponse[upcomingResponse.findIndex(course => course.id === courseId)].isUserEnrolled = 1;
+                    upcomingResponse[upcomingResponse.findIndex(course => course.id === courseId)].enrolled++;
+                    renderUpcoming();
+                } else {
+                    displayErrorToastStandard(response.message);
+                }
+            },
+            error: function () {
+                displayErrorToastStandard('Something went wrong while handling this request');
+            }
+        });
+    });
+
+    $(document).on('click', '.event-course-unenrol', function() {
+        const courseId = $(this).closest('div.col.mb-2.px-2').data().id;
+        $.ajax({
+            type: 'POST',
+            url: '../php/enrol/_userUnenrol.php',
+            data: {
+                id: courseId
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == true) {
+                    displaySuccessToast(response.message);
+                    upcomingResponse[upcomingResponse.findIndex(course => course.id === courseId)].isUserEnrolled = 0;
+                    upcomingResponse[upcomingResponse.findIndex(course => course.id === courseId)].enrolled--;
+                    renderUpcoming();
+                } else {
+                    displayErrorToastStandard(response.message);
+                }
+            },
+            error: function () {
+                displayErrorToastStandard('Something went wrong while handling this request');
+            }
+        });
     });
 });
