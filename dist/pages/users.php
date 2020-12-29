@@ -46,7 +46,7 @@ if (!empty($_SESSION['successMessage'])) {
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top enrolr-navbar-top-accent shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center p-0" href="#">
-                <img src="../img/enrolrLogo.png" alt="enrolr logo" width="60" class="d-inline-block">
+                <img src="../img/EnrolrLogo.png" alt="enrolr logo" width="60" class="d-inline-block">
                 <span>Enrolr</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

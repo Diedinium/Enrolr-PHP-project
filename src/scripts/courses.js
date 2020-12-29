@@ -11,6 +11,7 @@ window.submitLogout = submitLogout;
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
     $('#clearSearchIcon').hide();
+    $('#clearPastSearchIcon').hide();
 
     $('input, select').on('focusout', function () {
         $(this).removeClass('error');
@@ -106,6 +107,26 @@ $(function () {
         errorElement: 'small'
     });
 
+    let formPastSearchValidator = $('#pastSearchForm').validate({
+        onfocusout: false,
+        rules: {
+            searchPastMinDate: {
+                require_from_group: [1, '.pastSearchGroup']
+            },
+            searchPastMaxDate: {
+                require_from_group: [1, '.pastSearchGroup'],
+                greaterThan: '#searchPastMinDate'
+            },
+            searchPastTitle: {
+                require_from_group: [1, '.pastSearchGroup'],
+                noWhiteSpace: true,
+                minlength: 3,
+                maxlength: 50
+            }
+        },
+        errorElement: 'small'
+    });
+
     $(document).on('hidden.bs.toast', function ($event) {
         $event.target.remove();
     });
@@ -155,10 +176,12 @@ $(function () {
                 $('#upcomingSearchForm').hide();
             }
             $('#courses nav').hide();
+            $('#courses div.alert.alert-info').remove();
             $('#courses').append('<div class="alert alert-info">No upcoming courses found.</div>');
             $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
         } else {
             $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+            $('#courses div.alert.alert-info').remove();
             $('#upcomingSearchForm').show();
             $('#courses nav').show();
             const $upcomingContainer = $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2');
@@ -231,7 +254,7 @@ $(function () {
                             $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
                                 '<button type="button" class="btn enrolr-brand-colour-bg text-white event-course-enrol disabled">Enrol</button>'
                             );
-                        }                        
+                        }
                     }
                     else {
                         $courseTemplate.find('div.card-footer div.enrolr-actions-min-width').append(
@@ -266,10 +289,10 @@ $(function () {
         }
     };
 
-    function replaceUpcomingWithLoading() {
-        $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+    function replaceCoursesWithLoading(selector) {
+        $(`${selector} div.row.row-cols-1.row-cols-lg-3.row-cols-md-2`).empty();
         for (let i = 0; i < 3; i++) {
-            $('#courses div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').append($('#templates').children('div').eq(6).clone());
+            $(`${selector} div.row.row-cols-1.row-cols-lg-3.row-cols-md-2`).append($('#templates').children('div').eq(6).clone());
         }
     }
 
@@ -290,7 +313,7 @@ $(function () {
                             upcomingResponse = upcomingResponse.filter(course => course.id !== $parentCourse.data().id);
                             if (upcomingResponse.length < 1 && paginateIndex > 1) {
                                 paginateIndex--;
-                                replaceUpcomingWithLoading();
+                                replaceCoursesWithLoading('#courses');
                                 getUpcoming();
                             }
                             else {
@@ -356,7 +379,7 @@ $(function () {
         getEnrolledStaff($(this).data().id);
     });
 
-    $('#ModalEditCourse').on('hidden.bs.modal', function() {
+    $('#ModalEditCourse').on('hidden.bs.modal', function () {
         let foundIndex = upcomingResponse.findIndex(course => course.id === $(this).data().id);
         upcomingResponse[foundIndex].enrolled = $(this).data().enrolled;
         renderUpcoming(userIsAdmin);
@@ -522,14 +545,14 @@ $(function () {
 
     $(document).on('click', '#courses nav ul.pagination li:not(.disabled):nth-child(1) button', function () {
         paginateIndex--;
-        replaceUpcomingWithLoading();
+        replaceCoursesWithLoading('#courses');
         getUpcoming();
         tabContent.scrollIntoView();
     });
 
     $(document).on('click', '#courses nav ul.pagination li:not(.disabled):nth-child(2) button', function () {
         paginateIndex++;
-        replaceUpcomingWithLoading();
+        replaceCoursesWithLoading('#courses');
         getUpcoming();
         tabContent.scrollIntoView();
     });
@@ -546,7 +569,7 @@ $(function () {
         e.preventDefault();
         paginateIndex = 1;
         isSearching = true;
-        replaceUpcomingWithLoading();
+        replaceCoursesWithLoading('#courses');
         getUpcoming();
         tabContent.scrollIntoView();
     });
@@ -568,11 +591,11 @@ $(function () {
         formUpcomingSearchValidator.resetForm();
         paginateIndex = 1;
         isSearching = false;
-        replaceUpcomingWithLoading();
+        replaceCoursesWithLoading('#courses');
         getUpcoming();
     });
 
-    $(document).on('click', '.event-course-enrol:not(.disabled)', function() {
+    $(document).on('click', '.event-course-enrol:not(.disabled)', function () {
         const courseId = $(this).closest('div.col.mb-2.px-2').data().id;
         $.ajax({
             type: 'POST',
@@ -597,7 +620,7 @@ $(function () {
         });
     });
 
-    $(document).on('click', '.event-course-unenrol', function() {
+    $(document).on('click', '.event-course-unenrol', function () {
         const courseId = $(this).closest('div.col.mb-2.px-2').data().id;
         $.ajax({
             type: 'POST',
@@ -620,5 +643,197 @@ $(function () {
                 displayErrorToastStandard('Something went wrong while handling this request');
             }
         });
+    });
+
+    let pastCoursesResponse = [];
+    let userIsAdminPastCourses = false;
+    let paginateIndexPastCourses = 1;
+    let isSearchingPastCourses = false;
+
+    let getPast = () => $.ajax({
+        type: 'GET',
+        url: '../php/course/_getPast.php',
+        data: {
+            pageIndex: paginateIndexPastCourses,
+            searchPastMinDate: $('#searchPastMinDate').val(),
+            searchPastMaxDate: $('#searchPastMaxDate').val(),
+            searchPastTitle: $('#searchPastTitle').val()
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                pastCoursesResponse = response.data;
+                userIsAdminPastCourses = response.isAdmin;
+                renderPast(userIsAdminPastCourses);
+            } else {
+                displayErrorToastStandard(response.message);
+            }
+        },
+        error: function () {
+            displayErrorToastStandard('Something went wrong fetching data for this page, please reload the page to try again.');
+        }
+    });
+
+    function renderPast(isAdmin) {
+        if (pastCoursesResponse.length < 1) {
+            if (!isSearchingPastCourses) {
+                $('#pastSearchForm').hide();
+            }
+            $('#past nav').hide();
+            $('#past div.alert.alert-info').remove();
+            $('#past').append('<div class="alert alert-info">No upcoming courses found.</div>');
+            $('#past div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+        } else {
+            $('#past div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
+            $('#past div.alert.alert-info').remove();
+            $('#pastSearchForm').show();
+            $('#past nav').show();
+            const $pastContainer = $('#past div.row.row-cols-1.row-cols-lg-3.row-cols-md-2');
+            pastCoursesResponse.every((course, i) => {
+                const createdDate = new Date(course.created);
+                const courseDate = new Date(course.date);
+                let $courseTemplate = $('#templates').children('div').eq(8).clone();
+                $courseTemplate.find('h5.card-title').html(course.title);
+                $courseTemplate.find('p.card-text').html(course.description);
+
+                $courseTemplate.find('ul li span span').eq(1).html(courseDate.toLocaleString([], {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                    hour12: true
+                }));
+                $courseTemplate.find('ul li span span').eq(2).html(`${course.enrolled}/${course.maxAttendees}`);
+                $courseTemplate.find('div.card-footer small').first().html(createdDate.toLocaleString([], {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                    hour12: true
+                }));
+
+                if (course.location === null || course.location === "") {
+                    let $linkTemplate = $('#templates').children('li').eq(0).clone();
+                    $linkTemplate.find('small').html('Link is no longer available.')
+                    $courseTemplate.find('ul li').first().replaceWith($linkTemplate);
+                } else {
+                    $courseTemplate.find('ul li span span').first().html(course.location);
+                }
+
+                if (!isAdmin) {
+                    $courseTemplate.find('div.card-footer div i').remove();
+                }
+
+                $courseTemplate.data(course);
+
+                $pastContainer.append($courseTemplate);
+
+                if (i >= 11) return false;
+                else return true;
+            });
+
+            if (paginateIndexPastCourses > 1) {
+                $('#past nav ul li:nth-child(1)').removeClass('disabled');
+            }
+            else {
+                $('#past nav ul li:nth-child(1)').addClass('disabled');
+            }
+
+            if (pastCoursesResponse.length > 12) {
+                $('#past nav ul li:nth-child(2)').removeClass('disabled');
+            }
+            else {
+                $('#past nav ul li:nth-child(2)').addClass('disabled');
+            }
+
+            $('[data-toggle="tooltip"]').tooltip();
+        }
+    };
+
+    $('#past-tab').on('shown.bs.tab', function () {
+        getPast(userIsAdminPastCourses);
+    });
+
+    $(document).on('click', '.event-delete-past-course', function() {
+        confirmDialog(`Are you sure you want to delete "${$(this).closest('div.col.mb-2.px-2').data().title}", this action cannot be undone`, 'Confirm Deletion', () => {
+            const $parentCourse = $(this).closest('div.col.mb-2.px-2');
+            $.ajax({
+                type: 'POST',
+                url: '../php/course/_deleteCourse.php',
+                data: {
+                    id: $parentCourse.data().id
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success == true) {
+                        displaySuccessToast(response.message);
+                        $parentCourse.fadeOut(500, () => {
+                            pastCoursesResponse = pastCoursesResponse.filter(course => course.id !== $parentCourse.data().id);
+                            if (pastCoursesResponse.length < 1 && paginateIndexPastCourses > 1) {
+                                paginateIndexPastCourses--;
+                                replaceCoursesWithLoading('#past');
+                                getPast();
+                            }
+                            else {
+                                renderPast(userIsAdminPastCourses);
+                            }
+                        });
+                    } else {
+                        displayErrorToastStandard(response.message);
+                    }
+                },
+                error: function () {
+                    displayErrorToastStandard('Something went wrong while handling this request');
+                }
+            });
+        });
+    });
+
+    $(document).on('click', '#past nav ul.pagination li:not(.disabled):nth-child(1) button', function () {
+        paginateIndexPastCourses--;
+        replaceCoursesWithLoading('#past');
+        getPast();
+        tabContent.scrollIntoView();
+    });
+
+    $(document).on('click', '#past nav ul.pagination li:not(.disabled):nth-child(2) button', function () {
+        paginateIndexPastCourses++;
+        replaceCoursesWithLoading('#past');
+        getPast();
+        tabContent.scrollIntoView();
+    });
+
+    $(document).on('enter', '#pastSearchForm input', function () {
+        $('#pastSearchForm').trigger('submit');
+    });
+
+    $(document).on('click', '#pastSearchIcon', function () {
+        $('#pastSearchForm').trigger('submit');
+    });
+
+    $(document).on('submit', '#pastSearchForm', function (e) {
+        e.preventDefault();
+        paginateIndexPastCourses = 1;
+        isSearchingPastCourses = true;
+        replaceCoursesWithLoading('#past');
+        getPast();
+        tabContent.scrollIntoView();
+    });
+
+    $(document).on('input', '#pastSearchForm input', function () {
+        if ($('#searchPastMinDate').val() === "" && $('#searchPastMaxDate').val() === "" && $('#searchPastTitle').val() === "") {
+            $('.tooltip').tooltip('hide');
+            $('#clearPastSearchIcon').hide();
+        }
+        else {
+            $('#clearPastSearchIcon').show();
+        }
+    });
+
+    $(document).on('click', '#clearPastSearchIcon', function () {
+        $('#pastSearchForm').trigger('reset');
+        $('.tooltip').tooltip('hide');
+        $('#pastSearchIcon').hide();
+        formPastSearchValidator.resetForm();
+        paginateIndexPastCourses = 1;
+        isSearchingPastCourses = false;
+        replaceCoursesWithLoading('#past');
+        getPast();
     });
 });

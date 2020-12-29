@@ -234,26 +234,31 @@ if (!empty($_SESSION['successMessage'])) {
                             </nav>
                         </div>
                         <div class="tab-pane fade p-2" id="past" role="tabpanel">
-                            <div class="form-row mb-3">
-                                <div class="col-md-4 col-sm-6 col-12">
-                                    <select name="sortPast" id="sortPast" class="form-control form-control-sm">
-                                        <option selected value="1">Date Asc (Default)</option>
-                                        <option value="2">Date Desc</option>
-                                        <option value="3">Attendees Asc</option>
-                                        <option value="4">Attendees Desc</option>
-                                        <?php if (!$account->getIsAdmin()) : ?>
-                                            <option value="5">Enrolled Asc</option>
-                                            <option value="6">Enrolled Desc</option>
-                                        <?php endif; ?>
-                                        <option value="7">Created Asc</option>
-                                        <option value="8">Created Desc</option>
-                                    </select>
+                            <form id="pastSearchForm">
+                                <h5>Search past courses</h5>
+                                <div class="form-row mb-3 align-items-start" id="pastSearchFilter">
+                                    <div class="col-lg-3 col-md-12 mb-2 mb-lg-0">
+                                        <div class="form-label-group mb-0 w-100">
+                                            <input type="date" id="searchPastMinDate" name="searchPastMinDate" class="form-control pastSearchGroup" placeholder="2020-12-01" max="<?= date("Y-m-d") ?>">
+                                            <label for="searchPastMinDate">Min date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-12 mb-2 mb-lg-0">
+                                        <div class="form-label-group mb-0 w-100">
+                                            <input type="date" id="searchPastMaxDate" name="searchPastMaxDate" class="form-control pastSearchGroup" data-msg-greaterThan="This date cannot be less than or equal to the min date." placeholder="2020-12-01" max="<?= date("Y-m-d") ?>">
+                                            <label for="searchPastMaxDate">Max date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex align-items-center">
+                                        <div class="form-label-group mb-0 w-100">
+                                            <input type="text" id="searchPastTitle" name="searchPastTitle" class="form-control pastSearchGroup" placeholder="Search by title">
+                                            <label for="searchPastTitle">Search by title</label>
+                                        </div>
+                                        <i data-toggle="tooltip" data-placement="top" title="Clear search" id="clearPastSearchIcon" class="fas fa-redo fa-lg enrolr-danger-icon pl-2"></i>
+                                        <i data-toggle="tooltip" data-placement="top" title="Search" id="pastSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon pl-3"></i>
+                                    </div>
                                 </div>
-                                <div class="col d-flex align-items-center mt-2 mt-sm-0">
-                                    <input type="search" class="form-control form-control-sm" placeholder="Search by title">
-                                    <i data-toggle="tooltip" data-placement="top" title="Search" id="pastSearchIcon" class="fas fa-search fa-lg enrolr-standard-icon pl-2"></i>
-                                </div>
-                            </div>
+                            </form>
 
                             <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
                                 <div class="col mb-2 px-2">
@@ -332,6 +337,13 @@ if (!empty($_SESSION['successMessage'])) {
                                     </div>
                                 </div>
                             </div>
+
+                            <nav>
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                    <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>

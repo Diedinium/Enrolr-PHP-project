@@ -176,6 +176,33 @@
         </div>
     </div>
 
+    <div class="col mb-2 px-2">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-0">title</h5>
+                <p class="card-text enrolr-line-sep">description</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <span><i data-toggle="tooltip" data-placement="top" title="Location" class="fa fa-map-marked text-muted pr-2"></i><span></span></span>
+                </li>
+                <li class="list-group-item d-flex">
+                    <span class="mr-auto"><i data-toggle="tooltip" data-placement="top" title="Course date/time" class="fa fa-calendar-day text-muted pr-2"></i><span></span></span>
+                    <span><i data-toggle="tooltip" data-placement="top" title="Attendees" class="fa fa-user text-muted pr-2"></i><span></span></span>
+                </li>
+            </ul>
+            <div class="card-footer">
+                <div class="d-flex align-items-center">
+                    <small class="text-muted mr-auto">created</small>
+                    <div class="enrolr-actions-min-width text-right">
+                        <i data-toggle="tooltip" data-placement="top" title="View attendees" class="fas fa-users fa-lg enrolr-standard-icon event-view-past-attendees"></i>
+                        <i data-toggle="tooltip" data-placement="top" title="Delete" class="fas fa-trash fa-lg enrolr-danger-icon event-delete-past-course pl-2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <li class="list-group-item d-flex align-items-center">
         <i data-toggle="tooltip" data-placement="top" title="Link" class="fa fa-globe text-muted pr-2"></i>
         <div>

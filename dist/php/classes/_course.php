@@ -49,6 +49,52 @@ class Course
         return $result;
     }
 
+    public static function getPastCourses(int $userId, int $pageIndex, string $searchMinDate, string $searchMaxDate, string $searchTitle): array
+    {
+        global $connection;
+
+        // Idea here is to return one more result than is dispayed.
+        // Then, in the front end, if there are 13 results rather than 12, paginate controls know to allow navigation to next page.
+        $limitEnd = (12 * $pageIndex) + 1;
+        $limitStart = $limitEnd - 13;
+        $pastQuery = null;
+
+        // Build where clause
+        if (!empty($searchMaxDate)) {
+            $where = "WHERE DATE(t_courses.date) <= '$searchMaxDate'";
+        } else {
+            $where = "WHERE DATE(t_courses.date) <= CURRENT_DATE";
+        }
+
+        if (!empty($searchMinDate)) {
+            $where .= " AND DATE(t_courses.date) >= '$searchMinDate'";
+        }
+
+        // Since title is not validated at _getUpcoming, should be prepared via prepared statement.
+        if (!empty($searchTitle)) {
+            $where .= " AND t_courses.title LIKE CONCAT('%', ?, '%')";
+        }
+
+        $pastQueryString = "SELECT t_courses.*, COUNT(t_enroll.iduser) AS 'enrolled', IFNULL(MAX(CASE WHEN t_enroll.iduser = ? then true end), false) as 'isUserEnrolled' FROM t_courses LEFT JOIN t_enroll ON t_enroll.idcourse = t_courses.id $where GROUP BY t_courses.id ORDER BY t_courses.date DESC LIMIT ?, ?";
+
+        // Prepare statement differently depending on if title is populated or not.
+        if (!empty($searchTitle)) {
+            $pastQuery = $connection->prepare($pastQueryString);
+            $pastQuery->bind_param("isii", $userId, $searchTitle, $limitStart, $limitEnd);
+        } else {
+            $pastQuery = $connection->prepare($pastQueryString);
+            $pastQuery->bind_param("iii", $userId, $limitStart, $limitEnd);
+        }
+
+        $pastQuery->execute();
+        $queryResult = $pastQuery->get_result();
+        $result = [];
+        while ($row = $queryResult->fetch_assoc()) {
+            array_push($result, $row);
+        }
+        return $result;
+    }
+
     public static function getUsersEnrolledOnCourse(int $courseId, int $pageIndex): array
     {
         global $connection;
