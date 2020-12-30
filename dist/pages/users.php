@@ -67,7 +67,7 @@ if (!empty($_SESSION['successMessage'])) {
                         </li>
                     <?php endif ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.php"><i class="fas fa-question"></i> About</a>
+                        <a class="nav-link" href="help.php"><i class="fas fa-question"></i> Help</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" action="../php/account/_logout.php" method="POST" id="logoutForm">

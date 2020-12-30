@@ -369,6 +369,7 @@ class Account
     {
         global $connection;
 
+        // Return false when user is admin
         if ($this->getIsAdmin()) {
             return false;
         }
@@ -385,10 +386,12 @@ class Account
         $checkCourseQuery->store_result();
         $checkCourseQuery->fetch();
 
+        // Return false if user is already enrolled.
         if ($isUserEnrolled) {
             return false;
         }
 
+        // Return true if space is available, false if not.
         if ($maxAttendees > $currentAttendees) {
             return true;
         }

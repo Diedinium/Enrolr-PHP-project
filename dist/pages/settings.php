@@ -65,7 +65,7 @@ if (!empty($_SESSION['successMessage'])) {
                         </li>
                     <?php endif ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.php"><i class="fas fa-question"></i> About</a>
+                        <a class="nav-link" href="help.php"><i class="fas fa-question"></i> Help</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" action="../php/account/_logout.php" method="POST" id="logoutForm">
@@ -138,6 +138,13 @@ if (!empty($_SESSION['successMessage'])) {
                         </div>
 
                         <div class="tab-pane fade p-2" id="security" role="tabpanel">
+                            <?php if ($account->getIsAdmin()) : ?>
+                                <div class="alert alert-warning">
+                                    <strong>WARNING: </strong>Be very careful changing your password as an admin, only another admin can reset your password.
+                                    Please note down for future use that using <a href="../php/account/_createAdmin.php">this link</a> will re-create the default Admin.McAdmin@enrolr.co.uk account with the default password configured in this file. 
+                                    This could prove useful if you lose access to the application. If you have access to the web server, you can configure the password the default admin account has by changing this file.
+                                </div>
+                            <?php endif; ?>
                             <form action="../php/account/_updatePassword.php" id="formChangePassword" method="POST">
                                 <div class="form-group">
                                     <label for="firstName">Current Password</label>
@@ -198,7 +205,7 @@ if (!empty($_SESSION['successMessage'])) {
                                                 <strong>Delete all enrolments</strong>
                                                 <div>This will delete all of your current enrolments. This action is permanent and cannot be undone.</div>
                                             </div>
-                                            <form action="../php/todos/_deleteEnrolments.php" method="POST" class="flex-shrink-0 mt-2 mt-sm-0" id="formDeleteAllTodos">
+                                            <form action="../php/account/_deleteEnrolments.php" onclick="showSpinner()" method="POST" class="flex-shrink-0 mt-2 mt-sm-0" id="formDeleteAllTodos">
                                                 <button type="submit" class="btn btn-danger">Delete all enrolments</button>
                                             </form>
                                         </div>
@@ -211,7 +218,7 @@ if (!empty($_SESSION['successMessage'])) {
                                                 <strong>Delete Account</strong>
                                                 <div>This will permanently delete your account along with all associated data. This action is permanent and cannot be undone.</div>
                                             </div>
-                                            <form action="../php/account/_deleteAccount.php" method="POST" class="flex-shrink-0 mt-2 mt-sm-0" id="formDeleteAccount">
+                                            <form action="../php/account/_deleteAccount.php" onsubmit="showSpinner()" method="POST" class="flex-shrink-0 mt-2 mt-sm-0" id="formDeleteAccount">
                                                 <button type="submit" class="btn btn-danger">Delete Account</button>
                                             </form>
                                         </div>

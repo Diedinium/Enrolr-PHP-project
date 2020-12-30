@@ -66,7 +66,7 @@ if (!empty($_SESSION['successMessage'])) {
                         </li>
                     <?php endif ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.php"><i class="fas fa-question"></i> About</a>
+                        <a class="nav-link" href="help.php"><i class="fas fa-question"></i> Help</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" action="../php/account/_logout.php" method="POST" id="logoutForm">
@@ -227,10 +227,13 @@ if (!empty($_SESSION['successMessage'])) {
                             </div>
 
                             <nav>
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
-                                    <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
-                                </ul>
+                                <div class="d-flex justify-content-end">
+                                    <div class="rounded border px-2 py-1 mr-auto"><span class="text-muted">Page: </span><span class="badge badge-primary">1</span></div>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                        <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                    </ul>
+                                </div>
                             </nav>
                         </div>
                         <div class="tab-pane fade p-2" id="past" role="tabpanel">
@@ -339,10 +342,13 @@ if (!empty($_SESSION['successMessage'])) {
                             </div>
 
                             <nav>
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
-                                    <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
-                                </ul>
+                                <div class="d-flex justify-content-end">
+                                    <div class="rounded border px-2 py-1 mr-auto"><span class="text-muted">Page: </span><span class="badge badge-primary">1</span></div>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                        <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                    </ul>
+                                </div>
                             </nav>
                         </div>
                     </div>
@@ -494,10 +500,84 @@ if (!empty($_SESSION['successMessage'])) {
                                 </div>
                             </div>
                             <nav class="mt-2">
-                                <ul class="pagination justify-content-end mb-0">
-                                    <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
-                                    <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
-                                </ul>
+                                <div class="d-flex justify-content-end">
+                                    <div class="rounded border px-2 py-1 mr-auto"><span class="text-muted">Page: </span><span class="badge badge-primary">1</span></div>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                        <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" id="ModalViewAttendees">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Course attendees</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="alert alert-warning"><strong>Note: </strong>You cannot remove attendees from past courses.</div>
+                            <ul class="list-group">
+
+                            </ul>
+                            <div class="enrolled-staff-placeholder">
+                                <div class="ph-item mb-0 px-0 py-2">
+                                    <div class="ph-col-12">
+                                        <div class="ph-row mb-0">
+                                            <div class="ph-col-4 big"></div>
+                                            <div class="ph-col-8 empty"></div>
+                                            <div class="ph-col-8"></div>
+                                            <div class="ph-col-4 emtpy"></div>
+                                            <div class="ph-col-6"></div>
+                                            <div class="ph-col-6 empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ph-item mb-0 px-0 py-2">
+                                    <div class="ph-col-12">
+                                        <div class="ph-row mb-0">
+                                            <div class="ph-col-4 big"></div>
+                                            <div class="ph-col-8 empty"></div>
+                                            <div class="ph-col-8"></div>
+                                            <div class="ph-col-4 emtpy"></div>
+                                            <div class="ph-col-6"></div>
+                                            <div class="ph-col-6 empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ph-item mb-0 px-0 py-2">
+                                    <div class="ph-col-12">
+                                        <div class="ph-row mb-0">
+                                            <div class="ph-col-4 big"></div>
+                                            <div class="ph-col-8 empty"></div>
+                                            <div class="ph-col-8"></div>
+                                            <div class="ph-col-4 emtpy"></div>
+                                            <div class="ph-col-6"></div>
+                                            <div class="ph-col-6 empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <nav class="mt-2">
+                                <div class="d-flex justify-content-end">
+                                    <div class="rounded border px-2 py-1 mr-auto"><span class="text-muted">Page: </span><span class="badge badge-primary">1</span></div>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                        <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                    </ul>
+                                </div>
                             </nav>
                         </div>
                     </div>

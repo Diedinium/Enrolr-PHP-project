@@ -58,7 +58,7 @@ $connection->close();
                         <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/about.php"><i class="fas fa-question"></i> About</a>
+                        <a class="nav-link" href="pages/help.php"><i class="fas fa-question"></i> Help</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" action="php/account/_auth.php" method="POST" id="logonForm">
@@ -82,29 +82,31 @@ $connection->close();
                     <?= $errorMessage ?>
                 </div>
             <?php endif; ?>
-            <div class="jumbotron mt-3 text-center">
+            <div class="jumbotron mt-3 text-center enrolr-subtle-shadow">
                 <h1 class="display-4">Welcome to enrolr!</h1>
                 <p>A course enrollment/management web application.</p>
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-12">
-                    <div class="card h-100 enrolr-brand-colour-border">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="card h-100 enrolr-brand-colour-border enrolr-subtle-shadow">
                         <h4 class="card-header enrolr-brand-colour-text">
-                            Placeholder
+                            Need help?
                         </h4>
                         <div class="card-body">
-                            <p>This is a placeholder untill I think of something useful to put here...</p>
+                            <p>Go to the help page if you need help or information on this web app.</p>
+                            <a href="pages/help.php" class="btn enrolr-brand-colour-bg text-white">Help</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-12">
-                    <div class="card h-100 enrolr-brand-colour-border">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="card h-100 enrolr-brand-colour-border enrolr-subtle-shadow">
                         <h4 class="card-header enrolr-brand-colour-text">
-                            Placeholder
+                            Login/Register
                         </h4>
                         <div class="card-body">
-                            <p>This is a placeholder untill I think of something useful to put here...</p>
+                            <p>If you are already a user, use the login form in the top navigation bar to login (click the menu icon to expand and view this on mobile).</p>
+                            <p>If you are not yet signed up, you will need to contact your administrator(s) to get an account created.</p>
                         </div>
                     </div>
                 </div>

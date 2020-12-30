@@ -2,7 +2,8 @@
 
 class Course
 {
-    // Returns array of upcoming courses.
+    // Paginated query that returns array of upcoming courses. Intentionally returns courses that are on todays date, even if time has passed.
+    // This means users can still see courses that might be "in progress" on the day, rather than these being hidden in the past courses. 
     public static function getUpcomingCourses(int $userId, int $pageIndex, string $searchMinDate, string $searchMaxDate, string $searchTitle): array
     {
         global $connection;
@@ -13,11 +14,13 @@ class Course
         $limitStart = $limitEnd - 13;
         $upcomingQuery = null;
 
+        $today = new DateTime();
+
         // Build where clause
         if (!empty($searchMinDate)) {
             $where = "WHERE DATE(t_courses.date) >= '$searchMinDate'";
         } else {
-            $where = "WHERE DATE(t_courses.date) >= CURRENT_DATE";
+            $where = "WHERE DATE(t_courses.date) >= '{$today->format('Y-m-d')}'";
         }
 
         if (!empty($searchMaxDate)) {
@@ -49,6 +52,7 @@ class Course
         return $result;
     }
 
+    // Paginated query that returns past courses, intentionally doesn't consider a course as a past course until the day the course is on has fully passed.
     public static function getPastCourses(int $userId, int $pageIndex, string $searchMinDate, string $searchMaxDate, string $searchTitle): array
     {
         global $connection;
@@ -59,11 +63,13 @@ class Course
         $limitStart = $limitEnd - 13;
         $pastQuery = null;
 
+        $today = new DateTime();
+
         // Build where clause
         if (!empty($searchMaxDate)) {
-            $where = "WHERE DATE(t_courses.date) <= '$searchMaxDate'";
+            $where = "WHERE DATE(t_courses.date) < '$searchMaxDate'";
         } else {
-            $where = "WHERE DATE(t_courses.date) <= CURRENT_DATE";
+            $where = "WHERE DATE(t_courses.date) < '{$today->format('Y-m-d')}'";
         }
 
         if (!empty($searchMinDate)) {
@@ -95,10 +101,12 @@ class Course
         return $result;
     }
 
+    // Paginated query that returns an array of staff who are enrolled on a course.
     public static function getUsersEnrolledOnCourse(int $courseId, int $pageIndex): array
     {
         global $connection;
 
+        // Get start/end for query limits. Return one more result than needed so front end can determine if next button should be active.
         $limitEnd = (5 * $pageIndex) + 1;
         $limitStart = $limitEnd - 6;
 
@@ -150,6 +158,37 @@ class Course
     {
         global $connection;
 
+        // Ensure that title and description are not empty.
+        if (empty($title) || empty($description)) {
+            throw new Exception("Cannot create a course without required details (title, date, description). Please try again.");
+        }
+
+        // Ensure either a link or location is provided.
+        if (empty($link) && empty($location)) {
+            throw new Exception("A valid course must either have a link, location or both. Please try again.");
+        }
+
+        // Ensure date is provided and is a valid time.
+        if (!empty($date)) {
+            try {
+                $testDate = new DateTime($date);
+                if (new DateTime() > $testDate) {
+                    throw new Exception();
+                }
+            } catch (Exception $ex) {
+                throw new Exception("Provided course date is not valid. Please ensure date is today or later, and that it complies to the following formats: YYYY/MM/dd hh:mm or YYYY/MM/ddThh:mm."
+                    . " For the best experience, we recommend using Edge or Chrome - which support date/time pickers for this input field.");
+            }
+        }
+        else {
+            throw new Exception("You must provide a date.");
+        }
+
+        // Validate that maxAttendees and duration are more than zero.
+        if ($maxAttendees <= 0 || $duration <= 0.0) {
+            throw new Exception("A course cannot have zero max attendees or a duration of zero.");
+        }
+
         $editCourse = $connection->prepare("UPDATE t_courses SET title=?, date=?, duration=?, maxAttendees=?, description=?, link=?, location=? WHERE id = ?");
         $editCourse->bind_param("ssdisssi", $title, $date, $duration, $maxAttendees, $description, $link, $location, $courseId);
         $success = $editCourse->execute();
@@ -159,9 +198,41 @@ class Course
         }
     }
 
+    // Create a course.
     public static function createCourse(string $title, string $date, float $duration, int $maxAttendees, string $description, string $link, string $location): int
     {
         global $connection;
+
+        // Ensure that title and description are not empty.
+        if (empty($title) || empty($description)) {
+            throw new Exception("Cannot create a course without required details (title, date, description). Please try again.");
+        }
+
+        // Ensure either a link or location is provided.
+        if (empty($link) && empty($location)) {
+            throw new Exception("A valid course must either have a link, location or both. Please try again.");
+        }
+
+        // Ensure date is provided and is a valid time.
+        if (!empty($date)) {
+            try {
+                $testDate = new DateTime($date);
+                if (new DateTime() > $testDate) {
+                    throw new Exception();
+                }
+            } catch (Exception $ex) {
+                throw new Exception("Provided course date is not valid. Please ensure date is today or later, and that it complies to the following formats: YYYY/MM/dd hh:mm or YYYY/MM/ddThh:mm."
+                    . " For the best experience, we recommend using Edge or Chrome - which support date/time pickers for this input field.");
+            }
+        }
+        else {
+            throw new Exception("You must provide a date.");
+        }
+
+        // Validate that maxAttendees and duration are more than zero.
+        if ($maxAttendees <= 0 || $duration <= 0.0) {
+            throw new Exception("A course cannot have zero max attendees or a duration of zero.");
+        }
 
         $createCourse = $connection->prepare("INSERT INTO t_courses (title, date, duration, maxAttendees, description, link, location) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $createCourse->bind_param("ssdisss", $title, $date, $duration, $maxAttendees, $description, $link, $location);

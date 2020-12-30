@@ -26,22 +26,25 @@ $(function () {
             },
             createDescription: {
                 required: true,
-                maxlength: 350,
+                maxlength: 600,
                 noWhiteSpace: true
             },
             createDate: {
                 required: true
             },
             createDuration: {
-                required: true
+                required: true,
+                min: 0.1
             },
             createMaxAttendees: {
-                required: true
+                required: true,
+                min: 1
             },
             createLink: {
                 required: '#createLocation:blank',
                 maxlength: 1000,
-                noWhiteSpace: true
+                noWhiteSpace: true,
+                url: true
             },
             createLocation: {
                 required: '#createLink:blank',
@@ -61,22 +64,25 @@ $(function () {
             },
             editDescription: {
                 required: true,
-                maxlength: 350,
+                maxlength: 600,
                 noWhiteSpace: true
             },
             editDate: {
                 required: true
             },
             editDuration: {
-                required: true
+                required: true,
+                min: 0.1
             },
             editMaxAttendees: {
-                required: true
+                required: true,
+                min: 1
             },
             editLink: {
                 required: '#editLocation:blank',
                 maxlength: 1000,
-                noWhiteSpace: true
+                noWhiteSpace: true,
+                url: true
             },
             editLocation: {
                 required: '#editLink:blank',
@@ -285,6 +291,8 @@ $(function () {
                 $('#courses nav ul li:nth-child(2)').addClass('disabled');
             }
 
+            $('#courses nav div.rounded.border.px-2.py-1.mr-auto span').eq(1).html(paginateIndex);
+
             $('[data-toggle="tooltip"]').tooltip();
         }
     };
@@ -350,7 +358,7 @@ $(function () {
 
     let paginateIndexEnrolledStaff = 1;
     let enrolledStaffResponse = [];
-    let getEnrolledStaff = (courseId) => $.ajax({
+    let getEnrolledStaff = (courseId, modal, allowDelete) => $.ajax({
         type: 'GET',
         url: '../php/course/_getStaffEnrolledOnCourse.php',
         data: {
@@ -361,7 +369,7 @@ $(function () {
         success: function (response) {
             if (response.success) {
                 enrolledStaffResponse = response.data;
-                renderEnrolledStaff();
+                renderEnrolledStaff(modal, allowDelete);
             } else {
                 displayErrorToastStandard(response.message);
             }
@@ -376,7 +384,7 @@ $(function () {
         $('#ModalEditCourse div.modal-body div.alert.alert-info').remove();
         $('#ModalEditCourse .enrolled-staff-placeholder').show();
         paginateIndexEnrolledStaff = 1;
-        getEnrolledStaff($(this).data().id);
+        getEnrolledStaff($(this).data().id, '#ModalEditCourse', true);
     });
 
     $('#ModalEditCourse').on('hidden.bs.modal', function () {
@@ -389,14 +397,14 @@ $(function () {
         paginateIndexEnrolledStaff--;
         $('#ModalEditCourse div.modal-body ul').first().empty();
         $('#ModalEditCourse .enrolled-staff-placeholder').show();
-        getEnrolledStaff($('#ModalEditCourse').data().id);
+        getEnrolledStaff($('#ModalEditCourse').data().id, '#ModalEditCourse', true);
     });
 
     $(document).on('click', '#ModalEditCourse nav ul.pagination li:not(.disabled):nth-child(2) button', function () {
         paginateIndexEnrolledStaff++;
         $('#ModalEditCourse div.modal-body ul').first().empty();
         $('#ModalEditCourse .enrolled-staff-placeholder').show();
-        getEnrolledStaff($('#ModalEditCourse').data().id);
+        getEnrolledStaff($('#ModalEditCourse').data().id, '#ModalEditCourse', true);
     });
 
     $(document).on('click', '.event-user-remove-from-course', function () {
@@ -420,7 +428,7 @@ $(function () {
                         }
                         $('#ModalEditCourse div.modal-body ul').first().empty();
                         $('#ModalEditCourse .enrolled-staff-placeholder').show();
-                        getEnrolledStaff($('#ModalEditCourse').data().id);
+                        getEnrolledStaff($('#ModalEditCourse').data().id, '#ModalEditCourse', true);
                     });
                 } else {
                     displayErrorToastStandard(response.message);
@@ -432,47 +440,51 @@ $(function () {
         });
     });
 
-    function renderEnrolledStaff() {
+    function renderEnrolledStaff(modal, allowDelete) {
         if (paginateIndexEnrolledStaff > 1) {
-            $('#ModalEditCourse nav ul li:nth-child(1)').removeClass('disabled');
+            $(`${modal} nav ul li:nth-child(1)`).removeClass('disabled');
         }
         else {
-            $('#ModalEditCourse nav ul li:nth-child(1)').addClass('disabled');
+            $(`${modal} nav ul li:nth-child(1)`).addClass('disabled');
         }
 
         if (enrolledStaffResponse.length > 5) {
-            $('#ModalEditCourse nav ul li:nth-child(2)').removeClass('disabled');
+            $(`${modal} nav ul li:nth-child(2)`).removeClass('disabled');
         }
         else {
-            $('#ModalEditCourse nav ul li:nth-child(2)').addClass('disabled');
+            $(`${modal} nav ul li:nth-child(2)`).addClass('disabled');
         }
 
+        $(`${modal} nav div.rounded.border.px-2.py-1.mr-auto span`).eq(1).html(paginateIndexEnrolledStaff);
+
         if (enrolledStaffResponse.length < 1) {
-            $('#ModalEditCourse div.modal-body div.alert.alert-info').remove();
-            $('#ModalEditCourse div.modal-body').children('div').first().append('<div class="alert alert-info">No staff are currently enrolled.</div>');
-            $('#ModalEditCourse div.modal-body nav').hide();
-            $('#ModalEditCourse .enrolled-staff-placeholder').hide();
+            $(`${modal} div.modal-body div.alert.alert-info`).remove();
+            $(`${modal} div.modal-body`).children('div').first().append('<div class="alert alert-info">No staff are currently enrolled.</div>');
+            $(`${modal} div.modal-body nav`).hide();
+            $(`${modal} .enrolled-staff-placeholder`).hide();
         }
         else {
-            $('#ModalEditCourse .enrolled-staff-placeholder').hide();
-            $('#ModalEditCourse div.modal-body nav').show();
-            $('#ModalEditCourse div.modal-body div.alert.alert-info').remove();
+            $(`${modal} .enrolled-staff-placeholder`).hide();
+            $(`${modal} div.modal-body nav`).show();
+            $(`${modal} div.modal-body div.alert.alert-info`).remove();
             enrolledStaffResponse.every((staff, i) => {
                 let $enrolledStaffTemplate = $('#templates').children('li').eq(1).clone();
                 $enrolledStaffTemplate.find('p strong').html(`${staff.firstName} ${staff.lastName}`);
                 $enrolledStaffTemplate.find('p em').html(staff.jobTitle);
-                $enrolledStaffTemplate.find('p').eq(1).html(staff.email); ''
+                $enrolledStaffTemplate.find('p').eq(1).html(staff.email);
                 $enrolledStaffTemplate.find('small').html(`Enrolled: ${new Date(staff.dateCreated).toLocaleString([], {
                     dateStyle: 'short',
                     timeStyle: 'short',
                     hour12: true
                 })}`);
+                if (!allowDelete) {
+                    $enrolledStaffTemplate.find('button').remove();
+                }
                 $enrolledStaffTemplate.data(staff);
-                $('#ModalEditCourse div.modal-body ul').first().append($enrolledStaffTemplate);
+                $(`${modal} div.modal-body ul`).first().append($enrolledStaffTemplate);
                 if (i >= 4) return false;
                 else return true;
             });
-
         }
     }
 
@@ -681,7 +693,7 @@ $(function () {
             }
             $('#past nav').hide();
             $('#past div.alert.alert-info').remove();
-            $('#past').append('<div class="alert alert-info">No upcoming courses found.</div>');
+            $('#past').append('<div class="alert alert-info">No past courses found.</div>');
             $('#past div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
         } else {
             $('#past div.row.row-cols-1.row-cols-lg-3.row-cols-md-2').empty();
@@ -741,6 +753,8 @@ $(function () {
             else {
                 $('#past nav ul li:nth-child(2)').addClass('disabled');
             }
+
+            $('#past nav div.rounded.border.px-2.py-1.mr-auto span').eq(1).html(paginateIndex);
 
             $('[data-toggle="tooltip"]').tooltip();
         }
@@ -835,5 +849,34 @@ $(function () {
         isSearchingPastCourses = false;
         replaceCoursesWithLoading('#past');
         getPast();
+    });
+
+    $(document).on('click', '.event-view-past-attendees', function() {
+        $('.tooltip').tooltip('hide');
+        const currentCourseData = $(this).closest('div.col.mb-2.px-2').data();
+        $('#ModalViewAttendees').data(currentCourseData);
+        $('#ModalViewAttendees').modal('show');
+    });
+
+    $('#ModalViewAttendees').on('shown.bs.modal', function () {
+        $('#ModalViewAttendees div.modal-body ul').first().empty();
+        $('#ModalViewAttendees div.modal-body div.alert.alert-info').remove();
+        $('#ModalViewAttendees .enrolled-staff-placeholder').show();
+        paginateIndexEnrolledStaff = 1;
+        getEnrolledStaff($(this).data().id, '#ModalViewAttendees', false);
+    });
+
+    $(document).on('click', '#ModalViewAttendees nav ul.pagination li:not(.disabled):nth-child(1) button', function () {
+        paginateIndexEnrolledStaff--;
+        $('#ModalViewAttendees div.modal-body ul').first().empty();
+        $('#ModalViewAttendees .enrolled-staff-placeholder').show();
+        getEnrolledStaff($('#ModalViewAttendees').data().id, '#ModalViewAttendees', false);
+    });
+
+    $(document).on('click', '#ModalViewAttendees nav ul.pagination li:not(.disabled):nth-child(2) button', function () {
+        paginateIndexEnrolledStaff++;
+        $('#ModalViewAttendees div.modal-body ul').first().empty();
+        $('#ModalViewAttendees .enrolled-staff-placeholder').show();
+        getEnrolledStaff($('#ModalViewAttendees').data().id, '#ModalViewAttendees', false);
     });
 });

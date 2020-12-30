@@ -36,7 +36,8 @@ module.exports = {
         users: './src/scripts/users.js',
         settings: './src/scripts/settings.js',
         courses: './src/scripts/courses.js',
-        enrolments: './src/scripts/enrolments.js'
+        enrolments: './src/scripts/enrolments.js',
+        help: './src/scripts/help.js'
     },
     mode: 'development',
     devtool: 'eval-source-map',

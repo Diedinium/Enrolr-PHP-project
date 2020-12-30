@@ -1,11 +1,13 @@
 import $ from 'jquery';
 import validate from 'jquery-validation';
 import 'bootstrap';
-import { showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast, submitLogout } from './functions';
+import { showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast, submitLogout, confirmDialog } from './functions';
 
 window.jQuery = $;
 window.$ = $;
 window.submitLogout = submitLogout;
+window.showSpinner = showSpinner;
+window.confirmDialog = confirmDialog;
 
 $(function() {
     const queryString = window.location.search;
@@ -122,9 +124,9 @@ $(function() {
 
     $(document).on('click', '#formDeleteAccount button', function(e) {
         e.preventDefault();
-        return confirmDialog(`Are you sure you want to delete your account? This action cannot be undone.`, 'Confirm Deletion', function() {
+        confirmDialog(`Are you sure you want to delete your account? This action cannot be undone.`, 'Confirm Deletion', function() {
             showSpinner();
-            $('#formDeleteAccount').submit();
+            $('#formDeleteAccount').trigger('submit');
         });
     });
 

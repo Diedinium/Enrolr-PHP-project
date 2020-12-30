@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("Europe/London");
 
 $dbPassword = "JuPbdDs1aDSdhnfU";
 $dbUserName = "wad-assignment";
