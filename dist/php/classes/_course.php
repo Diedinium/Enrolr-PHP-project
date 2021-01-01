@@ -171,8 +171,12 @@ class Course
         // Ensure date is provided and is a valid time.
         if (!empty($date)) {
             try {
-                $testDate = new DateTime($date);
-                if (new DateTime() > $testDate) {
+                $testDateTime = new DateTime($date);
+                $currentdateTime = new DateTime();
+                $testDate = new DateTime($testDateTime->format("Y-m-d"));
+                $currentDate = new DateTime($currentdateTime->format("Y-m-d"));
+                $diff = $currentDate->diff($testDate)->format("%r%a");
+                if ($diff < 0) {
                     throw new Exception();
                 }
             } catch (Exception $ex) {
@@ -216,8 +220,12 @@ class Course
         // Ensure date is provided and is a valid time.
         if (!empty($date)) {
             try {
-                $testDate = new DateTime($date);
-                if (new DateTime() > $testDate) {
+                $testDateTime = new DateTime($date);
+                $currentdateTime = new DateTime();
+                $testDate = new DateTime($testDateTime->format("Y-m-d"));
+                $currentDate = new DateTime($currentdateTime->format("Y-m-d"));
+                $diff = $currentDate->diff($testDate)->format("%r%a");
+                if ($diff < 0) {
                     throw new Exception();
                 }
             } catch (Exception $ex) {
@@ -243,5 +251,45 @@ class Course
         }
 
         return $createCourse->insert_id;
+    }
+
+    public static function getUpcomingEnrolments(int $pageIndex): array
+    {
+        global $connection;
+        global $account;
+
+        $limitEnd = (12 * $pageIndex) + 1;
+        $limitStart = $limitEnd - 13;
+
+        $upcomingEnrolmentsQuery = $connection->prepare("SELECT t_courses.*, (SELECT COUNT(iduser) FROM t_enroll WHERE idcourse = t_courses.id) AS 'enrolled' FROM t_courses LEFT JOIN t_enroll ON t_enroll.idcourse = t_courses.id WHERE DATE(t_courses.date) >= CURRENT_DATE AND t_enroll.iduser = {$account->getId()} GROUP BY t_courses.id ORDER BY t_courses.date LIMIT ?, ?");
+        $upcomingEnrolmentsQuery->bind_param("ii", $limitStart, $limitEnd);
+
+        $upcomingEnrolmentsQuery->execute();
+        $queryResult = $upcomingEnrolmentsQuery->get_result();
+        $result = [];
+        while ($row = $queryResult->fetch_assoc()) {
+            array_push($result, $row);
+        }
+        return $result;
+    }
+
+    public static function getPastEnrolments($pageIndex): array
+    {
+        global $connection;
+        global $account;
+
+        $limitEnd = (12 * $pageIndex) + 1;
+        $limitStart = $limitEnd - 13;
+
+        $pastEnrolmentsQuery = $connection->prepare("SELECT t_courses.*, (SELECT COUNT(iduser) FROM t_enroll WHERE idcourse = t_courses.id) AS 'enrolled' FROM t_courses LEFT JOIN t_enroll ON t_enroll.idcourse = t_courses.id WHERE DATE(t_courses.date) < CURRENT_DATE AND t_enroll.iduser = {$account->getId()} GROUP BY t_courses.id ORDER BY t_courses.date LIMIT ?, ?");
+        $pastEnrolmentsQuery->bind_param("ii", $limitStart, $limitEnd);
+
+        $pastEnrolmentsQuery->execute();
+        $queryResult = $pastEnrolmentsQuery->get_result();
+        $result = [];
+        while ($row = $queryResult->fetch_assoc()) {
+            array_push($result, $row);
+        }
+        return $result;
     }
 }

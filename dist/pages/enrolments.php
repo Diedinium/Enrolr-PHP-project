@@ -91,8 +91,201 @@ if (!empty($_SESSION['successMessage'])) {
                 </div>
             <?php endif; ?>
 
-            <h1>Placeholder content</h1>
-            <p>To see this page means you're logged in, yay.</p>
+            <div class="card border-0 enrolr-subtle-shadow mt-3">
+                <div class="card-header">
+                    <h3><span class="enrolr-gradient">Your Enrolments</span></h3>
+                    <ul class="nav nav-tabs card-header-tabs" id="courseTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="upcoming-tab" data-toggle="tab" href="#upcoming">Upcoming Enrolments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="past-tab" data-toggle="tab" href="#past">Past Enrolments</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-2">
+                    <div class="tab-content" id="enrolmentTabContent">
+                        <div class="tab-pane fade show active p-2" id="upcoming" role="tabpanel">
+                            <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <nav>
+                                <div class="d-flex justify-content-end">
+                                    <div class="rounded border px-2 py-1 mr-auto"><span class="text-muted">Page: </span><span class="badge badge-primary">1</span></div>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                        <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="tab-pane fade p-2" id="past" role="tabpanel">
+                            <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 mx-n2">
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-2 px-2">
+                                    <div class="ph-item mb-2">
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-8 big"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-8 empty"></div>
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-12"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-6"></div>
+                                                <div class="ph-col-6 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4"></div>
+                                            </div>
+                                            <div class="ph-row mt-4">
+                                                <div class="ph-col-12 big"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <nav>
+                                <div class="d-flex justify-content-end">
+                                    <div class="rounded border px-2 py-1 mr-auto"><span class="text-muted">Page: </span><span class="badge badge-primary">1</span></div>
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled"><button type="button" class="page-link">Previous</button></li>
+                                        <li class="page-item disabled"><button type="button" class="page-link">Next</button></li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 

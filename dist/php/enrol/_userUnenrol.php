@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     try {
         $account->unenroll($courseId);
 
-        echo json_encode(["success" => 1, "message" => "Succesfully enrolled on course."]);
+        echo json_encode(["success" => 1, "message" => "Succesfully unenrolled from course."]);
         die;
     }
     catch (Exception $ex) {

@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="toast enrolr-success-toast" role="alert" data-delay="8000" id="templateToastSuccess">
+    <div class="toast enrolr-success-toast" role="alert" data-delay="6000" id="templateToastSuccess">
         <div class="toast-header">
             <strong class="mr-auto text-success">Success</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="toast" role="alert" data-delay="8000" id="templateToastStandard">
+    <div class="toast" role="alert" data-delay="6000" id="templateToastStandard">
         <div class="toast-header">
             <strong class="mr-auto">Error</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
@@ -197,6 +197,46 @@
                     <div class="enrolr-actions-min-width text-right">
                         <i data-toggle="tooltip" data-placement="top" title="View attendees" class="fas fa-users fa-lg enrolr-standard-icon event-view-past-attendees"></i>
                         <i data-toggle="tooltip" data-placement="top" title="Delete" class="fas fa-trash fa-lg enrolr-danger-icon event-delete-past-course pl-2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col mb-2 px-2">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-0 enrolr-title">title</h5>
+                <div class="pb-2">
+                    <span class="badge badge-info enrolr-badge-hours">hours</span>
+                    <span class="badge badge-success enrolr-badge-this-week">This week</span>
+                    <span class="badge badge-warning enrolr-badge-today">Today!</span>
+                    <span class="badge badge-danger enrolr-badge-fully-booked">Fully booked</span>
+                </div>
+                <p class="card-text enrolr-line-sep enrolr-description">description</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item ">
+                    <span><i data-toggle="tooltip" data-placement="top" title="Location" class="fa fa-map-marked text-muted pr-2"></i><span class="enrolr-location"></span></span>
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                    <i data-toggle="tooltip" data-placement="top" title="Link" class="fa fa-globe text-muted pr-2"></i>
+                    <div>
+                        <p class="mb-0 text-break">
+                            <a class="enrolr-link" href="#">Link to course</a>
+                        </p>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex">
+                    <span class="mr-auto"><i data-toggle="tooltip" data-placement="top" title="Course date/time" class="fa fa-calendar-day text-muted pr-2"></i><span class="enrolr-date"></span></span>
+                    <span><i data-toggle="tooltip" data-placement="top" title="Attendees" class="fa fa-user text-muted pr-2"></i><span class="enrolr-attendees"></span></span>
+                </li>
+            </ul>
+            <div class="card-footer">
+                <div class="d-flex align-items-center">
+                    <small class="text-muted mr-auto enrolr-created-date">created</small>
+                    <div class="enrolr-actions-min-width text-right">
+                        <button type="button" class="btn btn-secondary text-white event-course-unenrol">Unenrol</button>
                     </div>
                 </div>
             </div>

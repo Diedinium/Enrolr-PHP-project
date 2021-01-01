@@ -431,7 +431,7 @@ if (!empty($_SESSION['successMessage'])) {
                             </div>
                             <div class="form-row">
                                 <div class="form-label-group col-md-4">
-                                    <input type="datetime-local" id="editDate" name="editDate" class="form-control" placeholder="2020-12-01" min="<?= date("Y-m-d\\TH:i") ?>">
+                                    <input type="datetime-local" id="editDate" name="editDate" class="form-control" placeholder="2020-12-01" min="<?= date("Y-m-d")."T00:00" ?>">
                                     <label for="editDate">Course date/time</label>
                                 </div>
                                 <div class="form-label-group col-md-4">
