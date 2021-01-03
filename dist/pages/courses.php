@@ -33,6 +33,7 @@ if (!empty($_SESSION['successMessage'])) {
     <title>Enrolr - Enrollments</title>
 
     <link rel="stylesheet" href="../static/main.css">
+    <link rel="icon" href="../img/EnrolrLogo.png">
 </head>
 
 <body>
@@ -369,7 +370,7 @@ if (!empty($_SESSION['successMessage'])) {
                             <span>&times;</span>
                         </button>
                     </div>
-                    <form action="../php/course/_createCourse.php" method="POST" id="formCreateCourse">
+                    <form action="../php/course/_createCourse.php" method="POST" id="formCreateCourse" autocomplete="off">
                         <div class="modal-body">
                             <div class="form-label-group">
                                 <input type="text" id="createTitle" name="createTitle" class="form-control" placeholder="Title">
@@ -420,7 +421,7 @@ if (!empty($_SESSION['successMessage'])) {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="../php/course/_editCourse.php" method="POST" id="formEditCourse">
+                        <form action="../php/course/_editCourse.php" method="POST" id="formEditCourse" autocomplete="off">
                             <input type="hidden" value="0" name="editId" id="editId">
                             <div class="form-label-group">
                                 <input type="text" id="editTitle" name="editTitle" class="form-control" placeholder="Title">

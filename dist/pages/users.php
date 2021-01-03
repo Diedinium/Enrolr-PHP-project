@@ -39,6 +39,7 @@ if (!empty($_SESSION['successMessage'])) {
     <title>Enrolr - Users</title>
 
     <link rel="stylesheet" href="../static/main.css">
+    <link rel="icon" href="../img/EnrolrLogo.png">
 </head>
 
 <body>
@@ -228,7 +229,7 @@ if (!empty($_SESSION['successMessage'])) {
                         <span>&times;</span>
                     </button>
                 </div>
-                <form action="../php/account/_createUser.php" method="POST" id="formAddUser">
+                <form action="../php/account/_createUser.php" method="POST" id="formAddUser" autocomplete="off">
                     <div class="modal-body">
                         <div class="form-label-group">
                             <input type="email" id="createEmail" name="createEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
@@ -282,10 +283,10 @@ if (!empty($_SESSION['successMessage'])) {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="../php/account/_editUser.php" method="POST" id="formEditUser">
+                    <form action="../php/account/_editUser.php" method="POST" id="formEditUser" autocomplete="off">
                         <input type="hidden" id="updateUserId" name="updateUserId">
                         <div class="form-label-group">
-                            <input type="email" id="updateEmail" name="updateEmail" class="form-control" placeholder="Email address" autocomplete="new-password">
+                            <input type="email" id="updateEmail" name="updateEmail" class="form-control" placeholder="Email address">
                             <label for="updateEmail">Email address</label>
                         </div>
                         <div class="d-sm-flex">

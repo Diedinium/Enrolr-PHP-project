@@ -39,6 +39,7 @@ if (!empty($_SESSION['successMessage'])) {
     <title>Enrolr - Enrolments</title>
 
     <link rel="stylesheet" href="../static/main.css">
+    <link rel="icon" href="../img/EnrolrLogo.png">
 </head>
 
 <body>

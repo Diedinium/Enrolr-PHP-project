@@ -26,6 +26,7 @@ if (!empty($_SESSION['successMessage'])) {
     <title>Enrolr - Help</title>
 
     <link rel="stylesheet" href="../static/main.css">
+    <link rel="icon" href="../img/EnrolrLogo.png">
 </head>
 
 <body>
