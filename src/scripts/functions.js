@@ -81,6 +81,11 @@ function submitLogout() {
     $('#logoutForm').trigger('submit');
 }
 
+const datesAreOnSameDay = (first, second) =>
+    first.getFullYear() === second.getFullYear() &&
+    first.getMonth() === second.getMonth() &&
+    first.getDate() === second.getDate();
+
 $.validator.addMethod("noWhiteSpace", function (value, element) {
     if (value && !value.trim()) {
         return false;
@@ -106,5 +111,5 @@ Date.prototype.addDays = function(days) {
     return date;
 };
 
-export { displayErrorToast, displayErrorToastStandard, displaySuccessToast, displayStandardToast, confirmDialog, showSpinner, hideSpinner, submitLogout };
+export { displayErrorToast, displayErrorToastStandard, displaySuccessToast, displayStandardToast, confirmDialog, showSpinner, hideSpinner, submitLogout, datesAreOnSameDay };
 

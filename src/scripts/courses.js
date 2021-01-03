@@ -2,7 +2,7 @@ import $ from 'jquery';
 import validate from 'jquery-validation';
 import 'jquery-validation/dist/additional-methods';
 import 'bootstrap';
-import { submitLogout, confirmDialog, showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast } from './functions';
+import { submitLogout, confirmDialog, showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast, datesAreOnSameDay } from './functions';
 
 window.jQuery = $;
 window.$ = $;
@@ -196,7 +196,7 @@ $(function () {
                 const courseDate = new Date(course.date);
                 const todaysDatePlus7 = new Date().addDays(7);
                 const isThisWeek = courseDate < todaysDatePlus7;
-                const isToday = courseDate.getDate() === new Date().getDate();
+                const isToday = datesAreOnSameDay(courseDate, new Date());
                 const isFullyBooked = course.maxAttendees <= course.enrolled;
                 let $courseTemplate = $('#templates').children('div').eq(5).clone();
                 $courseTemplate.find('h5.card-title').html(course.title);

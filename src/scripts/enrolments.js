@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import validate from 'jquery-validation';
 import 'bootstrap';
-import { showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast, submitLogout } from './functions';
+import { showSpinner, hideSpinner, displayErrorToastStandard, displaySuccessToast, submitLogout, datesAreOnSameDay } from './functions';
 
 // Provide necessary functions/variables to window so they can be used wtihin HTML page.
 window.jQuery = $;
@@ -109,7 +109,7 @@ $(function () {
                 const courseDate = new Date(enrolment.date);
                 const todaysDatePlus7 = new Date().addDays(7);
                 const isThisWeek = courseDate < todaysDatePlus7;
-                const isToday = courseDate.getDate() === new Date().getDate();
+                const isToday = datesAreOnSameDay(courseDate, new Date());
                 const isFullyBooked = enrolment.maxAttendees <= enrolment.enrolled;
 
                 // Get the template and populate title, description and duration.
