@@ -6,6 +6,10 @@ session_start();
 
 $account = new Account();
 
+if (!$account->getAuthenticated()) {
+    dieWithError("You did not provide valid login details.");
+}
+
 try {
     $account->logout();
     $_SESSION['successMessage'] = 'Logout successful';
