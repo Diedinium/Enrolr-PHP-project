@@ -843,7 +843,7 @@ $(function () {
     $(document).on('click', '#clearPastSearchIcon', function () {
         $('#pastSearchForm').trigger('reset');
         $('.tooltip').tooltip('hide');
-        $('#pastSearchIcon').hide();
+        $('#clearPastSearchIcon').hide();
         formPastSearchValidator.resetForm();
         paginateIndexPastCourses = 1;
         isSearchingPastCourses = false;
