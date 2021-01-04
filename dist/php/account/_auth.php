@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
+        $page = $_POST['page'];
 
         if (empty($email) || empty($password)) {
             dieWithError("Could not login, either a username or password was not provided");
@@ -36,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         catch (Exception $ex) {
-            dieWithError($ex->getMessage());
+            dieWithError($ex->getMessage(), $page);
         }   
     }
     else {

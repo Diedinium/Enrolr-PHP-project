@@ -63,6 +63,7 @@ $connection->close();
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" action="php/account/_auth.php" method="POST" id="logonForm">
+                    <input type="hidden" name="page" value="index.php">
                     <input class="form-control mr-sm-2 mb-sm-0 mb-2" type="email" name="email" required placeholder="Email" aria-label="Email">
                     <input class="form-control mr-sm-2" type="password" required name="password" placeholder="Password" aria-label="Password">
                     <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
