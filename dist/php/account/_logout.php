@@ -1,10 +1,6 @@
 <?php
 require __DIR__ . '/../classes/_connect.php';
-require __DIR__ . '/../classes/_account.php';
-
-session_start();
-
-$account = new Account();
+require __DIR__ . '/_auth.php';
 
 if (!$account->getAuthenticated()) {
     dieWithError("You did not provide valid login details.");
