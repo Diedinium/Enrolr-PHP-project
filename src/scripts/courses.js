@@ -325,7 +325,8 @@ $(function () {
                                 getUpcoming();
                             }
                             else {
-                                renderUpcoming(userIsAdmin);
+                                replaceCoursesWithLoading('#courses');
+                                getUpcoming();
                             }
                         });
                     } else {
@@ -764,7 +765,7 @@ $(function () {
         getPast(userIsAdminPastCourses);
     });
 
-    $(document).on('click', '.event-delete-past-course', function() {
+    $(document).on('click', '.event-delete-past-course', function () {
         confirmDialog(`Are you sure you want to delete "${$(this).closest('div.col.mb-2.px-2').data().title}", this action cannot be undone`, 'Confirm Deletion', () => {
             const $parentCourse = $(this).closest('div.col.mb-2.px-2');
             $.ajax({
@@ -785,7 +786,8 @@ $(function () {
                                 getPast();
                             }
                             else {
-                                renderPast(userIsAdminPastCourses);
+                                replaceCoursesWithLoading('#past');
+                                getPast();
                             }
                         });
                     } else {
@@ -851,7 +853,7 @@ $(function () {
         getPast();
     });
 
-    $(document).on('click', '.event-view-past-attendees', function() {
+    $(document).on('click', '.event-view-past-attendees', function () {
         $('.tooltip').tooltip('hide');
         const currentCourseData = $(this).closest('div.col.mb-2.px-2').data();
         $('#ModalViewAttendees').data(currentCourseData);
