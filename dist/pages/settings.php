@@ -206,7 +206,7 @@ if (!empty($_SESSION['successMessage'])) {
                                                 <strong>Delete all enrolments</strong>
                                                 <div>This will delete all of your current enrolments. This action is permanent and cannot be undone.</div>
                                             </div>
-                                            <form action="../php/account/_deleteEnrolments.php" onclick="showSpinner()" method="POST" class="flex-shrink-0 mt-2 mt-sm-0" id="formDeleteAllTodos">
+                                            <form action="../php/account/_deleteEnrolments.php" method="POST" class="flex-shrink-0 mt-2 mt-sm-0" id="formDeleteAllEnrollments">
                                                 <button type="submit" class="btn btn-danger">Delete all enrolments</button>
                                             </form>
                                         </div>

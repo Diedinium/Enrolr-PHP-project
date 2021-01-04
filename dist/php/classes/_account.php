@@ -307,7 +307,7 @@ class Account
             throw new Exception("Cannot delete, no user id.");
         }
 
-        $success = $connection->query("DELETE FROM t_enroll WHERE iduser = $this->id");
+        $success = $connection->query("DELETE t_enroll FROM t_enroll LEFT JOIN t_courses ON t_enroll.idcourse = t_courses.id WHERE t_enroll.iduser = {$this->id} AND DATE(t_courses.date) >= CURRENT_DATE()");
 
         if (!$success) {
             throw new Exception("Deleting enrollments failed.");

@@ -122,6 +122,14 @@ $(function() {
         });
     });
 
+    $(document).on('click', '#formDeleteAllEnrollments button', function(e) {
+        e.preventDefault();
+        confirmDialog('Are you sure you want to delete all your enrolments? This action cannot be undone, and will not remove past enrolments.', 'Confirm Unenrollment', function() {
+            showSpinner();
+            $('#formDeleteAllEnrollments').trigger('submit');
+        });
+    });
+
     $(document).on('click', '#formDeleteAccount button', function(e) {
         e.preventDefault();
         confirmDialog(`Are you sure you want to delete your account? This action cannot be undone.`, 'Confirm Deletion', function() {
