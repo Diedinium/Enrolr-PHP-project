@@ -127,7 +127,7 @@ class Course
         return $result;
     }
 
-    // Deletes course by course Id
+    // Admin based course deletion. Deletes course by course Id
     public static function deleteCourse(int $courseId)
     {
         global $connection;
@@ -253,11 +253,14 @@ class Course
         return $createCourse->insert_id;
     }
 
+    // Get a users upcoming enrolments, only works when user is logged into account.
     public static function getUpcomingEnrolments(int $pageIndex): array
     {
         global $connection;
+        // Notice fetching of global account and use here, which is why user must be logged in!
         global $account;
 
+        // Return one more result than necessary based on page index, so frontend can decide to enable/disable next button
         $limitEnd = (12 * $pageIndex) + 1;
         $limitStart = $limitEnd - 13;
 
@@ -273,6 +276,7 @@ class Course
         return $result;
     }
 
+    // Get a users past enrolments, like upcoming enrolments, this requires a user to be logged in
     public static function getPastEnrolments($pageIndex): array
     {
         global $connection;

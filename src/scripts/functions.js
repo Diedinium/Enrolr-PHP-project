@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'bootstrap';
 
+// Clones toast template and appends into toast contaienr, for error list type toasts
 function displayErrorToast(errorMap, errorList) {
     if (Object.keys(errorMap).length > 0) {
         let $toastError = $('#templates').find('#templateToastError').clone();
@@ -16,6 +17,7 @@ function displayErrorToast(errorMap, errorList) {
     }
 }
 
+// Clones toast template and appends into toast contaienr, for standard error toasts
 function displayErrorToastStandard(errorMessage, errorTitle = null) {
     let $toastError = $('#templates').find('#templateToastError').clone();
     let $toastContainer = $('#toastContainer');
@@ -29,6 +31,7 @@ function displayErrorToastStandard(errorMessage, errorTitle = null) {
     $toastContainer.append($toastError);
 }
 
+// Clones toast template and appends into toast contaienr, for success toasts
 function displaySuccessToast(successMessage, successTitle = null) {
     let $toastSuccess = $('#templates').find('#templateToastSuccess').clone();
     let $toastContainer = $('#toastContainer');
@@ -42,6 +45,7 @@ function displaySuccessToast(successMessage, successTitle = null) {
     $toastContainer.append($toastSuccess);
 }
 
+// Clones toast template and appends into toast contaienr, for standard (non error or success) toasts
 function displayStandardToast(message, title = null) {
     let $toastStandard = $('#templates').find('#templateToastStandard').clone();
     let $toastContainer = $('#toastContainer');
@@ -55,6 +59,7 @@ function displayStandardToast(message, title = null) {
     $toastContainer.append($toastStandard);
 }
 
+// Confirm dialog, on click of yes button, returns yesCallback, otherwise just hides modal.
 function confirmDialog(message, title, yesCallback) {
     $('#confirmMessage').html(message);
     $('#confirmTitle').html(title);
@@ -69,23 +74,28 @@ function confirmDialog(message, title, yesCallback) {
     });
 }
 
+// Shows spinner and loader
 function showSpinner() {
     $('.loader:first, .overlay:first').removeClass('d-none');
 }
 
+// Hides spinner and loader
 function hideSpinner() {
     $('.loader:first, .overlay:first').addClass('d-none');
 }
 
+// Submits logout form
 function submitLogout() {
     $('#logoutForm').trigger('submit');
 }
 
+// Comparison to check if two provided dates are on the same date
 const datesAreOnSameDay = (first, second) =>
     first.getFullYear() === second.getFullYear() &&
     first.getMonth() === second.getMonth() &&
     first.getDate() === second.getDate();
 
+// Adds the "noWhiteSpace" validator to jQuery validation. Returns false if value and trimmed value both equal false
 $.validator.addMethod("noWhiteSpace", function (value, element) {
     if (value && !value.trim()) {
         return false;
@@ -95,6 +105,7 @@ $.validator.addMethod("noWhiteSpace", function (value, element) {
     }
 }, "Whitespace (spaces and tabs) alone are not allowed.");
 
+// Adds the "GreateThan" method to jQuery validate, if dates are valid, returns true/false on if value date is greater than params date, returns true otherwise
 $.validator.addMethod("greaterThan", function (value, element, params) {
 
     if (!/Invalid|NaN/.test(new Date(value)) && !/Invalid|NaN/.test(new Date($(params).val()))) {
@@ -105,11 +116,13 @@ $.validator.addMethod("greaterThan", function (value, element, params) {
     }
 }, "This field must be greater than it's corresponding field");
 
+// Allows days to be added to a Date type
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
 };
 
+// Export relevant functions for use in other files.
 export { displayErrorToast, displayErrorToastStandard, displaySuccessToast, displayStandardToast, confirmDialog, showSpinner, hideSpinner, submitLogout, datesAreOnSameDay };
 

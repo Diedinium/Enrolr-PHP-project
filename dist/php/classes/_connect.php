@@ -1,4 +1,5 @@
 <?php
+// Ensure timezone is set correctly when rendering pages.
 date_default_timezone_set("Europe/London");
 
 $dbPassword = "JuPbdDs1aDSdhnfU";

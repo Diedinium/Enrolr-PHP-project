@@ -4,6 +4,7 @@ import 'bootstrap';
 import { displayErrorToast } from './functions';
 
 $(function() {
+    // Validate logon form via jQuery validate
     $('#logonForm').validate({
         onkeyup: false,
         onclick: false,
@@ -15,6 +16,7 @@ $(function() {
         errorPlacement: function(error, element) {}
     });
 
+    // Remove error class on focus out of input
     $('input, select').on('focusout', function() {
         $(this).removeClass('error');
     });

@@ -1,3 +1,4 @@
+// Simply used to easily render all required styles into one .css file
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';

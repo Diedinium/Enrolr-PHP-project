@@ -12,6 +12,7 @@ $(function () {
     // Initialise tooltips once page is ready.
     $('[data-toggle="tooltip"]').tooltip();
 
+    // Clear error class on focus out of inputs
     $('input, select').on('focusout', function () {
         $(this).removeClass('error');
     });
@@ -240,6 +241,7 @@ $(function () {
         getPastEnrolments();
     });
 
+    // Function variable for unenroling user from course
     let unenrolUser = async (courseId) => $.ajax({
         type: 'POST',
         url: '../php/enrol/_userUnenrol.php',
@@ -262,6 +264,7 @@ $(function () {
         }
     });
 
+    // On click of upcoming course unenrol button, await unenrol of user then remove from list and re-fetch data.
     $(document).on('click', '#upcoming .event-course-unenrol', async function () {
         let result = await unenrolUser($(this).closest('div.col.mb-2.px-2').data().id);
         if (result) $(this).closest('div.col.mb-2.px-2').fadeOut(500, () => {

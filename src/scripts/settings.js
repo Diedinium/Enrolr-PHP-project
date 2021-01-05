@@ -10,6 +10,7 @@ window.showSpinner = showSpinner;
 window.confirmDialog = confirmDialog;
 
 $(function() {
+    // Navigate to query string provided tab on page load
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -19,13 +20,15 @@ $(function() {
         $(`#${tabName}`).tab('show');
     }
 
+    // Enable tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
-
+    // Remove error class from inputs on focus out
     $('input, select').on('focusout', function() {
         $(this).removeClass('error');
     });
 
+    // Validate change password form via jQuery validation
     $('#formChangePassword').validate({
         rules: {
             currentPassword: {
@@ -50,6 +53,7 @@ $(function() {
         errorElement: 'small'
     });
 
+    // Validate update details form via jQuery validation
     $('#formUpdateDetails').validate({
         rules: {
             firstName: {
@@ -71,6 +75,7 @@ $(function() {
         errorElement: 'small'
     });
 
+    // On submit of change password form, post to changePassword endpoint
     $(document).on('submit', '#formChangePassword', function(e) {
         e.preventDefault();
         showSpinner();
@@ -81,6 +86,7 @@ $(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success == true) {
+                    // Display success message and reset form on success
                     displaySuccessToast(response.message);
                     $('#formChangePassword').trigger('reset');
                     hideSpinner();
@@ -96,6 +102,7 @@ $(function() {
         });
     });
 
+    // On submit of update details form, post form fields to update Details endpoint.
     $(document).on('submit', '#formUpdateDetails', function(e) {
         e.preventDefault();
         showSpinner();
@@ -106,6 +113,7 @@ $(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success == true) {
+                    // On success update details in account details section
                     $('#details form div span').eq(1).html(`${$('#firstName').val()} ${$('#lastName').val()}`);
                     $('#details form div span').eq(2).html($('#jobRole').val());
                     displaySuccessToast(response.message);
@@ -122,6 +130,7 @@ $(function() {
         });
     });
 
+    // On click of delete all enrolments button, confirm, if yes submit form.
     $(document).on('click', '#formDeleteAllEnrollments button', function(e) {
         e.preventDefault();
         confirmDialog('Are you sure you want to delete all your enrolments? This action cannot be undone, and will not remove past enrolments.', 'Confirm Unenrollment', function() {
@@ -130,6 +139,7 @@ $(function() {
         });
     });
 
+    // On click of delete account button, confirm, if yes submit form.
     $(document).on('click', '#formDeleteAccount button', function(e) {
         e.preventDefault();
         confirmDialog(`Are you sure you want to delete your account? This action cannot be undone.`, 'Confirm Deletion', function() {
@@ -138,6 +148,7 @@ $(function() {
         });
     });
 
+    // When toasts are fully hidden, remove from DOM.
     $(document).on('hidden.bs.toast', function($event) {
         $event.target.remove();
     });

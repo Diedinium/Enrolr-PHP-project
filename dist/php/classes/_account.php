@@ -2,6 +2,7 @@
 
 class Account
 {
+    // Member variables
     private int $id;
     private string $email;
     private string $password;
@@ -69,6 +70,7 @@ class Account
         return $this->jobRole;
     }
 
+    // Combine first name and last name to get full name
     public function getFullName()
     {
         return $this->firstName . " " . $this->lastName;
@@ -84,6 +86,7 @@ class Account
         return $this->isAdmin;
     }
 
+    // Add an account to the DB, password passed should be plain string
     public function addAccount(string $email, string $password, string $firstName, string $lastName, string $jobTitle, bool $isAdmin = false): int
     {
         global $connection;
@@ -91,6 +94,7 @@ class Account
         $email = trim($email);
         $password = trim($password);
 
+        // If function returns value, email already exists in DB, throw error.
         if (!is_null($this->getIdFromName($email))) {
             throw new Exception("An account with this email already exists");
         }
@@ -112,6 +116,7 @@ class Account
     {
         global $connection;
 
+        // Throw error if deletion is attempted against unitialised blank account class
         if (is_null($this->id)) {
             throw new Exception("Cannot delete, no user id.");
         }
@@ -128,7 +133,9 @@ class Account
     {
         global $connection;
 
+        // Only attempt this login if the session is active
         if (session_status() == PHP_SESSION_ACTIVE) {
+            // Get the session Id
             $sessionId = session_id();
             $tokenQuery = $connection->prepare("SELECT iduser FROM t_persist WHERE token = ?");
 
@@ -138,9 +145,11 @@ class Account
             $tokenQuery->bind_result($userID);
             $tokenQuery->store_result();
 
+            // If result is more than 0, this means a persisted session has been found.
             if ($tokenQuery->num_rows > 0) {
                 $tokenQuery->fetch();
 
+                // Fetch user based on associated Id of user from the persist table.
                 $userQueryResults = $connection->query("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users WHERE id = {$userID}");
                 $row = $userQueryResults->fetch_assoc();
 
@@ -156,6 +165,7 @@ class Account
                 return;
             }
 
+            // If passed values are not empty, attempt to login using username/password instead.
             if (!empty($email) && !empty($password)) {
                 $userQuery = $connection->prepare("SELECT id, firstName, lastName, email, password, jobTitle, isAdmin, created FROM t_users WHERE email = ?");
 
@@ -165,9 +175,11 @@ class Account
                 $userQuery->bind_result($resultId, $resultFirstName, $resultLastName, $resultEmail, $resultPassword, $resultJobTitle, $resultIsAdmin, $resultCreated);
                 $userQuery->store_result();
 
+                // If result is found, this means user with provided email was found.
                 if ($userQuery->num_rows > 0) {
                     $row = $userQuery->fetch();
 
+                    // Verify that password matches
                     if (password_verify($password, $resultPassword)) {
                         $this->id = $resultId;
                         $this->firstName = $resultFirstName;
@@ -191,6 +203,7 @@ class Account
         }
     }
 
+    // Returns all staff.
     public static function getAllStaff(): array
     {
         global $connection;
@@ -203,6 +216,7 @@ class Account
         return $result;
     }
 
+    // Takes array of staff and only returns adminstrators from these
     public static function fitlerAdministrators(array $arrayToFilter): array
     {
         $result = [];
@@ -215,6 +229,7 @@ class Account
         return $result;
     }
 
+    // Takes an array of staff and only returns staff who are not admins from these
     public static function filterStaff(array $arrayToFilter): array
     {
         $result = [];
@@ -227,6 +242,7 @@ class Account
         return $result;
     }
 
+    // When re-creating or creating default admin account, ensure that old admin account is deleted.
     public static function ensureAdminAccountDeleted() {
         global $connection;
 
@@ -283,7 +299,7 @@ class Account
         }
     }
 
-    // Update user password
+    // Update user password (non-admin, intended to be used by users when they self change their own password)
     public function changePassword($newPassword)
     {
         global $connection;
@@ -298,7 +314,7 @@ class Account
         }
     }
 
-    // Delete all enrollments
+    // Delete all enrollments for current user
     public function deleteAllEnrollments()
     {
         global $connection;

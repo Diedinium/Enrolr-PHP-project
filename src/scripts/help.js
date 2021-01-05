@@ -3,11 +3,13 @@ import validate from 'jquery-validation';
 import 'bootstrap';
 import { displayErrorToast, submitLogout } from './functions';
 
+// Set variables that should be available on page
 window.jQuery = $;
 window.$ = $;
 window.submitLogout = submitLogout;
 
 $(function() {
+    // Validate logon form
     $('#logonForm').validate({
         onkeyup: false,
         onclick: false,
@@ -19,6 +21,7 @@ $(function() {
         errorPlacement: function(error, element) {}
     });
 
+    // Clear error class on focus out of input
     $('input, select').on('focusout', function() {
         $(this).removeClass('error');
     });

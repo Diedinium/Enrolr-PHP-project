@@ -2,12 +2,14 @@
 require __DIR__ . '/../classes/_connect.php';
 require __DIR__ . '/_auth.php';
 
+// Redirect if user is not logged in
 if (!$account->getAuthenticated()) {
     echo json_encode(["success" => 0, "message" => "You are not authorised to perform this action"]);
     die;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Return error if necessary details are not provided.
     if (!isset($_POST['firstName']) || !isset($_POST['lastName']) || !isset($_POST['jobRole'])) {
         echo json_encode(["success" => 0, "message" => "Something went wrong while processing this request."]);
         die;

@@ -2,6 +2,7 @@
 require __DIR__ . '/../classes/_connect.php';
 require __DIR__ . '/_auth.php';
 
+// Redirect if user is not logged in.
 if (!$account->getAuthenticated()) {
     dieWithError("You did not provide valid login details.");
 }

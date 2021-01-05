@@ -2,6 +2,7 @@
 require __DIR__ . '/../php/classes/_connect.php';
 require __DIR__ . '/../php/account/_auth.php';
 
+// Redirect non-authenticated users back to the index page.
 if (!$account->getAuthenticated()) {
     $_SESSION['errorMessage'] = "You did not provide valid login details.";
     header("Location: ../index.php");
@@ -9,6 +10,7 @@ if (!$account->getAuthenticated()) {
     exit;
 }
 
+// Get error messages from session if present
 $errorMessage;
 $successMessage;
 

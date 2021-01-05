@@ -3,6 +3,7 @@ require __DIR__ . '/../php/classes/_connect.php';
 require __DIR__ . '/../php/classes/_course.php';
 require __DIR__ . '/../php/account/_auth.php';
 
+// Get error messages from session if present
 $errorMessage;
 $successMessage;
 

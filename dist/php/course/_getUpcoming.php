@@ -3,11 +3,13 @@ require __DIR__ . '/../classes/_connect.php';
 require __DIR__ . '/../account/_auth.php';
 require __DIR__ . '/../classes/_course.php';
 
+// If user is not autenticated, return error.
 if (!$account->getAuthenticated()) {
     echo json_encode(["success" => 0, "message" => "You are not authorised to perform this action"]);
     die;
 }
 
+// If searchMinDate is not a valid date, throw an error.
 if (!empty($_GET['searchMinDate'])) {
     try {
         $testDate = new DateTime($_GET['searchMinDate']);
@@ -18,6 +20,7 @@ if (!empty($_GET['searchMinDate'])) {
     }
 }
 
+// If searchMaxDate is not a valid date, throw an error.
 if (!empty($_GET['searchMaxDate'])) {
     try {
         $testDate = new DateTime($_GET['searchMaxDate']);
@@ -28,6 +31,7 @@ if (!empty($_GET['searchMaxDate'])) {
     }
 }
 
+// Get upcoming courses and return array as JSON.
 echo json_encode(
     [
         "success" => 1,
